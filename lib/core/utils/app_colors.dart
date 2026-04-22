@@ -12,6 +12,10 @@ class AppColors {
   static const authBgColor = Color(0xFFF7F8FE);
 
 
+  static const navSelectedColor = Color(0xFF0052B5);
+  static const navUnSelectedColor = Color(0xFF484C52);
+
+
   static const whiteLightColor = Color(0xFFFDFDFD);
 
 

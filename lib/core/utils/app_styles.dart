@@ -93,9 +93,23 @@ class TextStyles {
 
 
   static TextStyle font12DarkGreyRegular = TextStyle(
-    fontSize: 12.sp,
+    fontSize: 11.45.sp,
     fontWeight: FontWeight.w500,
     color: AppColors.darkGrey,
+    fontFamily: fontFamily,
+  );
+
+  static TextStyle fontNavSelected = TextStyle(
+    fontSize: 11.45.sp,
+    fontWeight: FontWeight.w400,
+    color: AppColors.navSelectedColor,
+    fontFamily: fontFamily,
+  );
+
+  static TextStyle fontNavUnSelected = TextStyle(
+    fontSize: 12.sp,
+    fontWeight: FontWeight.w400,
+    color: AppColors.navUnSelectedColor,
     fontFamily: fontFamily,
   );
 }

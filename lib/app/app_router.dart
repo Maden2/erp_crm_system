@@ -9,6 +9,7 @@ import '../features/auth/presentation/pages/reset_password_page.dart';
 import '../features/auth/presentation/pages/signup_success_page.dart';
 import '../features/auth/presentation/pages/success_page.dart';
 import '../features/auth/presentation/pages/signup_page.dart';
+import '../features/navigation/presentation/pages/navigation_page.dart';
 import 'app_routes.dart';
 
 
@@ -55,6 +56,11 @@ class AppRouter {
       case Routes.signupSuccess:
         return MaterialPageRoute(
           builder: (_) => const SignupSuccessPage(),
+        );
+
+      case Routes.navigationPage:
+        return MaterialPageRoute(
+          builder: (_) => const NavigationPage(),
         );
 
       case Routes.dashboard:

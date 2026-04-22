@@ -7,6 +7,7 @@ class Routes {
   static const String signup = '/signup';
   static const String phoneNumber = '/phoneNumber';
   static const String signupSuccess = '/signupSuccess';
+  static const String navigationPage = '/navigationPage';
   static const String dashboard = '/dashboard';
   static const String productDetails = '/product-details';
 }

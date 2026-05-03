@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../home/presentation/pages/home_page.dart';
 import '../manager/navigation_cubit.dart';
 import '../widgets/custom_bottom_nav_bar.dart';
 
@@ -18,7 +19,7 @@ class NavigationPage extends StatelessWidget {
             body: IndexedStack(
               index: currentIndex,
               children: const [
-                Center(child: Text("الصفحة الرئيسية")),
+                HomePage(),
                 Center(child: Text("صفحة المنتجات")),
                 Center(child: Text("صفحة الطلبات")),
                 Center(child: Text("صفحة التحليلات")),

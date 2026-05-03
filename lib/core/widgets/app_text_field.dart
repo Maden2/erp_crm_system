@@ -105,7 +105,7 @@ class _AppTextFieldState extends State<AppTextField> {
             : null,
 
         errorText: widget.errorText,
-        errorStyle: TextStyles.font12RedRegular,
+        errorStyle: TextStyles.font12redRegular,
 
         contentPadding: EdgeInsets.symmetric(
           horizontal: 20.w,

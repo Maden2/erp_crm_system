@@ -53,11 +53,32 @@ class TextStyles {
     fontFamily: fontFamily,
   );
 
+  static TextStyle font14GreyBold = TextStyle(
+    fontSize: 14.sp,
+    fontWeight: FontWeight.bold,
+    color: AppColors.charcoalGray,
+    fontFamily: fontFamily,
+  );
+  static TextStyle font16BlackBold = TextStyle(
+    fontSize: 16.sp,
+    fontWeight: FontWeight.bold,
+    color: Colors.black,
+    fontFamily: fontFamily,
+  );
+
+
 
   static TextStyle font14DarkBlueMedium = TextStyle(
     fontSize: 14.sp,
     fontWeight: FontWeight.w500,
     color: AppColors.primary,
+    fontFamily: fontFamily,
+  );
+
+  static TextStyle font12BlackMedium = TextStyle(
+    fontSize: 12.sp,
+    fontWeight: FontWeight.w500,
+    color: AppColors.blackColor,
     fontFamily: fontFamily,
   );
 
@@ -77,12 +98,7 @@ class TextStyles {
   );
 
 
-  static TextStyle font12RedRegular = TextStyle(
-    fontSize: 12.sp,
-    fontWeight: FontWeight.normal,
-    color: Colors.red,
-    fontFamily: fontFamily,
-  );
+
 
   static TextStyle font12LightGreyRegular = TextStyle(
     fontSize: 12.sp,
@@ -112,4 +128,87 @@ class TextStyles {
     color: AppColors.navUnSelectedColor,
     fontFamily: fontFamily,
   );
+
+  static TextStyle font18WhiteBold = TextStyle(
+    fontSize: 18.sp,
+    fontWeight: FontWeight.w700,
+    color: AppColors.authBgColor,
+    fontFamily: fontFamily,
+  );
+
+  static TextStyle font24WhiteBold = TextStyle(
+    fontSize: 24.sp,
+    fontWeight: FontWeight.w700,
+    color: AppColors.authBgColor,
+    fontFamily: fontFamily,
+  );
+
+  static TextStyle font12WhiteRegular = TextStyle(
+    fontSize: 12.sp,
+    fontWeight: FontWeight.w400,
+    color: AppColors.authBgColor,
+    fontFamily: fontFamily,
+  );
+
+  static TextStyle font16WhiteMedium = TextStyle(
+    fontSize: 16.sp,
+    fontWeight: FontWeight.w500,
+    color: AppColors.authBgColor,
+    fontFamily: fontFamily,
+  );
+  static TextStyle font14BlackMedium = TextStyle(
+    fontSize: 14.sp,
+    fontWeight: FontWeight.w500,
+    color: AppColors.blackColor,
+    fontFamily: fontFamily,
+  );
+
+  static TextStyle font10BlackMedium = TextStyle(
+    fontSize: 10.sp,
+    fontWeight: FontWeight.w500,
+    color: AppColors.blackColor,
+    fontFamily: fontFamily,
+  );
+
+  static TextStyle font10CharcoalGrayRegular = TextStyle(
+    fontSize: 10.sp,
+    fontWeight: FontWeight.w400,
+    color: AppColors.charcoalGray,
+    fontFamily: fontFamily,
+  );
+
+  static TextStyle font10MainBlueRegular = TextStyle(
+    fontSize: 10.sp,
+    fontWeight: FontWeight.w400,
+    color: AppColors.mainBlue,
+    fontFamily: fontFamily,
+  );
+
+  static TextStyle font8BlackRegular = TextStyle(
+    fontSize:8.sp,
+    fontWeight: FontWeight.w400,
+    color: AppColors.blackColor,
+    fontFamily: fontFamily,
+  );
+  static TextStyle font12redRegular = TextStyle(
+    fontSize:12.sp,
+    fontWeight: FontWeight.w400,
+    color: AppColors.redColor,
+    fontFamily: fontFamily,
+  );
+  static TextStyle font12CoolGreyRegular = TextStyle(
+    fontSize:12.sp,
+    fontWeight: FontWeight.w400,
+    color: AppColors.coolGrayColor,
+    fontFamily: fontFamily,
+  );
+
+  static TextStyle font10CoolGreyRegular = TextStyle(
+    fontSize:10.sp,
+    fontWeight: FontWeight.w400,
+    color: AppColors.coolGrayColor,
+    fontFamily: fontFamily,
+  );
+
+
 }

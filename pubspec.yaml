@@ -40,6 +40,9 @@ dependencies:
   get_it: ^9.2.1
   flutter_bloc: ^9.1.1
   country_picker: ^2.0.24
+  smooth_page_indicator: ^1.2.0+1
+  fl_chart: ^0.65.0
+  cached_network_image: ^3.4.1
 
 dev_dependencies:
   flutter_test:
@@ -67,6 +70,8 @@ flutter:
   assets:
      - assets/images/
      - assets/images/nav_icons/
+     - assets/images/banners/
+     - assets/images/statistics/
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

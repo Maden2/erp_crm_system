@@ -101,7 +101,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                       },
                       child: Text(
                         "قم بتغيير رقم هاتفك",
-                        style: TextStyles.font12RedRegular.copyWith(
+                        style: TextStyles.font12redRegular.copyWith(
                           color: Colors.blue,
                           fontWeight: FontWeight.bold,
                         ),

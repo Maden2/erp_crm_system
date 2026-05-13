@@ -118,7 +118,7 @@ class _HomeBannerState extends State<HomeBanner> {
         borderRadius: BorderRadius.circular(16.r),
         image: DecorationImage(
           image: AssetImage(image),
-          fit: BoxFit.fill,
+          fit: BoxFit.cover,
         ),
       ),
       child: Padding(

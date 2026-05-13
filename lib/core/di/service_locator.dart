@@ -19,8 +19,20 @@ import '../../features/home/presentation/manager/sales_chart_cubit.dart';
 import '../../features/home/domain/usecases/get_low_stock_usecase.dart';
 import '../../features/home/presentation/manager/low_stock_cubit.dart';
 
-//  Support Ticket
+// Support Ticket
 import '../../features/home/presentation/manager/latest_support_ticket_cubit.dart';
+
+// ================== PRODUCTS ==================
+import '../../features/products/data/repositories/product_repository_impl.dart';
+import '../../features/products/domain/repositories/product_repository.dart';
+import '../../features/products/domain/usecases/get_product_details_usecase.dart';
+import '../../features/products/domain/usecases/get_products_usecase.dart';
+import '../../features/products/domain/usecases/copy_product_usecase.dart';
+import '../../features/products/domain/usecases/get_warehouse_history_usecase.dart';
+import '../../features/products/presentation/manager/product_details_cubit.dart';
+import '../../features/products/presentation/manager/products_cubit.dart';
+import '../../features/products/presentation/manager/copy_product_cubit.dart';
+import '../../features/products/presentation/manager/warehouse_history_cubit.dart';
 
 final getIt = GetIt.instance;
 
@@ -64,7 +76,7 @@ void setupServiceLocator() {
         () => LowStockCubit(getIt<GetLowStockUseCase>()),
   );
 
-  // ----------  Support Ticket ----------
+  // ---------- Support Ticket ----------
   getIt.registerLazySingleton(
         () => GetLatestSupportTicketUseCase(getIt<HomeRepository>()),
   );
@@ -74,4 +86,30 @@ void setupServiceLocator() {
       getIt<GetLatestSupportTicketUseCase>(),
     ),
   );
+
+  // ================== PRODUCTS ==================
+
+  getIt.registerLazySingleton<ProductRepository>(
+        () => ProductRepositoryImpl(),
+  );
+
+  getIt.registerLazySingleton(
+        () => GetProductsUseCase(getIt<ProductRepository>()),
+  );
+
+  getIt.registerFactory(
+        () => ProductsCubit(getIt<GetProductsUseCase>()),
+  );
+
+  // Products Details
+  getIt.registerFactory(() => ProductDetailsCubit(getIt()));
+  getIt.registerLazySingleton(() => GetProductDetailsUseCase(getIt()));
+
+  // ---------- Copy Product  ----------
+  getIt.registerLazySingleton(() => CopyProductUseCase(getIt<ProductRepository>()));
+  getIt.registerFactory(() => CopyProductCubit(getIt<CopyProductUseCase>()));
+
+  // ---------- Warehouse History ----------
+  getIt.registerLazySingleton(() => GetWarehouseHistoryUseCase(getIt<ProductRepository>()));
+  getIt.registerFactory(() => WarehouseHistoryCubit(getIt<GetWarehouseHistoryUseCase>()));
 }

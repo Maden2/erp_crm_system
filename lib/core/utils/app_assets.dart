@@ -4,6 +4,7 @@ class AppAssets {
   static const String _navIconsPath = "assets/images/nav_icons/";
   static const String _bannersPath = "assets/images/banners/";
   static const String _statsPath = "assets/images/statistics/";
+  static const String _iconsPath = "assets/images/icons/";
 
   // --- Navigation Icons (Bottom NavBar) ---
   static const String homeSelected = "${_navIconsPath}home_selected.png";
@@ -38,6 +39,9 @@ class AppAssets {
   static const String logo = "${_imagesPath}logo.png";
   static const String signupImg = "${_imagesPath}signup.png";
   static const String successImg = "${_imagesPath}success.png";
+
+  // --- Products & Categories Icons ---
+  static const String categoryIcon = "${_iconsPath}category_icon.png";
 
 
   static const String supportTicketIcon = "${_imagesPath}support_ticket_icon.png";

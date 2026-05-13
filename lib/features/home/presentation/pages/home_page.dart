@@ -1,28 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:pivot/core/utils/app_colors.dart';
-import 'package:pivot/core/utils/app_styles.dart';
-import 'package:pivot/features/home/domain/entities/home_banner_entity.dart';
-import 'package:pivot/features/home/domain/entities/home_stats_entity.dart';
+
 import '../../../../core/di/service_locator.dart';
-import '../manager/latest_support_ticket_cubit.dart';
-import '../manager/low_stock_cubit.dart';
+import '../../../../core/utils/app_colors.dart';
+import '../../../../core/utils/app_styles.dart';
+
+import '../../domain/entities/home_banner_entity.dart';
+import '../../domain/entities/home_stats_entity.dart';
+
 import '../manager/sales_chart_cubit.dart';
+import '../manager/low_stock_cubit.dart';
+import '../manager/latest_support_ticket_cubit.dart';
+
 import '../widgets/home_banner.dart';
-import '../widgets/empty_home_state.dart';
-import '../widgets/latest_support_ticket_section.dart';
-import '../widgets/low_stock_section.dart';
 import '../widgets/stats_section.dart';
+import '../widgets/empty_home_state.dart';
 import '../widgets/sales_chart_section.dart';
+import '../widgets/low_stock_section.dart';
+import '../widgets/latest_support_ticket_section.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    bool hasData = true;
-
     final homeBannerData = HomeBannerEntity(
       userName: "مادن",
       orderNumber: "2483",
@@ -39,52 +41,77 @@ class HomePage extends StatelessWidget {
       reportsPercentage: "25%",
     );
 
-    return Scaffold(
-      backgroundColor: AppColors.homeBg,
-      body: SafeArea(
-        child: SingleChildScrollView(
-          physics: const BouncingScrollPhysics(),
-          padding: EdgeInsets.symmetric(horizontal: 16.w),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(height: 20.h),
-              HomeBanner(data: homeBannerData),
-              SizedBox(height: 24.h),
-              Text("أهم المؤشرات", style: TextStyles.font14BlackMedium),
-              SizedBox(height: 16.h),
+    return MultiBlocProvider(
+      providers: [
+        //  Sales Chart
+        BlocProvider(
+          create: (_) =>
+          getIt<SalesChartCubit>()..getSalesChart(filter: "1أ"),
+        ),
 
-              if (hasData)
-                StatsSection(data: statsData)
-              else
-                const EmptyHomeState(),
+        //  Low Stock
+        BlocProvider(
+          create: (_) => getIt<LowStockCubit>()..getLowStock(),
+        ),
 
-              SizedBox(height: 24.h),
+        //  Support Ticket
+        BlocProvider(
+          create: (_) =>
+          getIt<LatestSupportTicketCubit>()..getLatestTicket(),
+        ),
+      ],
+      child: Scaffold(
+        backgroundColor: AppColors.homeBg,
+        body: SafeArea(
+          child: SingleChildScrollView(
+            physics: const BouncingScrollPhysics(),
+            padding: EdgeInsets.symmetric(horizontal: 24.w),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(height: 20.h),
 
+                //  Banner
+                HomeBanner(data: homeBannerData),
 
-              BlocBuilder<SalesChartCubit, SalesChartState>(
-                builder: (context, state) {
-                  if (state is SalesChartLoading) {
-                    return const Center(child: CircularProgressIndicator());
-                  } else if (state is SalesChartSuccess) {
-                    return SalesChartSection(
-                      chartData: state.data,
-                      selectedFilter: state.selectedFilter,
-                    );
-                  } else {
+                SizedBox(height: 24.h),
+
+                //  Stats
+                Text("أهم المؤشرات", style: TextStyles.font14BlackMedium),
+                SizedBox(height: 16.h),
+                StatsSection(data: statsData),
+
+                SizedBox(height: 24.h),
+
+                //  Sales Chart
+                BlocBuilder<SalesChartCubit, SalesChartState>(
+                  builder: (context, state) {
+                    if (state is SalesChartLoading) {
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    }
+
+                    if (state is SalesChartSuccess) {
+                      return SalesChartSection(
+                        chartData: state.data,
+                        selectedFilter: state.selectedFilter,
+                      );
+                    }
+
                     return const SizedBox();
-                  }
-                },
-              ),
+                  },
+                ),
 
-              SizedBox(height: 24.h),
-              BlocProvider(
-                create: (context) =>
-                getIt<LowStockCubit>()..getLowStock(),
-                child: BlocBuilder<LowStockCubit, LowStockState>(
+                SizedBox(height: 24.h),
+
+                //  Low Stock
+                BlocBuilder<LowStockCubit, LowStockState>(
                   builder: (context, state) {
                     if (state is LowStockLoading) {
-                      return const Center(child: CircularProgressIndicator());
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
                     }
 
                     if (state is LowStockSuccess) {
@@ -98,12 +125,11 @@ class HomePage extends StatelessWidget {
                     return const SizedBox();
                   },
                 ),
-              ),
-              SizedBox(height: 24.h),
-              BlocProvider(
-                create: (context) =>
-                getIt<LatestSupportTicketCubit>()..getLatestTicket(),
-                child: BlocBuilder<LatestSupportTicketCubit,
+
+                SizedBox(height: 24.h),
+
+                //  Support Ticket
+                BlocBuilder<LatestSupportTicketCubit,
                     LatestSupportTicketState>(
                   builder: (context, state) {
                     if (state is LatestSupportTicketSuccess &&
@@ -116,10 +142,10 @@ class HomePage extends StatelessWidget {
                     return const SizedBox();
                   },
                 ),
-              ),
-              SizedBox(height: 24.h),
 
-            ],
+                SizedBox(height: 24.h),
+              ],
+            ),
           ),
         ),
       ),

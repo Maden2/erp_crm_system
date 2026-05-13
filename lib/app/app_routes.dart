@@ -9,5 +9,10 @@ class Routes {
   static const String signupSuccess = '/signupSuccess';
   static const String navigationPage = '/navigationPage';
   static const String dashboard = '/dashboard';
+  static const String productsPage = '/products-Page';
   static const String productDetails = '/product-details';
+  static const String copyProductPage = '/copyProductPage';
+  static const String warehousesManagement = '/warehousesManagement';
+  static const String addWarehouse = '/addWarehouse';
+  static const String warehouseHistory = '/warehouseHistory';
 }

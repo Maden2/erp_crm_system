@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../home/presentation/pages/home_page.dart';
+import '../../../orders/Presentation/pages/orders_page.dart';
 import '../../../products/presentation/pages/products_page.dart';
 import '../manager/navigation_cubit.dart';
 import '../widgets/custom_bottom_nav_bar.dart';
@@ -22,7 +23,7 @@ class NavigationPage extends StatelessWidget {
               children: const [
                 HomePage(),
                 ProductsPage(),
-                Center(child: Text("صفحة الطلبات")),
+                OrdersPage(),
                 Center(child: Text("صفحة التحليلات")),
                 Center(child: Text("المزيد")),
               ],

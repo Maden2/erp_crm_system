@@ -5,6 +5,7 @@ class AppAssets {
   static const String _bannersPath = "assets/images/banners/";
   static const String _statsPath = "assets/images/statistics/";
   static const String _iconsPath = "assets/images/icons/";
+  static const String _ordersIconsPath = "assets/images/icons/orders/";
 
   // --- Navigation Icons (Bottom NavBar) ---
   static const String homeSelected = "${_navIconsPath}home_selected.png";
@@ -42,7 +43,20 @@ class AppAssets {
 
   // --- Products & Categories Icons ---
   static const String categoryIcon = "${_iconsPath}category_icon.png";
-
-
+  static const String emptyOrdersIcon = "${_iconsPath}empty_orders_icon.png";
   static const String supportTicketIcon = "${_imagesPath}support_ticket_icon.png";
+
+  // --- Order Details Icons (SVG) ---
+  static const String dateIcon = "${_ordersIconsPath}date_icon.svg";
+  static const String profileIcon = "${_ordersIconsPath}profile_icon.svg";
+  static const String phoneIcon = "${_ordersIconsPath}phone_icon.svg";
+  static const String mailIcon = "${_ordersIconsPath}mail_icon.svg";
+  static const String mapIcon = "${_ordersIconsPath}map_icon.svg";
+  static const String noteIcon = "${_ordersIconsPath}note_icon.svg";
+  static const String paymentIcon = "${_ordersIconsPath}payment_icon.svg";
+  static const String successIcon = "${_ordersIconsPath}success_icon.svg";
+  static const String invoiceIcon = "${_ordersIconsPath}invoice_icon.svg";
+  static const String trackingIcon = "${_ordersIconsPath}tracking_icon.svg";
+  static const String shippingIcon = "${_ordersIconsPath}shipping_icon.svg";
+  static const String printIcon = "${_ordersIconsPath}print_icon.svg";
 }

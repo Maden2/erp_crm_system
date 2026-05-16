@@ -23,6 +23,10 @@ import '../../features/home/presentation/manager/low_stock_cubit.dart';
 import '../../features/home/presentation/manager/latest_support_ticket_cubit.dart';
 
 // ================== PRODUCTS ==================
+import '../../features/orders/Presentation/manager/orders_cubit.dart';
+import '../../features/orders/data/repositories/order_repository_impl.dart';
+import '../../features/orders/domain/repositories/order_repository.dart';
+import '../../features/orders/domain/usecases/get_orders_usecase.dart';
 import '../../features/products/data/repositories/product_repository_impl.dart';
 import '../../features/products/domain/repositories/product_repository.dart';
 import '../../features/products/domain/usecases/get_product_details_usecase.dart';
@@ -112,4 +116,18 @@ void setupServiceLocator() {
   // ---------- Warehouse History ----------
   getIt.registerLazySingleton(() => GetWarehouseHistoryUseCase(getIt<ProductRepository>()));
   getIt.registerFactory(() => WarehouseHistoryCubit(getIt<GetWarehouseHistoryUseCase>()));
+
+
+  // ================== ORDERS ==================
+  getIt.registerLazySingleton<OrderRepository>(
+        () => OrderRepositoryImpl(),
+  );
+
+  getIt.registerLazySingleton(
+        () => GetOrdersUseCase(getIt<OrderRepository>()),
+  );
+
+  getIt.registerFactory(
+        () => OrdersCubit(getIt<GetOrdersUseCase>()),
+  );
 }

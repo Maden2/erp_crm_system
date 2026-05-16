@@ -127,6 +127,13 @@ class TextStyles {
     fontFamily: fontFamily,
   );
 
+  static TextStyle font10GreyTextRegular = TextStyle(
+    fontSize: 10.sp,
+    fontWeight: FontWeight.w400,
+    color: AppColors.greyText,
+    fontFamily: fontFamily,
+  );
+
   static TextStyle font14GreyRegular = TextStyle(
     fontSize: 14.sp,
     fontWeight: FontWeight.normal,
@@ -179,6 +186,13 @@ class TextStyles {
     fontSize: 12.sp,
     fontWeight: FontWeight.w500,
     color: AppColors.blackColor,
+    fontFamily: fontFamily,
+  );
+
+  static TextStyle font12darkTextMedium = TextStyle(
+    fontSize: 12.sp,
+    fontWeight: FontWeight.w500,
+    color: AppColors.darkText,
     fontFamily: fontFamily,
   );
 
@@ -335,6 +349,12 @@ class TextStyles {
   static TextStyle font12RedRegular = TextStyle(
     fontSize: 12.sp,
     fontWeight: FontWeight.w400,
+    color: AppColors.redColor,
+    fontFamily: fontFamily,
+  );
+  static TextStyle font12RedMedium = TextStyle(
+    fontSize: 12.sp,
+    fontWeight: FontWeight.w500,
     color: AppColors.redColor,
     fontFamily: fontFamily,
   );

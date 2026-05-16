@@ -73,8 +73,10 @@ class AppColors {
   static const statsCardBg = Color(0xFFF7F8FE);
 
   static const textPrimary = Color(0xFF1F2937);
-  static const textSecondary = Color(0xFF6B7280);
+  static const greyText = Color(0xFF6B7280);
   static const lightDivider = Color(0xFFE0E0E0);
+
+  static const darkText = Color(0xFF111827);
 
   static const success = Color(0xFF10B981);
   static const warning = Color(0xFFF59E0B);

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../core/di/service_locator.dart';
+
+// Auth Imports
 import '../features/auth/presentation/manager/auth_cubit.dart';
 import '../features/auth/presentation/pages/forgot_password_page.dart';
 import '../features/auth/presentation/pages/login_page.dart';
@@ -9,8 +11,15 @@ import '../features/auth/presentation/pages/reset_password_page.dart';
 import '../features/auth/presentation/pages/signup_page.dart';
 import '../features/auth/presentation/pages/signup_success_page.dart';
 import '../features/auth/presentation/pages/success_page.dart';
+
+// Home & Nav Imports
 import '../features/home/presentation/manager/sales_chart_cubit.dart';
 import '../features/navigation/presentation/pages/navigation_page.dart';
+
+// Products Imports
+import '../features/orders/Presentation/pages/order_details_page.dart';
+import '../features/orders/Presentation/pages/orders_page.dart';
+import '../features/orders/domain/entities/order_entity.dart';
 import '../features/products/domain/entities/product_details_entity.dart';
 import '../features/products/presentation/manager/copy_product_cubit.dart';
 import '../features/products/presentation/manager/product_details_cubit.dart';
@@ -20,8 +29,12 @@ import '../features/products/presentation/pages/copy_product_page.dart';
 import '../features/products/presentation/pages/product_details_page.dart';
 import '../features/products/presentation/pages/warehouse_history_page.dart';
 import '../features/products/presentation/pages/warehouses_management_page.dart';
-import 'app_routes.dart';
 
+// Orders Imports
+import '../features/orders/presentation/manager/orders_cubit.dart';
+
+
+import 'app_routes.dart';
 
 class AppRouter {
   static Route<dynamic> onGenerateRoute(RouteSettings settings) {
@@ -55,6 +68,11 @@ class AppRouter {
       case Routes.addWarehouse:
       case Routes.warehouseHistory:
         return _warehouseRoutes(settings);
+
+    // ================== ORDERS ==================
+      case Routes.ordersPage:
+      case Routes.orderDetails:
+        return _orderRoutes(settings, arguments);
 
     // ================== DEFAULT ==================
       default:
@@ -118,14 +136,13 @@ class AppRouter {
     }
   }
 
-// ------------------ 4. Warehouse Module ------------------
+  // ------------------ 4. Warehouse Module ------------------
   static Route<dynamic> _warehouseRoutes(RouteSettings settings) {
     switch (settings.name) {
       case Routes.warehousesManagement:
         return MaterialPageRoute(builder: (_) => const WarehousesManagementPage());
       case Routes.addWarehouse:
         return MaterialPageRoute(builder: (_) => const AddWarehousePage());
-
       case Routes.warehouseHistory:
         return MaterialPageRoute(
           builder: (_) => BlocProvider(
@@ -133,7 +150,30 @@ class AppRouter {
             child: const WarehouseHistoryPage(),
           ),
         );
+      default: return _errorRoute(settings);
+    }
+  }
 
+  // ------------------ 5. Order Module ------------------
+  static Route<dynamic> _orderRoutes(RouteSettings settings, dynamic arguments) {
+    switch (settings.name) {
+      case Routes.ordersPage:
+        return MaterialPageRoute(
+          builder: (_) => BlocProvider(
+            create: (context) => getIt<OrdersCubit>()..getOrders(status: "جديد"),
+            child: const OrdersPage(),
+          ),
+        );
+
+
+      case Routes.orderDetails:
+        final order = arguments as OrderEntity;
+
+        return MaterialPageRoute(
+          builder: (_) => OrderDetailsPage(
+            order: order,
+          ),
+        );
       default: return _errorRoute(settings);
     }
   }

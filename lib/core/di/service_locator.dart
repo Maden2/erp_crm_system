@@ -1,6 +1,7 @@
 import 'package:get_it/get_it.dart';
 
 // ================== AUTH ==================
+import '../../features/analytics/domain/usecases/get_analytics_use_case.dart';
 import '../../features/auth/data/repositories/mock_auth_repository.dart';
 import '../../features/auth/domain/repositories/auth_repository.dart';
 import '../../features/auth/domain/usecases/login_use_case.dart';
@@ -23,10 +24,6 @@ import '../../features/home/presentation/manager/low_stock_cubit.dart';
 import '../../features/home/presentation/manager/latest_support_ticket_cubit.dart';
 
 // ================== PRODUCTS ==================
-import '../../features/orders/Presentation/manager/orders_cubit.dart';
-import '../../features/orders/data/repositories/order_repository_impl.dart';
-import '../../features/orders/domain/repositories/order_repository.dart';
-import '../../features/orders/domain/usecases/get_orders_usecase.dart';
 import '../../features/products/data/repositories/product_repository_impl.dart';
 import '../../features/products/domain/repositories/product_repository.dart';
 import '../../features/products/domain/usecases/get_product_details_usecase.dart';
@@ -37,6 +34,17 @@ import '../../features/products/presentation/manager/product_details_cubit.dart'
 import '../../features/products/presentation/manager/products_cubit.dart';
 import '../../features/products/presentation/manager/copy_product_cubit.dart';
 import '../../features/products/presentation/manager/warehouse_history_cubit.dart';
+
+// ================== ORDERS ==================
+import '../../features/orders/Presentation/manager/orders_cubit.dart';
+import '../../features/orders/data/repositories/order_repository_impl.dart';
+import '../../features/orders/domain/repositories/order_repository.dart';
+import '../../features/orders/domain/usecases/get_orders_usecase.dart';
+
+// ================== ANALYTICS ==================
+import '../../features/analytics/data/repositories/analytics_repository_impl.dart';
+import '../../features/analytics/domain/repositories/analytics_repository.dart';
+import '../../features/analytics/presentation/manager/analytics_cubit.dart';
 
 final getIt = GetIt.instance;
 
@@ -129,5 +137,19 @@ void setupServiceLocator() {
 
   getIt.registerFactory(
         () => OrdersCubit(getIt<GetOrdersUseCase>()),
+  );
+
+  // ================== ANALYTICS ==================
+
+  getIt.registerLazySingleton<AnalyticsRepository>(
+        () => AnalyticsRepositoryImpl(),
+  );
+
+  getIt.registerLazySingleton(
+        () => GetAnalyticsUseCase(getIt<AnalyticsRepository>()),
+  );
+
+  getIt.registerFactory(
+        () => AnalyticsCubit(getIt<GetAnalyticsUseCase>()),
   );
 }

@@ -40,6 +40,8 @@ class AppAssets {
   static const String logo = "${_imagesPath}logo.png";
   static const String signupImg = "${_imagesPath}signup.png";
   static const String successImg = "${_imagesPath}success.png";
+  static const String analyticsHeaderBg = "${_imagesPath}analytics_header_bg.png";
+
 
   // --- Products & Categories Icons ---
   static const String categoryIcon = "${_iconsPath}category_icon.png";

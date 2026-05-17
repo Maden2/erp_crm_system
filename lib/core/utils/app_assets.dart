@@ -6,42 +6,38 @@ class AppAssets {
   static const String _statsPath = "assets/images/statistics/";
   static const String _iconsPath = "assets/images/icons/";
   static const String _ordersIconsPath = "assets/images/icons/orders/";
+  static const String _moreIconsPath = "assets/images/icons/more/"; // 💡 المسار الجديد
 
   // --- Navigation Icons (Bottom NavBar) ---
   static const String homeSelected = "${_navIconsPath}home_selected.png";
   static const String homeUnselected = "${_navIconsPath}home_unselected.png";
-
   static const String productsSelected = "${_navIconsPath}products_selected.png";
   static const String productsUnselected = "${_navIconsPath}products_unselected.png";
-
   static const String ordersSelected = "${_navIconsPath}orders_selected.png";
   static const String ordersUnselected = "${_navIconsPath}orders_unselected.png";
-
   static const String analyticsSelected = "${_navIconsPath}analytics_selected.png";
   static const String analyticsUnselected = "${_navIconsPath}analytics_unselected.png";
-
   static const String moreSelected = "${_navIconsPath}more_selected.png";
   static const String moreUnselected = "${_navIconsPath}more_unselected.png";
 
-  // --- Home Banners (Carousel Backgrounds) ---
+  // --- Home Banners ---
   static const String welcomeBannerBg = "${_bannersPath}welcome_banner_bg.png";
   static const String ordersBannerBg = "${_bannersPath}orders_banner_bg.png";
   static const String paymentsBannerBg = "${_bannersPath}payments_banner_bg.png";
   static const String alarmIcon = "${_bannersPath}alarm_icon.png";
   static const String walletIcon = "${_bannersPath}wallet_icon.png";
 
-  // --- Statistics Icons (Home Indicators) ---
+  // --- Statistics Icons ---
   static const String salesIcon = "${_statsPath}sales_icon.png";
-  static const String profitsIcon    = "${_statsPath}profits_icon.png";
-  static const String ordersIcon    = "${_statsPath}orders_icon.png";
-  static const String reportsIcon     = "${_statsPath}reports_icon.png";
+  static const String profitsIcon = "${_statsPath}profits_icon.png";
+  static const String ordersIcon = "${_statsPath}orders_icon.png";
+  static const String reportsIcon = "${_statsPath}reports_icon.png";
 
   // --- General Images & Logos ---
   static const String logo = "${_imagesPath}logo.png";
   static const String signupImg = "${_imagesPath}signup.png";
   static const String successImg = "${_imagesPath}success.png";
   static const String analyticsHeaderBg = "${_imagesPath}analytics_header_bg.png";
-
 
   // --- Products & Categories Icons ---
   static const String categoryIcon = "${_iconsPath}category_icon.png";
@@ -61,4 +57,26 @@ class AppAssets {
   static const String trackingIcon = "${_ordersIconsPath}tracking_icon.svg";
   static const String shippingIcon = "${_ordersIconsPath}shipping_icon.svg";
   static const String printIcon = "${_ordersIconsPath}print_icon.svg";
+
+  // --- More Tab Icons (SVG) --- 💡 التعديل الجديد بـ _icon
+  // 1. الإدارة المالية
+  static const String invoicesIcon = "${_moreIconsPath}invoices_icon.svg";
+  static const String profitsMoreIcon = "${_moreIconsPath}profits_icon.svg";
+
+  // 2. العمليات
+  static const String inventoryIcon = "${_moreIconsPath}inventory_icon.svg";
+  static const String customersIcon = "${_moreIconsPath}customers_icon.svg";
+
+  // 3. الدعم والجودة
+  static const String supportIcon = "${_moreIconsPath}support_icon.svg";
+  static const String complaintsIcon = "${_moreIconsPath}complaints_icon.svg";
+
+  // 4. التخصيص والنظام
+  static const String customizationIcon = "${_moreIconsPath}customization_icon.svg";
+  static const String notificationsIcon = "${_moreIconsPath}notifications_icon.svg";
+
+  // 5. الإعدادات
+  static const String settingsIcon = "${_moreIconsPath}settings_icon.svg";
+  static const String logoutIcon = "${_moreIconsPath}logout_icon.svg";
+  static const String companyIcon = "${_moreIconsPath}company_info_icon.svg";
 }

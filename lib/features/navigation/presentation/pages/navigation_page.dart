@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../analytics/presentation/pages/analytics_page.dart';
 import '../../../home/presentation/pages/home_page.dart';
+import '../../../more/presentation/pages/more_page.dart';
 import '../../../orders/Presentation/pages/orders_page.dart';
 import '../../../products/presentation/pages/products_page.dart';
 import '../manager/navigation_cubit.dart';
@@ -26,7 +27,7 @@ class NavigationPage extends StatelessWidget {
                 ProductsPage(),
                 OrdersPage(),
                 AnalyticsPage(),
-                Center(child: Text("المزيد")),
+                MorePage(),
               ],
             ),
             bottomNavigationBar: CustomBottomNavBar(

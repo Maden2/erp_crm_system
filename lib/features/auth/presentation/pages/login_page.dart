@@ -21,8 +21,10 @@ class _LoginPageState extends State<LoginPage> {
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  final TextEditingController emailController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
+  final TextEditingController emailController =
+  TextEditingController(text: "pivot@mail.com");
+  final TextEditingController passwordController =
+  TextEditingController(text: "12345678");
 
   bool rememberMe = false;
   bool isButtonEnabled = false;
@@ -55,7 +57,8 @@ class _LoginPageState extends State<LoginPage> {
       body: BlocListener<AuthCubit, AuthState>(
         listener: (context, state) {
           if (state is AuthSuccess) {
-            Navigator.pushNamedAndRemoveUntil(context, Routes.dashboard, (route) => false);
+
+            Navigator.pushNamedAndRemoveUntil(context, Routes.navigationPage, (route) => false);
           } else if (state is AuthError) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(content: Text(state.message), backgroundColor: Colors.red),
@@ -121,16 +124,12 @@ class _LoginPageState extends State<LoginPage> {
                         ],
                       ),
                       GestureDetector(
-                        onTap: () {},
-                        child: GestureDetector(
-                          onTap: () {
-
-                            Navigator.pushNamed(context, Routes.forgotPassword);
-                          },
-                          child: Text(
-                            "نسيت كلمة المرور؟",
-                            style: TextStyles.font14GreyRegular,
-                          ),
+                        onTap: () {
+                          Navigator.pushNamed(context, Routes.forgotPassword);
+                        },
+                        child: Text(
+                          "نسيت كلمة المرور؟",
+                          style: TextStyles.font14GreyRegular,
                         ),
                       ),
                     ],

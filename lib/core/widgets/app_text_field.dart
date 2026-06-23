@@ -8,7 +8,6 @@ class AppTextField extends StatefulWidget {
   final String label;
   final String hintText;
 
-
   final Widget? prefixIcon;
 
   final bool isPassword;
@@ -73,50 +72,41 @@ class _AppTextFieldState extends State<AppTextField> {
         hintText: widget.hintText,
         hintStyle: TextStyles.font14GreyRegular,
 
-
         prefixIcon: widget.prefixIcon != null
             ? Padding(
-          padding: EdgeInsetsDirectional.only(start: 12.w),
-          child: IconTheme(
-            data: IconThemeData(
-              color: AppColors.grey,
-            ),
-            child: widget.prefixIcon!,
-          ),
-        )
+                padding: EdgeInsetsDirectional.only(start: 12.w),
+                child: IconTheme(
+                  data: IconThemeData(color: AppColors.grey),
+                  child: widget.prefixIcon!,
+                ),
+              )
             : null,
-
 
         suffixIcon: widget.isPassword
             ? IconButton(
-          onPressed: () {
-            setState(() {
-              isObscure = !isObscure;
-            });
-          },
-          icon: Icon(
-            isObscure
-                ? Icons.visibility_off_outlined
-                : Icons.visibility_outlined,
-            color: AppColors.grey,
-            size: 24.sp,
-          ),
-        )
+                onPressed: () {
+                  setState(() {
+                    isObscure = !isObscure;
+                  });
+                },
+                icon: Icon(
+                  isObscure
+                      ? Icons.visibility_off_outlined
+                      : Icons.visibility_outlined,
+                  color: AppColors.grey,
+                  size: 24.sp,
+                ),
+              )
             : null,
 
         errorText: widget.errorText,
         errorStyle: TextStyles.font12redRegular,
 
-        contentPadding: EdgeInsets.symmetric(
-          horizontal: 20.w,
-          vertical: 18.h,
-        ),
+        contentPadding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 18.h),
 
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(15.r),
-          borderSide: BorderSide(
-            color: AppColors.borderColor,
-          ),
+          borderSide: BorderSide(color: AppColors.borderColor),
         ),
 
         focusedBorder: OutlineInputBorder(
@@ -129,17 +119,12 @@ class _AppTextFieldState extends State<AppTextField> {
 
         errorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(15.r),
-          borderSide: const BorderSide(
-            color: AppColors.danger,
-          ),
+          borderSide: const BorderSide(color: AppColors.danger),
         ),
 
         focusedErrorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(15.r),
-          borderSide: const BorderSide(
-            color: AppColors.danger,
-            width: 1.5,
-          ),
+          borderSide: const BorderSide(color: AppColors.danger, width: 1.5),
         ),
       ),
     );

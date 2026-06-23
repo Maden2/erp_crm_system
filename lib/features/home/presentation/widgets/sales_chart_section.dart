@@ -32,10 +32,7 @@ class SalesChartSection extends StatelessWidget {
           SizedBox(height: 20.h),
           Text("مخطط المبيعات", style: TextStyles.font12BlackMedium),
           SizedBox(height: 13.h),
-          AspectRatio(
-            aspectRatio: 1.7,
-            child: LineChart(_mainData()),
-          ),
+          AspectRatio(aspectRatio: 1.7, child: LineChart(_mainData())),
         ],
       ),
     );
@@ -46,9 +43,7 @@ class SalesChartSection extends StatelessWidget {
 
     if (data.isEmpty) return LineChartData();
 
-    final maxY = data
-        .map((e) => e.value)
-        .reduce((a, b) => a > b ? a : b);
+    final maxY = data.map((e) => e.value).reduce((a, b) => a > b ? a : b);
 
     final roundedMax = ((maxY / 1000).ceil() * 1000).toDouble();
 
@@ -58,23 +53,17 @@ class SalesChartSection extends StatelessWidget {
         drawVerticalLine: true,
         horizontalInterval: roundedMax / 5,
         verticalInterval: 1,
-        getDrawingHorizontalLine: (value) => FlLine(
-          color: const Color(0xFFCBD5E1),
-          strokeWidth: 1,
-        ),
-        getDrawingVerticalLine: (value) => FlLine(
-          color: const Color(0xFFCBD5E1),
-          strokeWidth: 1,
-        ),
+        getDrawingHorizontalLine: (value) =>
+            FlLine(color: const Color(0xFFCBD5E1), strokeWidth: 1),
+        getDrawingVerticalLine: (value) =>
+            FlLine(color: const Color(0xFFCBD5E1), strokeWidth: 1),
       ),
 
       titlesData: FlTitlesData(
         rightTitles: const AxisTitles(
           sideTitles: SideTitles(showTitles: false),
         ),
-        topTitles: const AxisTitles(
-          sideTitles: SideTitles(showTitles: false),
-        ),
+        topTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
 
         leftTitles: AxisTitles(
           sideTitles: SideTitles(
@@ -88,10 +77,7 @@ class SalesChartSection extends StatelessWidget {
                   ? '${(value / 1000).toStringAsFixed(0)}K'
                   : value.toInt().toString();
 
-              return Text(
-                label,
-                style: TextStyles.font10BlackMedium,
-              );
+              return Text(label, style: TextStyles.font10BlackMedium);
             },
           ),
         ),
@@ -115,9 +101,7 @@ class SalesChartSection extends StatelessWidget {
                 space: 8.h,
                 child: Text(
                   data[index].dayName,
-                  style: TextStyles.font10BlackMedium.copyWith(
-                    fontSize: 10.sp,
-                  ),
+                  style: TextStyles.font10BlackMedium.copyWith(fontSize: 10.sp),
                 ),
               );
             },
@@ -137,10 +121,7 @@ class SalesChartSection extends StatelessWidget {
         LineChartBarData(
           spots: List.generate(
             data.length,
-                (i) => FlSpot(
-              i.toDouble(),
-              data[i].value,
-            ),
+            (i) => FlSpot(i.toDouble(), data[i].value),
           ),
           isCurved: true,
           color: const Color(0xFF1E4AB0),
@@ -148,12 +129,11 @@ class SalesChartSection extends StatelessWidget {
           isStrokeCapRound: true,
           dotData: FlDotData(
             show: true,
-            getDotPainter: (spot, percent, bar, index) =>
-                FlDotCirclePainter(
-                  radius: 4,
-                  color: const Color(0xFF1E4AB0),
-                  strokeWidth: 0,
-                ),
+            getDotPainter: (spot, percent, bar, index) => FlDotCirclePainter(
+              radius: 4,
+              color: const Color(0xFF1E4AB0),
+              strokeWidth: 0,
+            ),
           ),
           belowBarData: BarAreaData(show: false),
         ),
@@ -174,22 +154,17 @@ class SalesChartSection extends StatelessWidget {
             context.read<SalesChartCubit>().getSalesChart(filter: e);
           },
           child: Container(
-            padding: EdgeInsets.symmetric(
-              horizontal: 10.w,
-              vertical: 6.h,
-            ),
+            padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 6.h),
             decoration: BoxDecoration(
-              color: isSelected
-                  ? Color(0xFFEFF2FE)
-                  : Colors.transparent,
+              color: isSelected ? Color(0xFFEFF2FE) : Colors.transparent,
               borderRadius: BorderRadius.circular(8.r),
               boxShadow: isSelected
                   ? [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.06),
-                  blurRadius: 6,
-                )
-              ]
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.06),
+                        blurRadius: 6,
+                      ),
+                    ]
                   : [],
             ),
             child: Text(
@@ -197,9 +172,7 @@ class SalesChartSection extends StatelessWidget {
               style: TextStyle(
                 color: isSelected ? AppColors.blackColor : Colors.grey,
                 fontSize: 12.sp,
-                fontWeight: isSelected
-                    ? FontWeight.w700
-                    : FontWeight.w500,
+                fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
               ),
             ),
           ),

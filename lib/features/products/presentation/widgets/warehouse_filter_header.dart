@@ -26,10 +26,7 @@ class WarehouseFilterHeader extends StatelessWidget {
         decoration: BoxDecoration(
           color: Color(0xFFF6F9FF),
           borderRadius: BorderRadius.circular(8.r),
-          border: Border.all(
-            color: const Color(0xFFE2E8F0),
-            width: 1.w,
-          ),
+          border: Border.all(color: const Color(0xFFE2E8F0), width: 1.w),
         ),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -45,7 +42,11 @@ class WarehouseFilterHeader extends StatelessWidget {
                   padding: EdgeInsets.symmetric(horizontal: 14.w),
                   child: Row(
                     children: [
-                      Image.asset(AppAssets.categoryIcon, width: 17.w, height: 17.h),
+                      Image.asset(
+                        AppAssets.categoryIcon,
+                        width: 17.w,
+                        height: 17.h,
+                      ),
                       SizedBox(width: 8.w),
                       Expanded(
                         child: Text(
@@ -55,16 +56,17 @@ class WarehouseFilterHeader extends StatelessWidget {
                         ),
                       ),
                       SizedBox(width: 6.w),
-                      Icon(Icons.keyboard_arrow_down, size: 20.sp, color: AppColors.darkOliveGrey),
+                      Icon(
+                        Icons.keyboard_arrow_down,
+                        size: 20.sp,
+                        color: AppColors.darkOliveGrey,
+                      ),
                     ],
                   ),
                 ),
               ),
             ),
-            Container(
-              width: 1.w,
-              color: const Color(0xFFD9D9D9),
-            ),
+            Container(width: 1.w, color: const Color(0xFFD9D9D9)),
             InkWell(
               onTap: onSettingsTap,
               borderRadius: BorderRadius.only(

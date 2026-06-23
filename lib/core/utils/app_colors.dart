@@ -8,12 +8,9 @@ class AppColors {
   static const borderColor = Color(0xFFCBCBCB);
   static const borderColorSelected = Color(0xFF707D85);
 
-
   static const authBgColor = Color(0xFFF7F8FE);
 
-
   static const blackColor = Color(0xFF313131);
-
 
   static const navSelectedColor = Color(0xFF0052B5);
   static const navUnSelectedColor = Color(0xFF484C52);
@@ -22,23 +19,16 @@ class AppColors {
 
   static const warningYellow = Color(0xFFFDEAB6);
 
-
-
   static const whiteLightColor = Color(0xFFFDFDFD);
 
-
   static const warningDeepOrange = Color(0xFFE45D32);
-
-
 
   static const activeDotColor = Color(0xFFF7F8FE);
   static const dotColor = Color(0xF7F8FE80);
 
-
   static const redColor = Color(0xFFEF4C53);
 
   static const goldenOrange = Color(0xFFF0A01B);
-
 
   static const coolGrayColor = Color(0xFF848688);
 
@@ -47,12 +37,7 @@ class AppColors {
 
   static const mainBlue = Color(0xFF4379EE);
 
-
   static const buttonColorUnSelected = Color(0x10226E33);
-
-
-
-
 
   static const grey = Color(0xFFCACACA);
   static const darkGrey = Color(0xFF343434);
@@ -60,13 +45,13 @@ class AppColors {
   static const charcoalGray = Color(0xFF606060);
   static const darkOliveGrey = Color(0xFF60655C);
   static const lightGrayText = Color(0xFF848688);
+  static const mediumGray = Color(0xFF313131);
 
   static const graphiteGrey = Color(0xFF404040);
 
   static const lightBlueGrey = Color(0xFFEDF0FC);
 
   static const softLavender = Color(0xFFE5E8F4);
-
 
   static const homeBg = Color(0xFFEFF2FE);
 

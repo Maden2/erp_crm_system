@@ -29,7 +29,6 @@ class ProductCard extends StatelessWidget {
         textDirection: TextDirection.ltr,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-
           Padding(
             padding: EdgeInsets.only(top: 4.h),
             child: Icon(Icons.more_vert, color: Colors.grey[400], size: 16.sp),
@@ -42,30 +41,25 @@ class ProductCard extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                    product.name,
-                    style: TextStyles.font12BlackMedium
-                ),
+                Text(product.name, style: TextStyles.font12BlackMedium),
                 SizedBox(height: 6.h),
                 Text(
-                    "${product.price} ج.م",
-                    style: TextStyles.font10LightGreyRegular
+                  "${product.price} ج.م",
+                  style: TextStyles.font10LightGreyRegular,
                 ),
                 SizedBox(height: 8.h),
-
 
                 Wrap(
                   alignment: WrapAlignment.end,
                   spacing: 6.w,
                   runSpacing: 4.h,
                   children: [
-                    _buildStatusTag(product.quantity,product.isLowStock),
+                    _buildStatusTag(product.quantity, product.isLowStock),
 
                     _buildStockTag(product.quantity),
                   ],
                 ),
                 SizedBox(height: 8.h),
-
 
                 _buildSkuTag(product.sku),
               ],
@@ -73,7 +67,6 @@ class ProductCard extends StatelessWidget {
           ),
 
           SizedBox(width: 12.w),
-
 
           Container(
             width: 48.w,
@@ -86,18 +79,18 @@ class ProductCard extends StatelessWidget {
               borderRadius: BorderRadius.circular(12.r),
               child: product.image.isNotEmpty
                   ? Image.network(
-                product.image,
-                fit: BoxFit.cover,
-                errorBuilder: (context, error, stackTrace) => Icon(
-                  Icons.broken_image_outlined,
-                  color: Colors.grey[300],
-                ),
-              )
+                      product.image,
+                      fit: BoxFit.cover,
+                      errorBuilder: (context, error, stackTrace) => Icon(
+                        Icons.broken_image_outlined,
+                        color: Colors.grey[300],
+                      ),
+                    )
                   : Icon(
-                Icons.image_outlined,
-                color: Colors.grey[300],
-                size: 30.sp,
-              ),
+                      Icons.image_outlined,
+                      color: Colors.grey[300],
+                      size: 30.sp,
+                    ),
             ),
           ),
         ],
@@ -106,10 +99,8 @@ class ProductCard extends StatelessWidget {
   }
 
   Widget _buildStatusTag(int quantity, bool isLowStock) {
-
     final bool isOutOfStock = quantity == 0;
     final bool showWarning = isOutOfStock || isLowStock;
-
 
     String text = "المخزون مستقر";
     Color bgColor = const Color(0x144379EE);
@@ -135,13 +126,8 @@ class ProductCard extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         textDirection: TextDirection.rtl,
         children: [
-
           if (showWarning) ...[
-            Icon(
-              Icons.warning_amber_rounded,
-              color: textColor,
-              size: 10.sp,
-            ),
+            Icon(Icons.warning_amber_rounded, color: textColor, size: 10.sp),
             SizedBox(width: 4.w),
           ],
 
@@ -157,7 +143,9 @@ class ProductCard extends StatelessWidget {
         ],
       ),
     );
-  }  Widget _buildStockTag(int quantity) {
+  }
+
+  Widget _buildStockTag(int quantity) {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 4.h),
       decoration: BoxDecoration(
@@ -174,7 +162,6 @@ class ProductCard extends StatelessWidget {
       ),
     );
   }
-
 
   Widget _buildSkuTag(String sku) {
     return Container(

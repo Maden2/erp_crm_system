@@ -63,13 +63,15 @@ class _PhoneNumberPageState extends State<PhoneNumberPage> {
               SizedBox(height: 32.h),
               Text("رقم الهاتف", style: TextStyles.font24PrimaryBold),
               SizedBox(height: 6.h),
-              Text("الرجاء إدخال رقم الهاتف", style: TextStyles.font14GreyRegular),
+              Text(
+                "الرجاء إدخال رقم الهاتف",
+                style: TextStyles.font14GreyRegular,
+              ),
               SizedBox(height: 40.h),
 
               Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-
                   GestureDetector(
                     onTap: () {
                       showCountryPicker(
@@ -96,16 +98,22 @@ class _PhoneNumberPageState extends State<PhoneNumberPage> {
                           Text(countryFlag, style: TextStyle(fontSize: 20.sp)),
 
                           SizedBox(width: 8.w),
-                          Text("+$countryCode", style: TextStyles.font12DarkGreyRegular),
+                          Text(
+                            "+$countryCode",
+                            style: TextStyles.font12DarkGreyRegular,
+                          ),
                           SizedBox(width: 8.w),
-                          Icon(Icons.keyboard_arrow_down, size: 20.sp, color: Colors.grey),
+                          Icon(
+                            Icons.keyboard_arrow_down,
+                            size: 20.sp,
+                            color: Colors.grey,
+                          ),
                         ],
                       ),
                     ),
                   ),
 
                   SizedBox(width: 10.w),
-
 
                   Expanded(
                     child: AppTextField(
@@ -114,7 +122,7 @@ class _PhoneNumberPageState extends State<PhoneNumberPage> {
                       hintText: "01015342445",
                       prefixIcon: const Icon(Icons.phone_android_outlined),
 
-                       keyboardType: TextInputType.phone,
+                      keyboardType: TextInputType.phone,
                     ),
                   ),
                 ],
@@ -124,12 +132,11 @@ class _PhoneNumberPageState extends State<PhoneNumberPage> {
 
               AppTextButton(
                 buttonText: "متابعة",
-                onPressed: isButtonEnabled ? () {
-                  Navigator.pushNamed(
-                    context,
-                    Routes.signupSuccess,
-                  );
-                } : null,
+                onPressed: isButtonEnabled
+                    ? () {
+                        Navigator.pushNamed(context, Routes.signupSuccess);
+                      }
+                    : null,
               ),
               SizedBox(height: 40.h),
             ],

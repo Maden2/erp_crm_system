@@ -6,11 +6,7 @@ class ProductsList extends StatelessWidget {
   final List<ProductEntity> products;
   final Function(ProductEntity)? onProductTap;
 
-  const ProductsList({
-    super.key,
-    required this.products,
-    this.onProductTap,
-  });
+  const ProductsList({super.key, required this.products, this.onProductTap});
 
   @override
   Widget build(BuildContext context) {

@@ -1,5 +1,4 @@
 class ProductFilterEntity {
-
   final List<String>? publishStatus;
   final List<String>? stockStatus;
   final List<String>? category;
@@ -23,34 +22,22 @@ class ProductFilterEntity {
     double? maxPrice,
   }) {
     return ProductFilterEntity(
-      publishStatus:
-      publishStatus ?? this.publishStatus,
+      publishStatus: publishStatus ?? this.publishStatus,
 
-      stockStatus:
-      stockStatus ?? this.stockStatus,
+      stockStatus: stockStatus ?? this.stockStatus,
 
-      category:
-      category ?? this.category,
+      category: category ?? this.category,
 
-      minPrice:
-      minPrice ?? this.minPrice,
+      minPrice: minPrice ?? this.minPrice,
 
-      maxPrice:
-      maxPrice ?? this.maxPrice,
+      maxPrice: maxPrice ?? this.maxPrice,
     );
   }
 
   bool get isEmpty {
-
-    return (publishStatus == null ||
-        publishStatus!.isEmpty) &&
-
-        (stockStatus == null ||
-            stockStatus!.isEmpty) &&
-
-        (category == null ||
-            category!.isEmpty) &&
-
+    return (publishStatus == null || publishStatus!.isEmpty) &&
+        (stockStatus == null || stockStatus!.isEmpty) &&
+        (category == null || category!.isEmpty) &&
         minPrice == null &&
         maxPrice == null;
   }

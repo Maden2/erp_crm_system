@@ -37,8 +37,11 @@ class EmptyProductsWidget extends StatelessWidget {
                       color: Color(0xFF1E4AB0),
                       shape: BoxShape.circle,
                     ),
-                    child: Icon(Icons.priority_high,
-                        color: Colors.white, size: 18.sp),
+                    child: Icon(
+                      Icons.priority_high,
+                      color: Colors.white,
+                      size: 18.sp,
+                    ),
                   ),
                 ),
               ],

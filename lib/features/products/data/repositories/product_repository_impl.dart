@@ -9,7 +9,6 @@ import '../../domain/repositories/product_repository.dart';
 import '../models/product_details_model.dart';
 
 class ProductRepositoryImpl implements ProductRepository {
-
   @override
   Future<Either<Failure, List<ProductEntity>>> getProducts({
     String? query,
@@ -27,9 +26,7 @@ class ProductRepositoryImpl implements ProductRepository {
         if (warehouseId == "2" && category != "هواتف") continue;
         if (warehouseId == "3" && category != "إكسسوار") continue;
 
-        int quantity = (i % 7 == 0)
-            ? 0
-            : (i % 4 == 0 ? 3 : 15);
+        int quantity = (i % 7 == 0) ? 0 : (i % 4 == 0 ? 3 : 15);
 
         data.add(
           ProductEntity(
@@ -40,15 +37,13 @@ class ProductRepositoryImpl implements ProductRepository {
 
             price: "${(i * 1200) + 5000}",
 
-            image:
-            "https://picsum.photos/200/200?random=$i",
+            image: "https://picsum.photos/200/200?random=$i",
 
             quantity: quantity,
 
             category: category,
 
-            isLowStock:
-            quantity > 0 && quantity <= 5,
+            isLowStock: quantity > 0 && quantity <= 5,
 
             sku: "SKU-PVT-$i",
           ),
@@ -58,45 +53,26 @@ class ProductRepositoryImpl implements ProductRepository {
       // ================= FILTER =================
 
       if (filter != null) {
-
         // CATEGORY
         if (filter.category != null &&
             filter.category!.isNotEmpty &&
             filter.category != "الكل") {
-
-          data = data.where(
-                (p) => p.category == filter.category,
-          ).toList();
+          data = data.where((p) => p.category == filter.category).toList();
         }
 
         // STOCK STATUS
         if (filter.stockStatus == "نفاد") {
-
-          data = data.where(
-                (p) => p.quantity == 0,
-          ).toList();
-
+          data = data.where((p) => p.quantity == 0).toList();
         } else if (filter.stockStatus == "منخفض") {
-
-          data = data.where(
-                (p) => p.isLowStock,
-          ).toList();
-
+          data = data.where((p) => p.isLowStock).toList();
         } else if (filter.stockStatus == "مستقر") {
-
-          data = data.where(
-                (p) =>
-            !p.isLowStock &&
-                p.quantity > 0,
-          ).toList();
+          data = data.where((p) => !p.isLowStock && p.quantity > 0).toList();
         }
 
         // MIN PRICE
         if (filter.minPrice != null) {
-
           data = data.where((p) {
-            final price =
-                double.tryParse(p.price) ?? 0;
+            final price = double.tryParse(p.price) ?? 0;
 
             return price >= filter.minPrice!;
           }).toList();
@@ -104,10 +80,8 @@ class ProductRepositoryImpl implements ProductRepository {
 
         // MAX PRICE
         if (filter.maxPrice != null) {
-
           data = data.where((p) {
-            final price =
-                double.tryParse(p.price) ?? 0;
+            final price = double.tryParse(p.price) ?? 0;
 
             return price <= filter.maxPrice!;
           }).toList();
@@ -117,32 +91,26 @@ class ProductRepositoryImpl implements ProductRepository {
       // ================= SEARCH =================
 
       if (query != null && query.isNotEmpty) {
-
-        data = data.where(
+        data = data
+            .where(
               (product) =>
-              product.name
-                  .toLowerCase()
-                  .contains(query.toLowerCase()),
-        ).toList();
+                  product.name.toLowerCase().contains(query.toLowerCase()),
+            )
+            .toList();
       }
 
       return Right(data);
-
     } catch (e) {
-
       return Left(ServerFailure(e.toString()));
     }
   }
 
   @override
-  Future<Either<Failure, ProductDetailsEntity>>
-  getProductDetails(String productId) async {
-
+  Future<Either<Failure, ProductDetailsEntity>> getProductDetails(
+    String productId,
+  ) async {
     try {
-
-      await Future.delayed(
-        const Duration(milliseconds: 400),
-      );
+      await Future.delayed(const Duration(milliseconds: 400));
 
       int id = int.tryParse(productId) ?? 1;
 
@@ -160,13 +128,9 @@ class ProductRepositoryImpl implements ProductRepository {
 
           sku: "SKU-PVT-$id",
 
-          brand: isPhone
-              ? "Apple"
-              : "Generic",
+          brand: isPhone ? "Apple" : "Generic",
 
-          stock: (id % 7 == 0)
-              ? 0
-              : (id % 4 == 0 ? 3 : 15),
+          stock: (id % 7 == 0) ? 0 : (id % 4 == 0 ? 3 : 15),
 
           warranty: 12,
 
@@ -183,86 +147,50 @@ class ProductRepositoryImpl implements ProductRepository {
           ],
 
           colors: isPhone
-              ? [
-            0xFF1C1C1C,
-            0xFFE5E5E5,
-            0xFFD4AF37,
-          ]
-              : [
-            0xFF000000,
-            0xFFFFFFFF,
-            0xFF708090,
-          ],
+              ? [0xFF1C1C1C, 0xFFE5E5E5, 0xFFD4AF37]
+              : [0xFF000000, 0xFFFFFFFF, 0xFF708090],
 
-          sizes: isPhone
-              ? ["128GB", "256GB", "512GB"]
-              : ["One Size"],
+          sizes: isPhone ? ["128GB", "256GB", "512GB"] : ["One Size"],
 
-          priceHistory: List.generate(
-            7,
-                (index) {
+          priceHistory: List.generate(7, (index) {
+            double base = isPhone ? 50000.0 : 1000.0;
 
-              double base =
-              isPhone ? 50000.0 : 1000.0;
+            double variation = (id * (index + 1) * 37) % 5000;
 
-              double variation =
-                  (id * (index + 1) * 37) % 5000;
+            return base + variation + (index * 100);
+          }),
 
-              return base +
-                  variation +
-                  (index * 100);
-            },
-          ),
-
-          category: isPhone
-              ? "هواتف"
-              : "إكسسوار",
+          category: isPhone ? "هواتف" : "إكسسوار",
 
           minOrder: 1,
         ),
       );
-
     } catch (e) {
-
       return Left(ServerFailure(e.toString()));
     }
   }
 
   @override
-  Future<Either<Failure, Unit>>
-  copyProductToWarehouse({
+  Future<Either<Failure, Unit>> copyProductToWarehouse({
     required String productId,
     required String warehouseId,
   }) async {
-
     try {
-
-      await Future.delayed(
-        const Duration(seconds: 1),
-      );
+      await Future.delayed(const Duration(seconds: 1));
 
       return const Right(unit);
-
     } catch (e) {
-
       return Left(ServerFailure(e.toString()));
     }
   }
 
   @override
-  Future<Either<Failure,
-      List<WarehouseHistoryEntity>>>
+  Future<Either<Failure, List<WarehouseHistoryEntity>>>
   getWarehouseHistory() async {
-
     try {
+      await Future.delayed(const Duration(milliseconds: 500));
 
-      await Future.delayed(
-        const Duration(milliseconds: 500),
-      );
-
-      final List<WarehouseHistoryEntity>
-      history = [
-
+      final List<WarehouseHistoryEntity> history = [
         WarehouseHistoryEntity(
           id: "1",
           userName: "صالح أحمد",
@@ -281,9 +209,7 @@ class ProductRepositoryImpl implements ProductRepository {
       ];
 
       return Right(history);
-
     } catch (e) {
-
       return Left(ServerFailure(e.toString()));
     }
   }

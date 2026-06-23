@@ -30,10 +30,7 @@ class SizeSelector extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(
-                sizes[index],
-                style: TextStyles.font14graphiteGreyRegular
-              ),
+              Text(sizes[index], style: TextStyles.font14graphiteGreyRegular),
 
               SizedBox(width: 8.w),
               Container(
@@ -46,10 +43,9 @@ class SizeSelector extends StatelessWidget {
                 alignment: Alignment.center,
                 child: Text(
                   '${index + 1}',
-                  style: TextStyles.font10lightBlueRegular
+                  style: TextStyles.font10lightBlueRegular,
                 ),
               ),
-
             ],
           ),
         );

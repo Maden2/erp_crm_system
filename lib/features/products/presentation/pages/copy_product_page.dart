@@ -13,10 +13,7 @@ import '../manager/copy_product_state.dart';
 class CopyProductPage extends StatefulWidget {
   final ProductDetailsEntity product;
 
-  const CopyProductPage({
-    super.key,
-    required this.product,
-  });
+  const CopyProductPage({super.key, required this.product});
 
   @override
   State<CopyProductPage> createState() => _CopyProductPageState();
@@ -31,11 +28,7 @@ class _CopyProductPageState extends State<CopyProductPage> {
     "ألعاب": "4",
   };
 
-  final List<String> warehouses = [
-    "الكترونيات",
-    "ملابس",
-    "ألعاب",
-  ];
+  final List<String> warehouses = ["الكترونيات", "ملابس", "ألعاب"];
 
   @override
   Widget build(BuildContext context) {
@@ -77,10 +70,7 @@ class _CopyProductPageState extends State<CopyProductPage> {
             children: [
               _buildProductCard(),
               SizedBox(height: 24.h),
-              Text(
-                "اختر المخزن المستهدف",
-                style: TextStyles.font14PrimaryBold,
-              ),
+              Text("اختر المخزن المستهدف", style: TextStyles.font14PrimaryBold),
               SizedBox(height: 12.h),
               _buildWarehouseDropdown(),
               const Spacer(),
@@ -90,11 +80,13 @@ class _CopyProductPageState extends State<CopyProductPage> {
                   return AppTextButton(
                     buttonText: "نسخ المنتج",
                     isLoading: state is CopyProductLoading,
-                    onPressed: (selectedWarehouse == null || state is CopyProductLoading)
+                    onPressed:
+                        (selectedWarehouse == null ||
+                            state is CopyProductLoading)
                         ? null
                         : () {
-                      _handleCopyAction(context);
-                    },
+                            _handleCopyAction(context);
+                          },
                   );
                 },
               ),
@@ -123,23 +115,17 @@ class _CopyProductPageState extends State<CopyProductPage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-              "المنتج المراد نسخه",
-              style: TextStyles.font14BlackMedium
-          ),
+          Text("المنتج المراد نسخه", style: TextStyles.font14BlackMedium),
           SizedBox(height: 8.h),
-          Text(
-            widget.product.name,
-            style: TextStyles.font12BlackRegular,
-          ),
+          Text(widget.product.name, style: TextStyles.font12BlackRegular),
           SizedBox(height: 4.h),
           Text(
             "الفئة: ${widget.product.category}",
             style: TextStyles.font10lightGrayTextRegular,
           ),
           Text(
-              "المخزن: الإلكترونيات",
-              style: TextStyles.font10lightGrayTextRegular
+            "المخزن: الإلكترونيات",
+            style: TextStyles.font10lightGrayTextRegular,
           ),
         ],
       ),
@@ -160,15 +146,24 @@ class _CopyProductPageState extends State<CopyProductPage> {
           value: selectedWarehouse,
           hint: Align(
             alignment: Alignment.centerRight,
-            child: Text("اختر المخزون المستهدف", style: TextStyles.font10lightGrayTextRegular),
+            child: Text(
+              "اختر المخزون المستهدف",
+              style: TextStyles.font10lightGrayTextRegular,
+            ),
           ),
-          icon: const Icon(Icons.keyboard_arrow_down, color: AppColors.lightGrayText),
+          icon: const Icon(
+            Icons.keyboard_arrow_down,
+            color: AppColors.lightGrayText,
+          ),
           items: warehouses.map((String warehouse) {
             return DropdownMenuItem<String>(
               value: warehouse,
               child: Align(
                 alignment: Alignment.centerRight,
-                child: Text(warehouse, style: const TextStyle(fontFamily: 'Cairo')),
+                child: Text(
+                  warehouse,
+                  style: const TextStyle(fontFamily: 'Cairo'),
+                ),
               ),
             );
           }).toList(),

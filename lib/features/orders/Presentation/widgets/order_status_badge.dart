@@ -28,10 +28,7 @@ class OrderStatusBadge extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           if (showDot) ...[
-            CircleAvatar(
-              radius: 3.r,
-              backgroundColor: statusColor,
-            ),
+            CircleAvatar(radius: 3.r, backgroundColor: statusColor),
             SizedBox(width: 6.w),
           ],
           Text(

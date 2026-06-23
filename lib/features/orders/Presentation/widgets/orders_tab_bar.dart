@@ -6,11 +6,7 @@ class OrdersTabBar extends StatefulWidget {
   final List<String> tabs;
   final Function(int) onTap;
 
-  const OrdersTabBar({
-    super.key,
-    required this.tabs,
-    required this.onTap,
-  });
+  const OrdersTabBar({super.key, required this.tabs, required this.onTap});
 
   @override
   State<OrdersTabBar> createState() => _OrdersTabBarState();
@@ -28,10 +24,7 @@ class _OrdersTabBarState extends State<OrdersTabBar> {
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 24.w),
 
-        decoration: BoxDecoration(
-
-          color: AppColors.homeBg,
-        ),
+        decoration: BoxDecoration(color: AppColors.homeBg),
 
         child: Container(
           padding: EdgeInsets.all(4.w),
@@ -55,7 +48,9 @@ class _OrdersTabBarState extends State<OrdersTabBar> {
                     padding: EdgeInsets.symmetric(vertical: 12.h),
 
                     decoration: BoxDecoration(
-                      color: isSelected ? AppColors.primary : Colors.transparent,
+                      color: isSelected
+                          ? AppColors.primary
+                          : Colors.transparent,
                       borderRadius: BorderRadius.circular(30.r),
                     ),
 
@@ -64,7 +59,9 @@ class _OrdersTabBarState extends State<OrdersTabBar> {
                       maxLines: 1,
                       style: TextStyle(
                         fontFamily: 'Cairo',
-                        fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                        fontWeight: isSelected
+                            ? FontWeight.bold
+                            : FontWeight.normal,
                         fontSize: 13.sp,
                         color: isSelected ? Colors.white : Colors.grey,
                       ),

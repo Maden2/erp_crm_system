@@ -19,8 +19,8 @@ class CopyProductCubit extends Cubit<CopyProductState> {
     );
 
     result.fold(
-          (failure) => emit(CopyProductFailure(failure.message)),
-          (_) => emit(CopyProductSuccess()),
+      (failure) => emit(CopyProductFailure(failure.message)),
+      (_) => emit(CopyProductSuccess()),
     );
   }
 }

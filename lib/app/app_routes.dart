@@ -17,4 +17,5 @@ class Routes {
   static const String warehouseHistory = '/warehouseHistory';
   static const String ordersPage = '/ordersPage';
   static const String orderDetails = '/order-details';
+  static const String invoicesPage = '/invoicesPage';
 }

@@ -7,8 +7,7 @@ part 'latest_support_ticket_state.dart';
 class LatestSupportTicketCubit extends Cubit<LatestSupportTicketState> {
   final GetLatestSupportTicketUseCase useCase;
 
-  LatestSupportTicketCubit(this.useCase)
-      : super(LatestSupportTicketInitial());
+  LatestSupportTicketCubit(this.useCase) : super(LatestSupportTicketInitial());
 
   Future<void> getLatestTicket() async {
     emit(LatestSupportTicketLoading());

@@ -7,4 +7,3 @@ void main() {
   setupServiceLocator();
   runApp(const CRMApp());
 }
-

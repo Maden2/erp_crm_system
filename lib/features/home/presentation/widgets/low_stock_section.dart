@@ -27,8 +27,7 @@ class LowStockSection extends StatelessWidget {
             physics: const NeverScrollableScrollPhysics(),
             itemCount: products.length,
             separatorBuilder: (_, __) => SizedBox(height: 20.h),
-            itemBuilder: (context, index) =>
-                _buildProductItem(products[index]),
+            itemBuilder: (context, index) => _buildProductItem(products[index]),
           ),
         ],
       ),
@@ -42,28 +41,31 @@ class LowStockSection extends StatelessWidget {
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text("منتجات قاربت على النفاد",
-                style: TextStyles.font12BlackMedium),
-            Text("راجع المخزون لتجنب نفاد المعروض",
-                style: TextStyles.font8BlackRegular),
+            Text(
+              "منتجات قاربت على النفاد",
+              style: TextStyles.font12BlackMedium,
+            ),
+            Text(
+              "راجع المخزون لتجنب نفاد المعروض",
+              style: TextStyles.font8BlackRegular,
+            ),
           ],
         ),
         Container(
-          padding:
-          EdgeInsets.symmetric(horizontal: 9.w, vertical: 5.h),
+          padding: EdgeInsets.symmetric(horizontal: 9.w, vertical: 5.h),
           decoration: BoxDecoration(
             color: const Color(0xFFFFEBEB),
             borderRadius: BorderRadius.circular(12.r),
           ),
           child: Row(
             children: [
-              const Icon(Icons.warning_amber_rounded,
-                  color: AppColors.redColor, size: 14),
+              const Icon(
+                Icons.warning_amber_rounded,
+                color: AppColors.redColor,
+                size: 14,
+              ),
               SizedBox(width: 4.w),
-              Text("تنبيه مخزون",
-                  style: TextStyles.font12redRegular,)
-
-
+              Text("تنبيه مخزون", style: TextStyles.font12redRegular),
             ],
           ),
         ),
@@ -73,7 +75,7 @@ class LowStockSection extends StatelessWidget {
 
   Widget _buildProductItem(LowStockEntity product) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 11.w,vertical: 8.h),
+      padding: EdgeInsets.symmetric(horizontal: 11.w, vertical: 8.h),
       decoration: BoxDecoration(
         color: const Color(0xFFEDF0FC),
         borderRadius: BorderRadius.circular(15.r),
@@ -89,7 +91,6 @@ class LowStockSection extends StatelessWidget {
               height: 48.w,
               fit: BoxFit.cover,
 
-
               placeholder: (context, url) => Container(
                 width: 48.w,
                 height: 48.w,
@@ -98,7 +99,6 @@ class LowStockSection extends StatelessWidget {
                   child: CircularProgressIndicator(strokeWidth: 2),
                 ),
               ),
-
 
               errorWidget: (context, url, error) => Container(
                 width: 48.w,
@@ -119,12 +119,11 @@ class LowStockSection extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(product.productName,
-                    style: TextStyles.font12BlackMedium),
+                Text(product.productName, style: TextStyles.font12BlackMedium),
                 SizedBox(height: 6.h),
                 Text(
                   "المتبقي ${product.remainingQuantity} قطع",
-                  style: TextStyles.font12redRegular
+                  style: TextStyles.font12redRegular,
                 ),
               ],
             ),
@@ -140,8 +139,6 @@ class LowStockSection extends StatelessWidget {
               style: TextStyles.font12CoolGreyRegular,
             ),
           ),
-
-
         ],
       ),
     );

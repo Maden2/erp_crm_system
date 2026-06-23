@@ -13,7 +13,6 @@ class SignupPage extends StatefulWidget {
   SignupPageState createState() => SignupPageState();
 }
 
-
 class SignupPageState extends State<SignupPage> {
   final nameController = TextEditingController();
   final emailController = TextEditingController();
@@ -36,9 +35,8 @@ class SignupPageState extends State<SignupPage> {
 
   void validate() {
     setState(() {
-
-      bool isPasswordMatching = passwordController.text == confirmPasswordController.text;
-
+      bool isPasswordMatching =
+          passwordController.text == confirmPasswordController.text;
 
       if (confirmPasswordController.text.isNotEmpty && !isPasswordMatching) {
         passwordErrorText = "كلمة المرور غير متطابقة";
@@ -46,7 +44,8 @@ class SignupPageState extends State<SignupPage> {
         passwordErrorText = null;
       }
 
-      isButtonEnabled = nameController.text.isNotEmpty &&
+      isButtonEnabled =
+          nameController.text.isNotEmpty &&
           emailController.text.isNotEmpty &&
           passwordController.text.isNotEmpty &&
           isPasswordMatching &&
@@ -77,12 +76,14 @@ class SignupPageState extends State<SignupPage> {
                 'assets/images/logo.png',
                 height: 60.h,
                 errorBuilder: (context, error, stackTrace) =>
-                const Icon(Icons.business, size: 60),
+                    const Icon(Icons.business, size: 60),
               ),
               SizedBox(height: 20.h),
               Text("مرحباً بك معنا👋", style: TextStyles.font24PrimaryBold),
-              Text("أنشئ حسابك وابدأ إدارة نظامك باحتراف.",
-                  style: TextStyles.font14GreyRegular),
+              Text(
+                "أنشئ حسابك وابدأ إدارة نظامك باحتراف.",
+                style: TextStyles.font14GreyRegular,
+              ),
               SizedBox(height: 30.h),
 
               AppTextField(
@@ -110,7 +111,6 @@ class SignupPageState extends State<SignupPage> {
               ),
               SizedBox(height: 16.h),
 
-
               AppTextField(
                 controller: confirmPasswordController,
                 label: "تأكيد كلمة المرور",
@@ -122,7 +122,6 @@ class SignupPageState extends State<SignupPage> {
 
               SizedBox(height: 15.h),
 
-
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
@@ -130,7 +129,8 @@ class SignupPageState extends State<SignupPage> {
                     value: isTermsAccepted,
                     activeColor: AppColors.primary,
                     shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(4.r)),
+                      borderRadius: BorderRadius.circular(4.r),
+                    ),
                     onChanged: (val) {
                       setState(() {
                         isTermsAccepted = val ?? false;
@@ -164,9 +164,11 @@ class SignupPageState extends State<SignupPage> {
 
               AppTextButton(
                 buttonText: "إنشاء حساب",
-                onPressed: isButtonEnabled ? () {
-                  Navigator.pushNamed(context, Routes.phoneNumber);
-                } : null,
+                onPressed: isButtonEnabled
+                    ? () {
+                        Navigator.pushNamed(context, Routes.phoneNumber);
+                      }
+                    : null,
               ),
 
               SizedBox(height: 20.h),
@@ -174,13 +176,19 @@ class SignupPageState extends State<SignupPage> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text("هل لديك حساب؟", style: TextStyles.font14DarkGreyRegular),
+                  Text(
+                    "هل لديك حساب؟",
+                    style: TextStyles.font14DarkGreyRegular,
+                  ),
                   SizedBox(width: 12.w),
                   GestureDetector(
                     onTap: () => Navigator.pop(context),
-                    child: Text("تسجيل الدخول",
-                        style: TextStyles.font14PrimaryBold
-                            .copyWith(color: Colors.blue)),
+                    child: Text(
+                      "تسجيل الدخول",
+                      style: TextStyles.font14PrimaryBold.copyWith(
+                        color: Colors.blue,
+                      ),
+                    ),
                   ),
                 ],
               ),

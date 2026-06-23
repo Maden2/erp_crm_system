@@ -58,6 +58,12 @@ class TextStyles {
     color: AppColors.lightGrayText,
     fontFamily: fontFamily,
   );
+  static TextStyle font12GrayTextRegular = TextStyle(
+    fontSize: 12.sp,
+    fontWeight: FontWeight.w400,
+    color: AppColors.greyText,
+    fontFamily: fontFamily,
+  );
 
   static TextStyle font14lightWhiteRegular = TextStyle(
     fontSize: 14.sp,

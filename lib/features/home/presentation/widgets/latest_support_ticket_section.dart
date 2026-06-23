@@ -8,10 +8,7 @@ import '../../domain/entities/latest_support_ticket_entity.dart';
 class LatestSupportTicketSection extends StatelessWidget {
   final LatestSupportTicketEntity ticket;
 
-  const LatestSupportTicketSection({
-    super.key,
-    required this.ticket,
-  });
+  const LatestSupportTicketSection({super.key, required this.ticket});
 
   @override
   Widget build(BuildContext context) {
@@ -45,10 +42,7 @@ class LatestSupportTicketSection extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                "تذاكر الدعم الجديدة",
-                style: TextStyles.font12BlackMedium,
-              ),
+              Text("تذاكر الدعم الجديدة", style: TextStyles.font12BlackMedium),
               SizedBox(height: 4.h),
               Row(
                 mainAxisSize: MainAxisSize.min,
@@ -62,7 +56,7 @@ class LatestSupportTicketSection extends StatelessWidget {
                         ),
                         TextSpan(
                           text: "رقم ${ticket.ticketNumber}",
-                          style: TextStyles.font10MainBlueRegular
+                          style: TextStyles.font10MainBlueRegular,
                         ),
                       ],
                     ),
@@ -79,8 +73,6 @@ class LatestSupportTicketSection extends StatelessWidget {
 
           SizedBox(width: 12.w),
           Icon(Icons.arrow_forward_ios, size: 16.sp, color: Color(0xFF6B7280)),
-
-
         ],
       ),
     );

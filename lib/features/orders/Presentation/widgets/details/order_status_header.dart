@@ -22,10 +22,7 @@ class OrderStatusHeader extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        OrderStatusBadge(
-          status: status,
-          showDot: true,
-        ),
+        OrderStatusBadge(status: status, showDot: true),
 
         Row(
           children: [
@@ -41,10 +38,7 @@ class OrderStatusHeader extends StatelessWidget {
 
             SizedBox(width: 4.w),
 
-            Text(
-              date,
-              style: TextStyles.font10GreyTextRegular
-            ),
+            Text(date, style: TextStyles.font10GreyTextRegular),
           ],
         ),
       ],

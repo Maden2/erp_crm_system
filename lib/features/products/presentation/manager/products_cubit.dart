@@ -56,13 +56,12 @@ class ProductsCubit extends Cubit<ProductsState> {
       query: searchQuery,
     );
 
-    result.fold(
-          (failure) => emit(ProductsFailure(failure.message)),
-          (products) {
-        allProducts = products;
-        _emitCurrentState();
-      },
-    );
+    result.fold((failure) => emit(ProductsFailure(failure.message)), (
+      products,
+    ) {
+      allProducts = products;
+      _emitCurrentState();
+    });
   }
 
   // ================= EMIT STATE =================
@@ -71,23 +70,32 @@ class ProductsCubit extends Cubit<ProductsState> {
 
     // ================= CATEGORY FILTER =================
     if (selectedCategory != "جميع الفئات") {
-      filteredList = filteredList.where((p) => p.category == selectedCategory).toList();
+      filteredList = filteredList
+          .where((p) => p.category == selectedCategory)
+          .toList();
     }
 
     // ================= STOCK FILTER =================
-    if (currentFilter.stockStatus != null && currentFilter.stockStatus!.isNotEmpty) {
+    if (currentFilter.stockStatus != null &&
+        currentFilter.stockStatus!.isNotEmpty) {
       if (currentFilter.stockStatus == "منخفض") {
-        filteredList = filteredList.where((p) => p.isLowStock && p.quantity > 0).toList();
+        filteredList = filteredList
+            .where((p) => p.isLowStock && p.quantity > 0)
+            .toList();
       } else if (currentFilter.stockStatus == "نفاد") {
         filteredList = filteredList.where((p) => p.quantity == 0).toList();
       } else if (currentFilter.stockStatus == "مستقر") {
-        filteredList = filteredList.where((p) => !p.isLowStock && p.quantity > 0).toList();
+        filteredList = filteredList
+            .where((p) => !p.isLowStock && p.quantity > 0)
+            .toList();
       }
     }
 
     // ================= CATEGORY FILTER FROM SHEET =================
     if (currentFilter.category != null && currentFilter.category!.isNotEmpty) {
-      filteredList = filteredList.where((p) => p.category == currentFilter.category).toList();
+      filteredList = filteredList
+          .where((p) => p.category == currentFilter.category)
+          .toList();
     }
 
     // ================= MIN PRICE =================

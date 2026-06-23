@@ -14,12 +14,14 @@ class OrderSummaryCard extends StatelessWidget {
       width: double.infinity,
       padding: EdgeInsets.all(16.w),
       decoration: BoxDecoration(
-          color: AppColors.authBgColor, borderRadius: BorderRadius.circular(8.r)),
+        color: AppColors.authBgColor,
+        borderRadius: BorderRadius.circular(8.r),
+      ),
       child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
 
         children: [
-          Text("ملخص الطلب",style: TextStyles.font12darkTextMedium,),
+          Text("ملخص الطلب", style: TextStyles.font12darkTextMedium),
           _buildSummaryRow("إجمالي المنتجات", "${order.subTotal} ج.م"),
           _buildSummaryRow("الشحن", "${order.shippingFees} ج.م"),
           _buildSummaryRow("الضريبة (15%)", "${order.tax} ج.م"),
@@ -31,7 +33,7 @@ class OrderSummaryCard extends StatelessWidget {
               isDiscount: true,
             ),
 
-          const Divider(height: 0.3,color: Color(0xFFE0E0E0),),
+          const Divider(height: 0.3, color: Color(0xFFE0E0E0)),
           _buildSummaryRow(
             "الإجمالي النهائي",
             "${order.totalAmount} ج.م",
@@ -42,8 +44,12 @@ class OrderSummaryCard extends StatelessWidget {
     );
   }
 
-  Widget _buildSummaryRow(String label, String value,
-      {bool isTotal = false, bool isDiscount = false}) {
+  Widget _buildSummaryRow(
+    String label,
+    String value, {
+    bool isTotal = false,
+    bool isDiscount = false,
+  }) {
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 10.h),
       child: Row(
@@ -57,7 +63,9 @@ class OrderSummaryCard extends StatelessWidget {
               fontWeight: isTotal ? FontWeight.bold : FontWeight.normal,
               color: isDiscount
                   ? const Color(0xFF22C55E)
-                  : (isTotal ? const Color(0xFF1E293B) : const Color(0xFF64748B)),
+                  : (isTotal
+                        ? const Color(0xFF1E293B)
+                        : const Color(0xFF64748B)),
             ),
           ),
           Text(
@@ -68,7 +76,9 @@ class OrderSummaryCard extends StatelessWidget {
               fontWeight: isTotal ? FontWeight.bold : FontWeight.normal,
               color: isTotal
                   ? AppColors.primary
-                  : (isDiscount ? const Color(0xFF22C55E) : const Color(0xFF1E293B)),
+                  : (isDiscount
+                        ? const Color(0xFF22C55E)
+                        : const Color(0xFF1E293B)),
             ),
           ),
         ],

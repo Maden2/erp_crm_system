@@ -7,56 +7,35 @@ import '../../../domain/entities/product_details_entity.dart';
 class ProductInfoTable extends StatelessWidget {
   final ProductDetailsEntity product;
 
-  const ProductInfoTable({
-    super.key,
-    required this.product,
-  });
+  const ProductInfoTable({super.key, required this.product});
 
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
-
-
         SizedBox(height: 12.h),
 
-
-        _buildRow(
-          "الفئة",
-          product.category ?? "هواتف",
-        ),
+        _buildRow("الفئة", product.category ?? "هواتف"),
 
         SizedBox(height: 8.h),
 
-        _buildRow(
-          "SKU",
-          product.sku,
-        ),
+        _buildRow("SKU", product.sku),
 
         SizedBox(height: 8.h),
 
-        _buildRow(
-          "الحالة",
-          product.stock > 0 ? "متاح" : "غير متاح",
-        ),
+        _buildRow("الحالة", product.stock > 0 ? "متاح" : "غير متاح"),
 
         SizedBox(height: 8.h),
 
-        _buildRow(
-          "الحد الأدنى",
-          "${product.minOrder ?? 4}",
-        ),
+        _buildRow("الحد الأدنى", "${product.minOrder ?? 4}"),
       ],
     );
   }
 
   Widget _buildRow(String label, String value) {
     return Container(
-      padding: EdgeInsets.symmetric(
-        horizontal: 8.w,
-        vertical: 8.h,
-      ),
+      padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 8.h),
 
       decoration: BoxDecoration(
         color: AppColors.lightBlueGrey,
@@ -74,10 +53,7 @@ class ProductInfoTable extends StatelessWidget {
             style: TextStyles.font14graphiteGreyRegular,
           ),
 
-          Text(
-            value,
-            style: TextStyles.font14graphiteGreyRegular
-          ),
+          Text(value, style: TextStyles.font14graphiteGreyRegular),
         ],
       ),
     );

@@ -6,14 +6,12 @@ class GetSalesChartUseCase {
 
   GetSalesChartUseCase(this.repository);
 
-  Future<List<SalesChartPointEntity>> call({
-    required String filter,
-  }) async {
+  Future<List<SalesChartPointEntity>> call({required String filter}) async {
     final result = await repository.getSalesChart(filter: filter);
 
     return result.fold(
-          (failure) => throw Exception(failure.message),
-          (data) => data,
+      (failure) => throw Exception(failure.message),
+      (data) => data,
     );
   }
 }

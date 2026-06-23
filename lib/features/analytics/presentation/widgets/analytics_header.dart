@@ -45,11 +45,7 @@ class _AnalyticsHeaderState extends State<AnalyticsHeader> {
           SafeArea(
             bottom: false,
             child: Padding(
-              padding: EdgeInsets.only(
-                bottom: 16.h,
-                left: 24.w,
-                right: 24.w,
-              ),
+              padding: EdgeInsets.only(bottom: 16.h, left: 24.w, right: 24.w),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [

@@ -8,7 +8,8 @@ import '../entities/warehouse_history_entity.dart';
 abstract class ProductRepository {
   Future<Either<Failure, List<ProductEntity>>> getProducts({
     String? query,
-    String? warehouseId, ProductFilterEntity? filter,
+    String? warehouseId,
+    ProductFilterEntity? filter,
   });
 
   Future<Either<Failure, ProductDetailsEntity>> getProductDetails(
@@ -21,5 +22,4 @@ abstract class ProductRepository {
   });
 
   Future<Either<Failure, List<WarehouseHistoryEntity>>> getWarehouseHistory();
-
 }

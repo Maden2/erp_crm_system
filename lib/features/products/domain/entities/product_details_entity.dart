@@ -34,12 +34,5 @@ class ProductDetailsEntity extends Equatable {
   });
 
   @override
-  List<Object?> get props => [
-    id,
-    sku,
-    name,
-    priceHistory,
-    stock,
-    price,
-  ];
+  List<Object?> get props => [id, sku, name, priceHistory, stock, price];
 }

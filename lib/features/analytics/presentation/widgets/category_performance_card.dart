@@ -7,10 +7,7 @@ import '../../domain/entities/analytics_entity.dart';
 class CategoryPerformanceCard extends StatelessWidget {
   final List<CategoryPerformanceEntity> categories;
 
-  const CategoryPerformanceCard({
-    super.key,
-    required this.categories,
-  });
+  const CategoryPerformanceCard({super.key, required this.categories});
 
   @override
   Widget build(BuildContext context) {
@@ -24,14 +21,11 @@ class CategoryPerformanceCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            "أداء الفئات",
-            style: TextStyles.font12darkTextMedium,
-          ),
+          Text("أداء الفئات", style: TextStyles.font12darkTextMedium),
           SizedBox(height: 12.h),
           ...List.generate(
             categories.length,
-                (index) => _buildCategoryProgress(
+            (index) => _buildCategoryProgress(
               categories[index].label,
               categories[index].percentage / 100,
             ),
@@ -41,16 +35,13 @@ class CategoryPerformanceCard extends StatelessWidget {
     );
   }
 
-  Widget _buildCategoryProgress(
-      String label,
-      double value,
-      ) {
+  Widget _buildCategoryProgress(String label, double value) {
     return Padding(
       padding: EdgeInsets.only(bottom: 12.h),
       child: Column(
         children: [
           Row(
-            textDirection: TextDirection.rtl, 
+            textDirection: TextDirection.rtl,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
@@ -95,11 +86,7 @@ class CategoryPerformanceCard extends StatelessWidget {
                           gradient: const LinearGradient(
                             begin: Alignment.centerRight,
                             end: Alignment.centerLeft,
-                            colors: [
-                              Color(0xFF5990D3),
-
-                              Color(0xFF0052B5),
-                            ],
+                            colors: [Color(0xFF5990D3), Color(0xFF0052B5)],
                           ),
                         ),
                       ),
@@ -108,7 +95,7 @@ class CategoryPerformanceCard extends StatelessWidget {
                 },
               ),
             ),
-          )
+          ),
         ],
       ),
     );

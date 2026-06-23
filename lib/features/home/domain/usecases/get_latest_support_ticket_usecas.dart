@@ -10,8 +10,8 @@ class GetLatestSupportTicketUseCase {
     final result = await repository.getLatestSupportTicket();
 
     return result.fold(
-          (failure) => throw Exception(failure.message),
-          (data) => data,
+      (failure) => throw Exception(failure.message),
+      (data) => data,
     );
   }
 }

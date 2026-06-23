@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:pivot/core/utils/app_colors.dart';
 
-class CustomAppBar extends StatelessWidget
-    implements PreferredSizeWidget {
+class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final Widget title;
   final List<Widget>? actions;
   final Widget? leading;
+  final double? leadingWidth;
 
   const CustomAppBar({
     super.key,
     required this.title,
     this.actions,
     this.leading,
+    this.leadingWidth,
   });
 
   @override
@@ -26,6 +27,7 @@ class CustomAppBar extends StatelessWidget
       title: title,
       actions: actions,
       leading: leading,
+      leadingWidth: leadingWidth,
     );
   }
 }

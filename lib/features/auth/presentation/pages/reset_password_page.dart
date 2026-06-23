@@ -15,7 +15,8 @@ class ResetPasswordPage extends StatefulWidget {
 
 class ResetPasswordPageState extends State<ResetPasswordPage> {
   final TextEditingController passwordController = TextEditingController();
-  final TextEditingController confirmPasswordController = TextEditingController();
+  final TextEditingController confirmPasswordController =
+      TextEditingController();
 
   bool isButtonEnabled = false;
 
@@ -30,16 +31,16 @@ class ResetPasswordPageState extends State<ResetPasswordPage> {
 
   void validateInputs() {
     setState(() {
-
-      bool isPasswordMatching = passwordController.text == confirmPasswordController.text;
+      bool isPasswordMatching =
+          passwordController.text == confirmPasswordController.text;
       if (confirmPasswordController.text.isNotEmpty && !isPasswordMatching) {
         passwordErrorText = "كلمة المرور غير متطابقة";
       } else {
         passwordErrorText = null;
       }
 
-
-      isButtonEnabled = passwordController.text.isNotEmpty &&
+      isButtonEnabled =
+          passwordController.text.isNotEmpty &&
           confirmPasswordController.text.isNotEmpty &&
           isPasswordMatching;
     });
@@ -95,8 +96,10 @@ class ResetPasswordPageState extends State<ResetPasswordPage> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text("اكتب كلمة المرور الجديدة",
-                          style: TextStyles.font12LightGreyRegular),
+                      Text(
+                        "اكتب كلمة المرور الجديدة",
+                        style: TextStyles.font12LightGreyRegular,
+                      ),
                       SizedBox(height: 16.h),
                       AppTextField(
                         controller: passwordController,
@@ -106,8 +109,10 @@ class ResetPasswordPageState extends State<ResetPasswordPage> {
                         prefixIcon: const Icon(Icons.lock_outline),
                       ),
                       SizedBox(height: 20.h),
-                      Text("تأكيد كلمة المرور",
-                          style: TextStyles.font12LightGreyRegular),
+                      Text(
+                        "تأكيد كلمة المرور",
+                        style: TextStyles.font12LightGreyRegular,
+                      ),
                       SizedBox(height: 16.h),
 
                       AppTextField(
@@ -123,8 +128,8 @@ class ResetPasswordPageState extends State<ResetPasswordPage> {
                         buttonText: "تغيير كلمة المرور",
                         onPressed: isButtonEnabled
                             ? () {
-                          Navigator.pushNamed(context, Routes.success);
-                        }
+                                Navigator.pushNamed(context, Routes.success);
+                              }
                             : null,
                       ),
                     ],

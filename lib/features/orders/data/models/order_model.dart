@@ -37,9 +37,11 @@ class OrderModel extends OrderEntity {
       shippingAddress: json['shipping_address'] ?? "",
       date: DateTime.parse(json['date'] ?? DateTime.now().toIso8601String()),
 
-      items: (json['items'] as List?)
-          ?.map((item) => OrderItemModel.fromJson(item))
-          .toList() ?? [],
+      items:
+          (json['items'] as List?)
+              ?.map((item) => OrderItemModel.fromJson(item))
+              .toList() ??
+          [],
 
       itemsCount: json['items_count'] ?? 0,
       subTotal: (json['sub_total'] as num?)?.toDouble() ?? 0.0,

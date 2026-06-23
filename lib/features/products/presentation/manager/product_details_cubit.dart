@@ -5,7 +5,8 @@ import 'product_details_state.dart';
 class ProductDetailsCubit extends Cubit<ProductDetailsState> {
   final GetProductDetailsUseCase getProductDetailsUseCase;
 
-  ProductDetailsCubit(this.getProductDetailsUseCase) : super(ProductDetailsInitial());
+  ProductDetailsCubit(this.getProductDetailsUseCase)
+    : super(ProductDetailsInitial());
 
   void getProductDetails(String productId) async {
     emit(ProductDetailsLoading());
@@ -13,8 +14,8 @@ class ProductDetailsCubit extends Cubit<ProductDetailsState> {
     final result = await getProductDetailsUseCase.call(productId);
 
     result.fold(
-          (failure) => emit(ProductDetailsFailure(failure.message)),
-          (product) => emit(ProductDetailsSuccess(product)),
+      (failure) => emit(ProductDetailsFailure(failure.message)),
+      (product) => emit(ProductDetailsSuccess(product)),
     );
   }
 }

@@ -19,10 +19,7 @@ class CustomerNoteBox extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            "ملاحظات للموظفين",
-            style: TextStyles.font12darkTextMedium,
-          ),
+          Text("ملاحظات للموظفين", style: TextStyles.font12darkTextMedium),
           SizedBox(height: 10.h),
           Container(
             width: double.infinity,
@@ -37,9 +34,10 @@ class CustomerNoteBox extends StatelessWidget {
               note,
               textDirection: TextDirection.rtl,
               textAlign: TextAlign.right,
-              style: TextStyles.font12darkTextMedium
+              style: TextStyles.font12darkTextMedium,
             ),
-          ),          SizedBox(height: 10.h),
+          ),
+          SizedBox(height: 10.h),
           SizedBox(
             width: double.infinity,
             child: ElevatedButton(
@@ -51,12 +49,11 @@ class CustomerNoteBox extends StatelessWidget {
                 padding: EdgeInsets.symmetric(vertical: 12.h),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8.r),
-
                 ),
               ),
               child: Text(
                 "حفظ الملاحظات",
-                style: TextStyles.font12darkTextMedium
+                style: TextStyles.font12darkTextMedium,
               ),
             ),
           ),

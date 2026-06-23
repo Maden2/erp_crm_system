@@ -89,10 +89,7 @@ class CustomerInfoCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: const Color(0xFFFFFBEB),
         borderRadius: BorderRadius.circular(8.r),
-        border: Border.all(
-          color: const Color(0xFFFEF3C7),
-          width: 1,
-        ),
+        border: Border.all(color: const Color(0xFFFEF3C7), width: 1),
       ),
       child: IntrinsicHeight(
         child: Row(
@@ -139,7 +136,6 @@ class CustomerInfoCard extends StatelessWidget {
                             color: const Color(0xFFD97706),
                           ),
                         ),
-
                       ],
                     ),
                     SizedBox(height: 4.h),

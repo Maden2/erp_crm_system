@@ -46,110 +46,115 @@ import '../../features/analytics/data/repositories/analytics_repository_impl.dar
 import '../../features/analytics/domain/repositories/analytics_repository.dart';
 import '../../features/analytics/presentation/manager/analytics_cubit.dart';
 
+// ================== INVOICES ==================
+import '../../features/invoices/data/datasources/invoice_remote_data_source.dart';
+import '../../features/invoices/data/repositories/invoice_repository_impl.dart';
+import '../../features/invoices/domain/repositories/invoice_repository.dart';
+import '../../features/invoices/domain/usecases/get_invoices_use_case.dart';
+import '../../features/invoices/presentation/manager/invoices_cubit.dart';
+
 final getIt = GetIt.instance;
 
 void setupServiceLocator() {
-
   // ================== AUTH ==================
 
-  getIt.registerLazySingleton<AuthRepository>(
-        () => MockAuthRepository(),
-  );
+  getIt.registerLazySingleton<AuthRepository>(() => MockAuthRepository());
 
-  getIt.registerLazySingleton(
-        () => LoginUseCase(getIt<AuthRepository>()),
-  );
+  getIt.registerLazySingleton(() => LoginUseCase(getIt<AuthRepository>()));
 
-  getIt.registerFactory(
-        () => AuthCubit(getIt<LoginUseCase>()),
-  );
+  getIt.registerFactory(() => AuthCubit(getIt<LoginUseCase>()));
 
   // ================== HOME ==================
 
-  getIt.registerLazySingleton<HomeRepository>(
-        () => HomeRepositoryImpl(),
-  );
+  getIt.registerLazySingleton<HomeRepository>(() => HomeRepositoryImpl());
 
   // ---------- Sales Chart ----------
   getIt.registerLazySingleton(
-        () => GetSalesChartUseCase(getIt<HomeRepository>()),
+    () => GetSalesChartUseCase(getIt<HomeRepository>()),
   );
 
-  getIt.registerFactory(
-        () => SalesChartCubit(getIt<GetSalesChartUseCase>()),
-  );
+  getIt.registerFactory(() => SalesChartCubit(getIt<GetSalesChartUseCase>()));
 
   // ---------- Low Stock ----------
   getIt.registerLazySingleton(
-        () => GetLowStockUseCase(getIt<HomeRepository>()),
+    () => GetLowStockUseCase(getIt<HomeRepository>()),
   );
 
-  getIt.registerFactory(
-        () => LowStockCubit(getIt<GetLowStockUseCase>()),
-  );
+  getIt.registerFactory(() => LowStockCubit(getIt<GetLowStockUseCase>()));
 
   // ---------- Support Ticket ----------
   getIt.registerLazySingleton(
-        () => GetLatestSupportTicketUseCase(getIt<HomeRepository>()),
+    () => GetLatestSupportTicketUseCase(getIt<HomeRepository>()),
   );
 
   getIt.registerFactory(
-        () => LatestSupportTicketCubit(
-      getIt<GetLatestSupportTicketUseCase>(),
-    ),
+    () => LatestSupportTicketCubit(getIt<GetLatestSupportTicketUseCase>()),
   );
 
   // ================== PRODUCTS ==================
 
-  getIt.registerLazySingleton<ProductRepository>(
-        () => ProductRepositoryImpl(),
-  );
+  getIt.registerLazySingleton<ProductRepository>(() => ProductRepositoryImpl());
 
   getIt.registerLazySingleton(
-        () => GetProductsUseCase(getIt<ProductRepository>()),
+    () => GetProductsUseCase(getIt<ProductRepository>()),
   );
 
-  getIt.registerFactory(
-        () => ProductsCubit(getIt<GetProductsUseCase>()),
-  );
+  getIt.registerFactory(() => ProductsCubit(getIt<GetProductsUseCase>()));
 
   // Products Details
   getIt.registerFactory(() => ProductDetailsCubit(getIt()));
   getIt.registerLazySingleton(() => GetProductDetailsUseCase(getIt()));
 
   // ---------- Copy Product  ----------
-  getIt.registerLazySingleton(() => CopyProductUseCase(getIt<ProductRepository>()));
+  getIt.registerLazySingleton(
+    () => CopyProductUseCase(getIt<ProductRepository>()),
+  );
   getIt.registerFactory(() => CopyProductCubit(getIt<CopyProductUseCase>()));
 
   // ---------- Warehouse History ----------
-  getIt.registerLazySingleton(() => GetWarehouseHistoryUseCase(getIt<ProductRepository>()));
-  getIt.registerFactory(() => WarehouseHistoryCubit(getIt<GetWarehouseHistoryUseCase>()));
-
+  getIt.registerLazySingleton(
+    () => GetWarehouseHistoryUseCase(getIt<ProductRepository>()),
+  );
+  getIt.registerFactory(
+    () => WarehouseHistoryCubit(getIt<GetWarehouseHistoryUseCase>()),
+  );
 
   // ================== ORDERS ==================
-  getIt.registerLazySingleton<OrderRepository>(
-        () => OrderRepositoryImpl(),
-  );
+  getIt.registerLazySingleton<OrderRepository>(() => OrderRepositoryImpl());
 
-  getIt.registerLazySingleton(
-        () => GetOrdersUseCase(getIt<OrderRepository>()),
-  );
+  getIt.registerLazySingleton(() => GetOrdersUseCase(getIt<OrderRepository>()));
 
-  getIt.registerFactory(
-        () => OrdersCubit(getIt<GetOrdersUseCase>()),
-  );
+  getIt.registerFactory(() => OrdersCubit(getIt<GetOrdersUseCase>()));
 
   // ================== ANALYTICS ==================
 
   getIt.registerLazySingleton<AnalyticsRepository>(
-        () => AnalyticsRepositoryImpl(),
+    () => AnalyticsRepositoryImpl(),
   );
 
   getIt.registerLazySingleton(
-        () => GetAnalyticsUseCase(getIt<AnalyticsRepository>()),
+    () => GetAnalyticsUseCase(getIt<AnalyticsRepository>()),
+  );
+
+  getIt.registerFactory(() => AnalyticsCubit(getIt<GetAnalyticsUseCase>()));
+
+  // ================== INVOICES ==================
+
+  getIt.registerLazySingleton<InvoiceRemoteDataSource>(
+    () => InvoiceRemoteDataSourceImpl(),
+  );
+
+  getIt.registerLazySingleton<InvoiceRepository>(
+    () => InvoiceRepositoryImpl(
+      remoteDataSource: getIt<InvoiceRemoteDataSource>(),
+    ),
+  );
+
+  getIt.registerLazySingleton(
+    () => GetInvoicesUseCase(getIt<InvoiceRepository>()),
   );
 
   getIt.registerFactory(
-        () => AnalyticsCubit(getIt<GetAnalyticsUseCase>()),
+    () => InvoicesCubit(getInvoicesUseCase: getIt<GetInvoicesUseCase>()),
   );
 }

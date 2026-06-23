@@ -13,16 +13,9 @@ class EmptyOrdersWidget extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Image.asset(
-            AppAssets.emptyOrdersIcon,
-            width: 200.w,
-            height: 200.h,
-          ),
+          Image.asset(AppAssets.emptyOrdersIcon, width: 200.w, height: 200.h),
           SizedBox(height: 24.h),
-          Text(
-            "قائمة الطلبات فارغة!ً",
-            style: TextStyles.font20DarkGreyMedium
-          ),
+          Text("قائمة الطلبات فارغة!ً", style: TextStyles.font20DarkGreyMedium),
           SizedBox(height: 12.h),
           Text(
             "بانتظار أول طلب ليظهر في لوحة التحكم.",

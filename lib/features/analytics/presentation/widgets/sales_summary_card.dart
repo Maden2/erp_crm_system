@@ -55,42 +55,62 @@ class _SalesSummaryCardState extends State<SalesSummaryCard> {
       {
         'title': 'إجمالي مبيعات اليوم',
         'value': '${data.totalSalesToday.toStringAsFixed(0)} ج.م',
-        'percent': '${data.salesChangePercentage >= 0 ? '+' : ''}${data.salesChangePercentage}%',
+        'percent':
+            '${data.salesChangePercentage >= 0 ? '+' : ''}${data.salesChangePercentage}%',
         'isPositive': data.salesChangePercentage >= 0,
         'iconColor': const Color(0xFF1D4ED8),
         'icon': Icons.trending_up,
         'chartColor': const Color(0xFF1D4ED8),
-        'spots': data.salesChart.asMap().entries.map((e) => FlSpot(e.key.toDouble(), e.value.value)).toList(),
+        'spots': data.salesChart
+            .asMap()
+            .entries
+            .map((e) => FlSpot(e.key.toDouble(), e.value.value))
+            .toList(),
       },
       {
         'title': 'الأرباح الصافية',
         'value': '${data.netProfit.toStringAsFixed(0)} ج.م',
-        'percent': '${data.netProfitChangePercentage >= 0 ? '+' : ''}${data.netProfitChangePercentage}%',
+        'percent':
+            '${data.netProfitChangePercentage >= 0 ? '+' : ''}${data.netProfitChangePercentage}%',
         'isPositive': data.netProfitChangePercentage >= 0,
         'iconColor': const Color(0xFF10B981),
         'icon': Icons.account_balance_wallet_outlined,
         'chartColor': const Color(0xFF10B981),
-        'spots': data.netProfitChart.asMap().entries.map((e) => FlSpot(e.key.toDouble(), e.value.value)).toList(),
+        'spots': data.netProfitChart
+            .asMap()
+            .entries
+            .map((e) => FlSpot(e.key.toDouble(), e.value.value))
+            .toList(),
       },
       {
         'title': 'عدد الطلبات',
         'value': data.totalOrders.toString(),
-        'percent': '${data.ordersChangePercentage >= 0 ? '+' : ''}${data.ordersChangePercentage}%',
+        'percent':
+            '${data.ordersChangePercentage >= 0 ? '+' : ''}${data.ordersChangePercentage}%',
         'isPositive': data.ordersChangePercentage >= 0,
         'iconColor': const Color(0xFF7C3AED),
         'icon': Icons.shopping_cart_outlined,
         'chartColor': const Color(0xFF3B82F6),
-        'spots': data.ordersChart.asMap().entries.map((e) => FlSpot(e.key.toDouble(), e.value.value)).toList(),
+        'spots': data.ordersChart
+            .asMap()
+            .entries
+            .map((e) => FlSpot(e.key.toDouble(), e.value.value))
+            .toList(),
       },
       {
         'title': 'نسبة الإلغاءات',
         'value': '${data.cancellationRate}%',
-        'percent': '${data.cancellationChangePercentage >= 0 ? '+' : ''}${data.cancellationChangePercentage}%',
+        'percent':
+            '${data.cancellationChangePercentage >= 0 ? '+' : ''}${data.cancellationChangePercentage}%',
         'isPositive': data.cancellationChangePercentage >= 0,
         'iconColor': const Color(0xFFF59E0B),
         'icon': Icons.warning_amber_rounded,
         'chartColor': const Color(0xFFF59E0B),
-        'spots': data.cancellationChart.asMap().entries.map((e) => FlSpot(e.key.toDouble(), e.value.value)).toList(),
+        'spots': data.cancellationChart
+            .asMap()
+            .entries
+            .map((e) => FlSpot(e.key.toDouble(), e.value.value))
+            .toList(),
       },
     ];
   }
@@ -100,7 +120,10 @@ class _SalesSummaryCardState extends State<SalesSummaryCard> {
     return BlocBuilder<AnalyticsCubit, AnalyticsState>(
       builder: (context, state) {
         if (state is AnalyticsLoading) {
-          return SizedBox(height: 160.h, child: const Center(child: CircularProgressIndicator()));
+          return SizedBox(
+            height: 160.h,
+            child: const Center(child: CircularProgressIndicator()),
+          );
         }
 
         if (state is AnalyticsSuccess) {
@@ -177,7 +200,11 @@ class _SalesSummaryCardState extends State<SalesSummaryCard> {
                   color: card['iconColor'] as Color,
                   borderRadius: BorderRadius.circular(10.r),
                 ),
-                child: Icon(card['icon'] as IconData, color: Colors.white, size: 14.sp),
+                child: Icon(
+                  card['icon'] as IconData,
+                  color: Colors.white,
+                  size: 14.sp,
+                ),
               ),
               SizedBox(width: 8.w),
               Expanded(
@@ -239,7 +266,10 @@ class _SalesSummaryCardState extends State<SalesSummaryCard> {
                     belowBarData: BarAreaData(
                       show: true,
                       gradient: LinearGradient(
-                        colors: [chartColor.withOpacity(0.12), chartColor.withOpacity(0.0)],
+                        colors: [
+                          chartColor.withOpacity(0.12),
+                          chartColor.withOpacity(0.0),
+                        ],
                         begin: Alignment.topCenter,
                         end: Alignment.bottomCenter,
                       ),

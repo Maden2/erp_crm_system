@@ -22,9 +22,7 @@ class ProductDetailsModel extends ProductDetailsEntity {
   /// ================================
   /// FROM JSON
   /// ================================
-  factory ProductDetailsModel.fromJson(
-      Map<String, dynamic> json,
-      ) {
+  factory ProductDetailsModel.fromJson(Map<String, dynamic> json) {
     return ProductDetailsModel(
       id: json['id'].toString(),
 
@@ -42,21 +40,13 @@ class ProductDetailsModel extends ProductDetailsEntity {
 
       description: json['description'] ?? '',
 
-      images: List<String>.from(
-        json['images'] ?? [],
-      ),
+      images: List<String>.from(json['images'] ?? []),
 
-      colors: List<int>.from(
-        json['colors'] ?? [],
-      ),
+      colors: List<int>.from(json['colors'] ?? []),
 
-      sizes: List<String>.from(
-        json['sizes'] ?? [],
-      ),
+      sizes: List<String>.from(json['sizes'] ?? []),
 
-      priceHistory: List<double>.from(
-        json['price_history'] ?? [],
-      ),
+      priceHistory: List<double>.from(json['price_history'] ?? []),
 
       category: json['category'] ?? '',
 

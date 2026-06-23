@@ -1,10 +1,6 @@
 import 'package:flutter/material.dart';
 
-enum StockStatus {
-  available,
-  discounted,
-  lowStock,
-}
+enum StockStatus { available, discounted, lowStock }
 
 extension StockStatusX on StockStatus {
   String get label {

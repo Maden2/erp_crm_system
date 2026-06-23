@@ -11,8 +11,8 @@ class AnalyticsCubit extends Cubit<AnalyticsState> {
     emit(AnalyticsLoading());
     final result = await getAnalyticsUseCase();
     result.fold(
-          (failure) => emit(AnalyticsError(failure.toString())),
-          (analytics) => emit(AnalyticsSuccess(analytics)),
+      (failure) => emit(AnalyticsError(failure.toString())),
+      (analytics) => emit(AnalyticsSuccess(analytics)),
     );
   }
 }

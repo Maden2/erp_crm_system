@@ -21,7 +21,6 @@ class _HomeBannerState extends State<HomeBanner> {
   int _currentPage = 0;
   late Timer _timer;
 
-
   late final HomeBannerEntity _dummyData = HomeBannerEntity(
     userName: "محمد",
     orderNumber: "2483",
@@ -67,13 +66,11 @@ class _HomeBannerState extends State<HomeBanner> {
               _buildBannerItem(
                 image: AppAssets.welcomeBannerBg,
                 title: "أهلاً ${data.userName} 👋",
-                subtitle:
-                "لنبدأ رحلتك في تنظيم عملك… كل شيء جاهز للانطلاق!",
+                subtitle: "لنبدأ رحلتك في تنظيم عملك… كل شيء جاهز للانطلاق!",
               ),
               _buildBannerItem(
                 image: AppAssets.ordersBannerBg,
-                title:
-                "تم استلام طلب جديد رقم #${data.orderNumber}",
+                title: "تم استلام طلب جديد رقم #${data.orderNumber}",
                 hasIcon: true,
                 iconPath: AppAssets.alarmIcon,
               ),
@@ -116,10 +113,7 @@ class _HomeBannerState extends State<HomeBanner> {
       margin: EdgeInsets.symmetric(horizontal: 2.w),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(16.r),
-        image: DecorationImage(
-          image: AssetImage(image),
-          fit: BoxFit.cover,
-        ),
+        image: DecorationImage(image: AssetImage(image), fit: BoxFit.cover),
       ),
       child: Padding(
         padding: EdgeInsets.all(20.w),
@@ -132,11 +126,7 @@ class _HomeBannerState extends State<HomeBanner> {
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(16.r),
                 ),
-                child: Image.asset(
-                  iconPath,
-                  width: 24.w,
-                  height: 24.h,
-                ),
+                child: Image.asset(iconPath, width: 24.w, height: 24.h),
               ),
               SizedBox(width: 12.w),
             ],
@@ -149,8 +139,7 @@ class _HomeBannerState extends State<HomeBanner> {
                     Text(title, style: TextStyles.font16WhiteBold),
                   if (subtitle != null) ...[
                     SizedBox(height: 8.h),
-                    Text(subtitle,
-                        style: TextStyles.font12WhiteRegular),
+                    Text(subtitle, style: TextStyles.font12WhiteRegular),
                   ],
                 ],
               ),

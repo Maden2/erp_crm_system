@@ -14,7 +14,8 @@ class AddWarehousePage extends StatefulWidget {
 }
 
 class _AddWarehousePageState extends State<AddWarehousePage> {
-  final TextEditingController _warehouseNameController = TextEditingController();
+  final TextEditingController _warehouseNameController =
+      TextEditingController();
   bool _isButtonEnabled = false;
 
   @override
@@ -52,10 +53,7 @@ class _AddWarehousePageState extends State<AddWarehousePage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              "جميع المخزون",
-              style: TextStyles.font20PrimaryMedium
-            ),
+            Text("جميع المخزون", style: TextStyles.font20PrimaryMedium),
 
             SizedBox(height: 20.h),
 
@@ -67,8 +65,8 @@ class _AddWarehousePageState extends State<AddWarehousePage> {
               buttonText: "إضافة مخزون",
               onPressed: _isButtonEnabled
                   ? () {
-                _handleSave();
-              }
+                      _handleSave();
+                    }
                   : null,
             ),
 
@@ -99,7 +97,10 @@ class _AddWarehousePageState extends State<AddWarehousePage> {
             fontSize: 12.sp,
           ),
           border: InputBorder.none,
-          contentPadding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 14.h),
+          contentPadding: EdgeInsets.symmetric(
+            horizontal: 16.w,
+            vertical: 14.h,
+          ),
         ),
       ),
     );

@@ -22,11 +22,8 @@ class AppTheme {
     cardTheme: CardThemeData(
       color: Colors.white,
       elevation: 0,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
     ),
-
 
     textTheme: const TextTheme(
       headlineMedium: TextStyle(
@@ -34,10 +31,7 @@ class AppTheme {
         fontWeight: FontWeight.bold,
         color: Color(0xFF1F2937),
       ),
-      bodyMedium: TextStyle(
-        fontSize: 14,
-        color: Color(0xFF6B7280),
-      ),
+      bodyMedium: TextStyle(fontSize: 14, color: Color(0xFF6B7280)),
     ),
   );
 }

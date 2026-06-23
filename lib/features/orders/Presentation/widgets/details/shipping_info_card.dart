@@ -46,7 +46,6 @@ class ShippingInfoCard extends StatelessWidget {
             valueColor: AppColors.primary,
           ),
 
-
           Container(
             width: double.infinity,
             padding: EdgeInsets.symmetric(vertical: 10.h),
@@ -67,10 +66,7 @@ class ShippingInfoCard extends StatelessWidget {
                   ),
                 ),
                 SizedBox(width: 4.w),
-                Text(
-                  "تتبع الشحنة",
-                  style: TextStyles.font12darkTextMedium
-                ),
+                Text("تتبع الشحنة", style: TextStyles.font12darkTextMedium),
               ],
             ),
           ),

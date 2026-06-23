@@ -47,7 +47,6 @@ class StatsCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-
           Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
@@ -79,10 +78,7 @@ class StatsCard extends StatelessWidget {
                       ),
                     ),
                     SizedBox(height: 8.h),
-                    Text(
-                      value,
-                      style: TextStyles.font16BlackBold
-                    ),
+                    Text(value, style: TextStyles.font16BlackBold),
                   ],
                 ),
               ),

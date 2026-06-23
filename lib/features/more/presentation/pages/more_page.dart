@@ -4,6 +4,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:pivot/core/utils/app_assets.dart';
 import 'package:pivot/core/utils/app_colors.dart';
+import '../../../../core/di/service_locator.dart';
+import '../../../invoices/presentation/manager/invoices_cubit.dart';
+import '../../../invoices/presentation/pages/invoices_screen.dart';
 import '../manager/more_cubit.dart';
 import '../widgets/menu_tile.dart';
 
@@ -31,7 +34,18 @@ class MorePage extends StatelessWidget {
                   title: "الفواتير",
                   subtitle: "ادارة وعرض الفواتير",
                   icon: AppAssets.invoicesIcon,
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => BlocProvider(
+                          create: (context) =>
+                              getIt<InvoicesCubit>()..fetchInvoices(),
+                          child: const InvoicesScreen(),
+                        ),
+                      ),
+                    );
+                  },
                 ),
                 MenuTile(
                   title: "الأرباح",
@@ -93,7 +107,6 @@ class MorePage extends StatelessWidget {
                   icon: AppAssets.settingsIcon,
                   onTap: () {},
                 ),
-
 
                 _buildLogoutButton(),
                 SizedBox(height: 30.h),
@@ -170,7 +183,11 @@ class MorePage extends StatelessWidget {
             ],
           ),
           const Spacer(),
-          const Icon(Icons.arrow_forward_ios, color: AppColors.homeBg, size: 20),
+          const Icon(
+            Icons.arrow_forward_ios,
+            color: AppColors.homeBg,
+            size: 20,
+          ),
         ],
       ),
     );

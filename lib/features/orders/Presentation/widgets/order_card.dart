@@ -12,11 +12,7 @@ class OrderCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.pushNamed(
-          context,
-          '/order-details',
-          arguments: order
-        );
+        Navigator.pushNamed(context, '/order-details', arguments: order);
       },
       child: Container(
         margin: EdgeInsets.only(bottom: 14.h),

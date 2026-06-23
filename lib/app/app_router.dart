@@ -33,6 +33,9 @@ import '../features/products/presentation/pages/warehouses_management_page.dart'
 // Orders Imports
 import '../features/orders/presentation/manager/orders_cubit.dart';
 
+// ================== INVOICES IMPORTS ==================
+import '../features/invoices/presentation/manager/invoices_cubit.dart';
+import '../features/invoices/presentation/pages/invoices_screen.dart';
 
 import 'app_routes.dart';
 
@@ -41,7 +44,7 @@ class AppRouter {
     final arguments = settings.arguments;
 
     switch (settings.name) {
-    // ================== AUTH ==================
+      // ================== AUTH ==================
       case Routes.initial:
       case Routes.login:
       case Routes.forgotPassword:
@@ -52,29 +55,33 @@ class AppRouter {
       case Routes.signupSuccess:
         return _authRoutes(settings);
 
-    // ================== MAIN APP & HOME ==================
+      // ================== MAIN APP & HOME ==================
       case Routes.navigationPage:
       case Routes.dashboard:
         return _homeRoutes(settings);
 
-    // ================== PRODUCTS ==================
+      // ================== PRODUCTS ==================
       case Routes.productsPage:
       case Routes.productDetails:
       case Routes.copyProductPage:
         return _productRoutes(settings, arguments);
 
-    // ================== WAREHOUSES ==================
+      // ================== WAREHOUSES ==================
       case Routes.warehousesManagement:
       case Routes.addWarehouse:
       case Routes.warehouseHistory:
         return _warehouseRoutes(settings);
 
-    // ================== ORDERS ==================
+      // ================== ORDERS ==================
       case Routes.ordersPage:
       case Routes.orderDetails:
         return _orderRoutes(settings, arguments);
 
-    // ================== DEFAULT ==================
+      // ================== INVOICES ==================
+      case Routes.invoicesPage:
+        return _invoiceRoutes(settings);
+
+      // ================== DEFAULT ==================
       default:
         return _errorRoute(settings);
     }
@@ -85,7 +92,12 @@ class AppRouter {
     switch (settings.name) {
       case Routes.initial:
       case Routes.login:
-        return MaterialPageRoute(builder: (_) => BlocProvider(create: (_) => getIt<AuthCubit>(), child: const LoginPage()));
+        return MaterialPageRoute(
+          builder: (_) => BlocProvider(
+            create: (_) => getIt<AuthCubit>(),
+            child: const LoginPage(),
+          ),
+        );
       case Routes.forgotPassword:
         return MaterialPageRoute(builder: (_) => const ForgotPasswordPage());
       case Routes.resetPassword:
@@ -98,7 +110,8 @@ class AppRouter {
         return MaterialPageRoute(builder: (_) => const PhoneNumberPage());
       case Routes.signupSuccess:
         return MaterialPageRoute(builder: (_) => const SignupSuccessPage());
-      default: return _errorRoute(settings);
+      default:
+        return _errorRoute(settings);
     }
   }
 
@@ -106,33 +119,57 @@ class AppRouter {
   static Route<dynamic> _homeRoutes(RouteSettings settings) {
     switch (settings.name) {
       case Routes.navigationPage:
-        return MaterialPageRoute(builder: (_) => MultiBlocProvider(providers: [
-          BlocProvider(create: (_) => getIt<SalesChartCubit>()..getSalesChart(filter: "1أ")),
-        ], child: const NavigationPage()));
+        return MaterialPageRoute(
+          builder: (_) => MultiBlocProvider(
+            providers: [
+              BlocProvider(
+                create: (_) =>
+                    getIt<SalesChartCubit>()..getSalesChart(filter: "1أ"),
+              ),
+            ],
+            child: const NavigationPage(),
+          ),
+        );
       case Routes.dashboard:
-        return MaterialPageRoute(builder: (_) => const Scaffold(body: Center(child: Text("Dashboard"))));
-      default: return _errorRoute(settings);
+        return MaterialPageRoute(
+          builder: (_) =>
+              const Scaffold(body: Center(child: Text("Dashboard"))),
+        );
+      default:
+        return _errorRoute(settings);
     }
   }
 
   // ------------------ 3. Product Module ------------------
-  static Route<dynamic> _productRoutes(RouteSettings settings, dynamic arguments) {
+  static Route<dynamic> _productRoutes(
+    RouteSettings settings,
+    dynamic arguments,
+  ) {
     switch (settings.name) {
       case Routes.productsPage:
-        return MaterialPageRoute(builder: (_) => Scaffold(body: Center(child: Text("Product: $arguments"))));
+        return MaterialPageRoute(
+          builder: (_) =>
+              Scaffold(body: Center(child: Text("Product: $arguments"))),
+        );
       case Routes.productDetails:
         final productId = arguments as String;
-        return MaterialPageRoute(builder: (_) => BlocProvider(
-          create: (_) => getIt<ProductDetailsCubit>()..getProductDetails(productId),
-          child: ProductDetailsPage(productId: productId),
-        ));
+        return MaterialPageRoute(
+          builder: (_) => BlocProvider(
+            create: (_) =>
+                getIt<ProductDetailsCubit>()..getProductDetails(productId),
+            child: ProductDetailsPage(productId: productId),
+          ),
+        );
       case Routes.copyProductPage:
         final product = arguments as ProductDetailsEntity;
-        return MaterialPageRoute(builder: (_) => BlocProvider(
-          create: (_) => getIt<CopyProductCubit>(),
-          child: CopyProductPage(product: product),
-        ));
-      default: return _errorRoute(settings);
+        return MaterialPageRoute(
+          builder: (_) => BlocProvider(
+            create: (_) => getIt<CopyProductCubit>(),
+            child: CopyProductPage(product: product),
+          ),
+        );
+      default:
+        return _errorRoute(settings);
     }
   }
 
@@ -140,7 +177,9 @@ class AppRouter {
   static Route<dynamic> _warehouseRoutes(RouteSettings settings) {
     switch (settings.name) {
       case Routes.warehousesManagement:
-        return MaterialPageRoute(builder: (_) => const WarehousesManagementPage());
+        return MaterialPageRoute(
+          builder: (_) => const WarehousesManagementPage(),
+        );
       case Routes.addWarehouse:
         return MaterialPageRoute(builder: (_) => const AddWarehousePage());
       case Routes.warehouseHistory:
@@ -150,36 +189,57 @@ class AppRouter {
             child: const WarehouseHistoryPage(),
           ),
         );
-      default: return _errorRoute(settings);
+      default:
+        return _errorRoute(settings);
     }
   }
 
   // ------------------ 5. Order Module ------------------
-  static Route<dynamic> _orderRoutes(RouteSettings settings, dynamic arguments) {
+  static Route<dynamic> _orderRoutes(
+    RouteSettings settings,
+    dynamic arguments,
+  ) {
     switch (settings.name) {
       case Routes.ordersPage:
         return MaterialPageRoute(
           builder: (_) => BlocProvider(
-            create: (context) => getIt<OrdersCubit>()..getOrders(status: "جديد"),
+            create: (context) =>
+                getIt<OrdersCubit>()..getOrders(status: "جديد"),
             child: const OrdersPage(),
           ),
         );
 
-
       case Routes.orderDetails:
         final order = arguments as OrderEntity;
-
         return MaterialPageRoute(
-          builder: (_) => OrderDetailsPage(
-            order: order,
+          builder: (_) => OrderDetailsPage(order: order),
+        );
+      default:
+        return _errorRoute(settings);
+    }
+  }
+
+  // ------------------ 6. Invoice Module ------------------
+  static Route<dynamic> _invoiceRoutes(RouteSettings settings) {
+    switch (settings.name) {
+      case Routes.invoicesPage:
+        return MaterialPageRoute(
+          builder: (_) => BlocProvider(
+            create: (context) => getIt<InvoicesCubit>()..fetchInvoices(),
+            child: const InvoicesScreen(),
           ),
         );
-      default: return _errorRoute(settings);
+      default:
+        return _errorRoute(settings);
     }
   }
 
   // ------------------ Error Page ------------------
   static Route<dynamic> _errorRoute(RouteSettings settings) {
-    return MaterialPageRoute(builder: (_) => Scaffold(body: Center(child: Text('No route defined for ${settings.name}'))));
+    return MaterialPageRoute(
+      builder: (_) => Scaffold(
+        body: Center(child: Text('No route defined for ${settings.name}')),
+      ),
+    );
   }
 }

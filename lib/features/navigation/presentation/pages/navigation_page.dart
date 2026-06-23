@@ -8,8 +8,6 @@ import '../../../products/presentation/pages/products_page.dart';
 import '../manager/navigation_cubit.dart';
 import '../widgets/custom_bottom_nav_bar.dart';
 
-
-
 class NavigationPage extends StatelessWidget {
   const NavigationPage({super.key});
 

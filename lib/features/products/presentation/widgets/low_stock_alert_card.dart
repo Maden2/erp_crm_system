@@ -45,7 +45,7 @@ class LowStockAlertCard extends StatelessWidget {
               style: TextStyles.font10AlertMedium,
               overflow: TextOverflow.ellipsis,
               maxLines: 2,
-            )
+            ),
           ),
         ],
       ),

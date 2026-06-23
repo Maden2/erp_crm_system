@@ -18,7 +18,6 @@ class SuccessPage extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-
               Image.asset(
                 'assets/images/success.png',
                 height: 260.h,
@@ -30,7 +29,6 @@ class SuccessPage extends StatelessWidget {
               ),
 
               SizedBox(height: 40.h),
-
 
               Text(
                 "تم تغيير كلمة المرور بنجاح!",
@@ -51,15 +49,13 @@ class SuccessPage extends StatelessWidget {
 
               SizedBox(height: 60.h),
 
-
               AppTextButton(
                 buttonText: "نعم",
                 onPressed: () {
-
                   Navigator.pushNamedAndRemoveUntil(
                     context,
                     Routes.login,
-                        (route) => false,
+                    (route) => false,
                   );
                 },
               ),

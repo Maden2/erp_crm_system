@@ -20,15 +20,13 @@ class OrderProductsCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            "المنتجات",
-            style: TextStyles.font12darkTextMedium,
-          ),
+          Text("المنتجات", style: TextStyles.font12darkTextMedium),
           ListView.separated(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
             itemCount: order.items.length,
-            separatorBuilder: (_, __) => Divider(height: 0.3.h, color: Colors.grey[200]),
+            separatorBuilder: (_, __) =>
+                Divider(height: 0.3.h, color: Colors.grey[200]),
             itemBuilder: (context, index) {
               final item = order.items[index];
               return _buildProductItem(item);
@@ -61,10 +59,7 @@ class OrderProductsCard extends StatelessWidget {
                   color: Colors.grey[100],
                   borderRadius: BorderRadius.circular(8.r),
                 ),
-                child: const Icon(
-                  Icons.image_outlined,
-                  color: Colors.grey,
-                ),
+                child: const Icon(Icons.image_outlined, color: Colors.grey),
               ),
             ),
           ),
@@ -145,4 +140,5 @@ class OrderProductsCard extends StatelessWidget {
         ],
       ),
     );
-  }}
+  }
+}

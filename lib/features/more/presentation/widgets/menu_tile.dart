@@ -43,11 +43,7 @@ class MenuTile extends StatelessWidget {
                   color: iconContainerColor ?? AppColors.primary,
                   shape: BoxShape.circle,
                 ),
-                child: SvgPicture.asset(
-                  icon,
-                  width: 24.sp,
-                  height: 24.sp,
-                ),
+                child: SvgPicture.asset(icon, width: 24.sp, height: 24.sp),
               ),
               SizedBox(width: 14.w),
               Expanded(
@@ -78,8 +74,11 @@ class MenuTile extends StatelessWidget {
                   ],
                 ),
               ),
-              Icon(Icons.arrow_forward_ios,
-                  color: textColor ?? const Color(0xFF6B7280), size: 20.sp),
+              Icon(
+                Icons.arrow_forward_ios,
+                color: textColor ?? const Color(0xFF6B7280),
+                size: 20.sp,
+              ),
             ],
           ),
         ),

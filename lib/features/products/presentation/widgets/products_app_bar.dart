@@ -5,16 +5,11 @@ import '../../../../core/widgets/custom_app_bar.dart';
 import '../../../../core/utils/app_styles.dart';
 import 'products_search_delegate.dart';
 
-class ProductsAppBar extends StatelessWidget
-    implements PreferredSizeWidget {
+class ProductsAppBar extends StatelessWidget implements PreferredSizeWidget {
   final Function(String)? onSearch;
   final Function(String)? onFilter;
 
-  const ProductsAppBar({
-    super.key,
-    this.onSearch,
-    this.onFilter,
-  });
+  const ProductsAppBar({super.key, this.onSearch, this.onFilter});
 
   @override
   Widget build(BuildContext context) {
@@ -34,10 +29,7 @@ class ProductsAppBar extends StatelessWidget
   }
 
   void _showSearch(BuildContext context) {
-    showSearch(
-      context: context,
-      delegate: ProductsSearchDelegate(onSearch),
-    );
+    showSearch(context: context, delegate: ProductsSearchDelegate(onSearch));
   }
 
   void _showFilter(BuildContext context) {

@@ -45,19 +45,15 @@ class HomePage extends StatelessWidget {
       providers: [
         //  Sales Chart
         BlocProvider(
-          create: (_) =>
-          getIt<SalesChartCubit>()..getSalesChart(filter: "1أ"),
+          create: (_) => getIt<SalesChartCubit>()..getSalesChart(filter: "1أ"),
         ),
 
         //  Low Stock
-        BlocProvider(
-          create: (_) => getIt<LowStockCubit>()..getLowStock(),
-        ),
+        BlocProvider(create: (_) => getIt<LowStockCubit>()..getLowStock()),
 
         //  Support Ticket
         BlocProvider(
-          create: (_) =>
-          getIt<LatestSupportTicketCubit>()..getLatestTicket(),
+          create: (_) => getIt<LatestSupportTicketCubit>()..getLatestTicket(),
         ),
       ],
       child: Scaffold(
@@ -87,9 +83,7 @@ class HomePage extends StatelessWidget {
                 BlocBuilder<SalesChartCubit, SalesChartState>(
                   builder: (context, state) {
                     if (state is SalesChartLoading) {
-                      return const Center(
-                        child: CircularProgressIndicator(),
-                      );
+                      return const Center(child: CircularProgressIndicator());
                     }
 
                     if (state is SalesChartSuccess) {
@@ -109,9 +103,7 @@ class HomePage extends StatelessWidget {
                 BlocBuilder<LowStockCubit, LowStockState>(
                   builder: (context, state) {
                     if (state is LowStockLoading) {
-                      return const Center(
-                        child: CircularProgressIndicator(),
-                      );
+                      return const Center(child: CircularProgressIndicator());
                     }
 
                     if (state is LowStockSuccess) {
@@ -129,14 +121,11 @@ class HomePage extends StatelessWidget {
                 SizedBox(height: 24.h),
 
                 //  Support Ticket
-                BlocBuilder<LatestSupportTicketCubit,
-                    LatestSupportTicketState>(
+                BlocBuilder<LatestSupportTicketCubit, LatestSupportTicketState>(
                   builder: (context, state) {
                     if (state is LatestSupportTicketSuccess &&
                         state.ticket != null) {
-                      return LatestSupportTicketSection(
-                        ticket: state.ticket!,
-                      );
+                      return LatestSupportTicketSection(ticket: state.ticket!);
                     }
 
                     return const SizedBox();

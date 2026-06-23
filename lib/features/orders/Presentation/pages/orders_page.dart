@@ -21,7 +21,7 @@ class OrdersPage extends StatefulWidget {
 class _OrdersPageState extends State<OrdersPage>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
-  final List<String> _tabs = ["ملغى","تم التسليم" , "قيد الشحن","جديد" ];
+  final List<String> _tabs = ["ملغى", "تم التسليم", "قيد الشحن", "جديد"];
 
   @override
   void initState() {
@@ -42,13 +42,10 @@ class _OrdersPageState extends State<OrdersPage>
       child: Scaffold(
         backgroundColor: AppColors.homeBg,
         appBar: CustomAppBar(
-          title: Text(
-              "الطلبات",
-              style: TextStyles.font20WhiteMedium
-          ),
+          title: Text("الطلبات", style: TextStyles.font20WhiteMedium),
           leading: IconButton(
             padding: EdgeInsets.only(right: 24.w),
-            icon: Icon(Icons.tune, color:AppColors.homeBg , size: 24.sp),
+            icon: Icon(Icons.tune, color: AppColors.homeBg, size: 24.sp),
             onPressed: () {
               // TODO: ربط الفلترة المتقدمة
             },

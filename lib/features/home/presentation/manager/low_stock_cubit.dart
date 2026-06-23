@@ -15,8 +15,8 @@ class LowStockCubit extends Cubit<LowStockState> {
     final result = await useCase();
 
     result.fold(
-          (failure) => emit(LowStockError(failure.message)),
-          (data) => emit(LowStockSuccess(data)),
+      (failure) => emit(LowStockError(failure.message)),
+      (data) => emit(LowStockSuccess(data)),
     );
   }
 }

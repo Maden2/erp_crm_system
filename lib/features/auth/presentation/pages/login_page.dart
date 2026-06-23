@@ -18,13 +18,14 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  final TextEditingController emailController =
-  TextEditingController(text: "pivot@mail.com");
-  final TextEditingController passwordController =
-  TextEditingController(text: "12345678");
+  final TextEditingController emailController = TextEditingController(
+    text: "pivot@mail.com",
+  );
+  final TextEditingController passwordController = TextEditingController(
+    text: "12345678",
+  );
 
   bool rememberMe = false;
   bool isButtonEnabled = false;
@@ -38,8 +39,8 @@ class _LoginPageState extends State<LoginPage> {
 
   void _validateInputs() {
     setState(() {
-      isButtonEnabled = emailController.text.isNotEmpty &&
-          passwordController.text.isNotEmpty;
+      isButtonEnabled =
+          emailController.text.isNotEmpty && passwordController.text.isNotEmpty;
     });
   }
 
@@ -57,11 +58,17 @@ class _LoginPageState extends State<LoginPage> {
       body: BlocListener<AuthCubit, AuthState>(
         listener: (context, state) {
           if (state is AuthSuccess) {
-
-            Navigator.pushNamedAndRemoveUntil(context, Routes.navigationPage, (route) => false);
+            Navigator.pushNamedAndRemoveUntil(
+              context,
+              Routes.navigationPage,
+              (route) => false,
+            );
           } else if (state is AuthError) {
             ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(state.message), backgroundColor: Colors.red),
+              SnackBar(
+                content: Text(state.message),
+                backgroundColor: Colors.red,
+              ),
             );
           }
         },
@@ -79,14 +86,20 @@ class _LoginPageState extends State<LoginPage> {
                       'assets/images/logo.png',
                       width: 120.w,
                       height: 50.h,
-                      errorBuilder: (context, error, stackTrace) =>
-                          Icon(Icons.business, size: 50.sp, color: AppColors.primary),
+                      errorBuilder: (context, error, stackTrace) => Icon(
+                        Icons.business,
+                        size: 50.sp,
+                        color: AppColors.primary,
+                      ),
                     ),
                   ),
                   SizedBox(height: 30.h),
                   Text("مرحباً بعودتك 👋", style: TextStyles.font24PrimaryBold),
                   SizedBox(height: 8.h),
-                  Text("مرحباً، قم بتسجيل الدخول للمتابعة.", style: TextStyles.font14GreyRegular),
+                  Text(
+                    "مرحباً، قم بتسجيل الدخول للمتابعة.",
+                    style: TextStyles.font14GreyRegular,
+                  ),
                   SizedBox(height: 36.h),
 
                   AppTextField(
@@ -115,10 +128,13 @@ class _LoginPageState extends State<LoginPage> {
                         children: [
                           Checkbox(
                             value: rememberMe,
-                            onChanged: (value) => setState(() => rememberMe = value ?? false),
+                            onChanged: (value) =>
+                                setState(() => rememberMe = value ?? false),
                             activeColor: AppColors.primary,
                             side: BorderSide(color: Colors.grey.shade300),
-                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4.r)),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(4.r),
+                            ),
                           ),
                           Text("تذكرني", style: TextStyles.font14GreyRegular),
                         ],
@@ -144,32 +160,38 @@ class _LoginPageState extends State<LoginPage> {
                         isLoading: state is AuthLoading,
                         onPressed: isButtonEnabled
                             ? () {
-
-                          if (_formKey.currentState!.validate()) {
-                            context.read<AuthCubit>().emitLoginStates(
-                              email: emailController.text,
-                              password: passwordController.text,
-                            );
-                          }
-                        }
+                                if (_formKey.currentState!.validate()) {
+                                  context.read<AuthCubit>().emitLoginStates(
+                                    email: emailController.text,
+                                    password: passwordController.text,
+                                  );
+                                }
+                              }
                             : null,
                       );
                     },
                   ),
 
                   SizedBox(height: 40.h),
-                  Icon(Icons.fingerprint, size: 70.sp, color: AppColors.primary.withOpacity(0.5)),
+                  Icon(
+                    Icons.fingerprint,
+                    size: 70.sp,
+                    color: AppColors.primary.withOpacity(0.5),
+                  ),
                   SizedBox(height: 20.h),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       const Text("ليس لديك حساب؟ "),
-                      SizedBox(width: 12.w,),
+                      SizedBox(width: 12.w),
                       GestureDetector(
-                        onTap: () => Navigator.pushNamed(context, Routes.signup),
+                        onTap: () =>
+                            Navigator.pushNamed(context, Routes.signup),
                         child: Text(
                           "إنشاء حساب",
-                          style: TextStyles.font14PrimaryBold.copyWith(color: AppColors.lightBlue),
+                          style: TextStyles.font14PrimaryBold.copyWith(
+                            color: AppColors.lightBlue,
+                          ),
                         ),
                       ),
                     ],

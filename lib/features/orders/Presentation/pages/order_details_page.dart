@@ -19,10 +19,7 @@ import '../widgets/details/payment_info_card.dart';
 class OrderDetailsPage extends StatelessWidget {
   final OrderEntity order;
 
-  const OrderDetailsPage({
-    super.key,
-    required this.order,
-  });
+  const OrderDetailsPage({super.key, required this.order});
 
   @override
   Widget build(BuildContext context) {
@@ -63,12 +60,9 @@ class OrderDetailsPage extends StatelessWidget {
 
             PaymentInfoCard(order: order),
 
-
             SizedBox(height: 14.h),
 
             ShippingInfoCard(order: order),
-
-
 
             if (order.staffNotes.isNotEmpty) ...[
               SizedBox(height: 14.h),
@@ -104,10 +98,7 @@ class OrderDetailsPage extends StatelessWidget {
             ),
             child: FittedBox(
               fit: BoxFit.scaleDown,
-              child: Text(
-                "الغاء الطلب",
-                style: TextStyles.font12RedMedium
-              ),
+              child: Text("الغاء الطلب", style: TextStyles.font12RedMedium),
             ),
           ),
         ),
@@ -133,7 +124,7 @@ class OrderDetailsPage extends StatelessWidget {
                   color: Colors.white,
                   fontFamily: 'Cairo',
                   fontSize: 12.sp,
-                  fontWeight: FontWeight.w500
+                  fontWeight: FontWeight.w500,
                 ),
               ),
             ),
@@ -173,4 +164,5 @@ class OrderDetailsPage extends StatelessWidget {
         ),
       ],
     );
-  }}
+  }
+}

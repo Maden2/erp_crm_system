@@ -14,7 +14,6 @@ class EmptyHomeState extends StatelessWidget {
 
         SizedBox(height: 24.h),
 
-
         Container(
           width: double.infinity,
           height: 220.h,
@@ -26,8 +25,11 @@ class EmptyHomeState extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(Icons.insert_chart_outlined,
-                  size: 50.sp, color: Colors.grey[300]),
+              Icon(
+                Icons.insert_chart_outlined,
+                size: 50.sp,
+                color: Colors.grey[300],
+              ),
               SizedBox(height: 12.h),
               Text(
                 "لا توجد بيانات مبيعات حالياً",
@@ -50,7 +52,8 @@ class EmptyHomeState extends StatelessWidget {
             style: ElevatedButton.styleFrom(
               backgroundColor: const Color(0xFF21418B),
               shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10.r)),
+                borderRadius: BorderRadius.circular(10.r),
+              ),
               elevation: 0,
             ),
             onPressed: () {},
@@ -92,9 +95,10 @@ class _ShimmerStatsCardState extends State<_ShimmerStatsCard>
       vsync: this,
       duration: const Duration(milliseconds: 1200),
     )..repeat();
-    _animation = Tween<double>(begin: -1.5, end: 1.5).animate(
-      CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
-    );
+    _animation = Tween<double>(
+      begin: -1.5,
+      end: 1.5,
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOut));
   }
 
   @override
@@ -151,7 +155,6 @@ class _ShimmerStatsCardState extends State<_ShimmerStatsCard>
           Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-
               Container(
                 width: 49.w,
                 height: 49.h,
@@ -170,7 +173,6 @@ class _ShimmerStatsCardState extends State<_ShimmerStatsCard>
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-
                     Text(
                       'إجمالي مبيعات اليوم',
                       style: TextStyle(
@@ -185,11 +187,7 @@ class _ShimmerStatsCardState extends State<_ShimmerStatsCard>
                   ],
                 ),
               ),
-              const Icon(
-                Icons.trending_up,
-                color: Color(0xFF21418B),
-                size: 20,
-              ),
+              const Icon(Icons.trending_up, color: Color(0xFF21418B), size: 20),
             ],
           ),
 

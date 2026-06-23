@@ -44,7 +44,7 @@ class TopProductsSection extends StatelessWidget {
                   padding: EdgeInsets.only(right: 4.w),
                   child: Text(
                     'المنتجات الأكثر مبيعاً',
-                    style: TextStyles.font12darkTextMedium
+                    style: TextStyles.font12darkTextMedium,
                   ),
                 ),
                 SizedBox(height: 12.h),
@@ -143,11 +143,7 @@ class TopProductsSection extends StatelessWidget {
             ),
           ),
           SizedBox(width: 4.w),
-          Icon(
-            Icons.chevron_left,
-            size: 16.sp,
-            color: const Color(0xFF6B7280),
-          ),
+          Icon(Icons.chevron_left, size: 16.sp, color: const Color(0xFF6B7280)),
         ],
       ),
     );

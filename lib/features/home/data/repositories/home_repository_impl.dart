@@ -7,7 +7,6 @@ import '../../domain/entities/latest_support_ticket_entity.dart'; // ✅ مهم
 import '../../domain/repositories/home_repository.dart';
 
 class HomeRepositoryImpl implements HomeRepository {
-
   // ================== Sales Chart ==================
   @override
   Future<Either<Failure, List<SalesChartPointEntity>>> getSalesChart({
@@ -23,9 +22,16 @@ class HomeRepositoryImpl implements HomeRepository {
       case "1أ":
         return List.generate(
           6,
-              (i) => SalesChartPointEntity(
+          (i) => SalesChartPointEntity(
             index: i,
-            dayName: ["السبت","الأحد","الاثنين","الثلاثاء","الأربعاء","الخميس"][i],
+            dayName: [
+              "السبت",
+              "الأحد",
+              "الاثنين",
+              "الثلاثاء",
+              "الأربعاء",
+              "الخميس",
+            ][i],
             value: (i + 1) * 1000 + (i.isEven ? 500 : -300),
           ),
         );
@@ -41,9 +47,9 @@ class HomeRepositoryImpl implements HomeRepository {
       case "3ش":
         return List.generate(
           3,
-              (i) => SalesChartPointEntity(
+          (i) => SalesChartPointEntity(
             index: i,
-            dayName: ["يناير","فبراير","مارس"][i],
+            dayName: ["يناير", "فبراير", "مارس"][i],
             value: (i + 1) * 4000 + (i.isEven ? 1200 : -800),
           ),
         );
@@ -51,7 +57,7 @@ class HomeRepositoryImpl implements HomeRepository {
       case "6ش":
         return List.generate(
           6,
-              (i) => SalesChartPointEntity(
+          (i) => SalesChartPointEntity(
             index: i,
             dayName: "شهر ${i + 1}",
             value: (i + 1) * 2500 + (i.isEven ? 1000 : -500),
@@ -61,7 +67,7 @@ class HomeRepositoryImpl implements HomeRepository {
       case "1س":
         return List.generate(
           12,
-              (i) => SalesChartPointEntity(
+          (i) => SalesChartPointEntity(
             index: i,
             dayName: "شهر ${i + 1}",
             value: (i + 1) * 1800 + (i.isEven ? 1500 : -700),
@@ -71,7 +77,7 @@ class HomeRepositoryImpl implements HomeRepository {
       case "الكل":
         return List.generate(
           5,
-              (i) => SalesChartPointEntity(
+          (i) => SalesChartPointEntity(
             index: i,
             dayName: "سنة ${2020 + i}",
             value: (i + 1) * 10000 + (i.isEven ? 4000 : -3000),
@@ -117,14 +123,12 @@ class HomeRepositoryImpl implements HomeRepository {
 
   // ================== Support Ticket ==================
   @override
-  Future<Either<Failure, LatestSupportTicketEntity?>> getLatestSupportTicket() async {
+  Future<Either<Failure, LatestSupportTicketEntity?>>
+  getLatestSupportTicket() async {
     await Future.delayed(const Duration(milliseconds: 300));
 
     return Right(
-      LatestSupportTicketEntity(
-        ticketNumber: "#2483",
-        timeAgo: "قبل 3 ساعات",
-      ),
+      LatestSupportTicketEntity(ticketNumber: "#2483", timeAgo: "قبل 3 ساعات"),
     );
   }
 }

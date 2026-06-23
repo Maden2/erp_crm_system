@@ -22,17 +22,12 @@ class AnalyticsPage extends StatelessWidget {
         backgroundColor: AppColors.homeBg,
         body: BlocBuilder<AnalyticsCubit, AnalyticsState>(
           builder: (context, state) {
-
             if (state is AnalyticsLoading) {
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
+              return const Center(child: CircularProgressIndicator());
             }
 
             if (state is AnalyticsError) {
-              return Center(
-                child: Text(state.message),
-              );
+              return Center(child: Text(state.message));
             }
 
             if (state is AnalyticsSuccess) {

@@ -30,13 +30,13 @@ class ProductsCategoriesTabBar extends StatelessWidget {
         indicatorWeight: 2.5,
         dividerColor: Colors.transparent,
         labelStyle: TextStyle(
-            fontSize: 12.sp,
-            fontFamily: 'Cairo',
-            fontWeight: FontWeight.w700
+          fontSize: 12.sp,
+          fontFamily: 'Cairo',
+          fontWeight: FontWeight.w700,
         ),
-        tabs: tabs.map((e) => Tab(
-          child: Text(e, overflow: TextOverflow.ellipsis),
-        )).toList(),
+        tabs: tabs
+            .map((e) => Tab(child: Text(e, overflow: TextOverflow.ellipsis)))
+            .toList(),
       ),
     );
   }

@@ -17,7 +17,7 @@ class CRMApp extends StatelessWidget {
           debugShowCheckedModeBanner: false,
           title: 'CRM App',
           theme: AppTheme.lightTheme,
-          initialRoute: Routes.login,
+          initialRoute: Routes.invoicesPage,
           onGenerateRoute: AppRouter.onGenerateRoute,
           builder: (context, widget) {
             return Directionality(

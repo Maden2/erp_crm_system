@@ -8,8 +8,10 @@ class AuthCubit extends Cubit<AuthState> {
 
   AuthCubit(this.loginUseCase) : super(AuthInitial());
 
-
-  Future<void> emitLoginStates({required String email, required String password}) async {
+  Future<void> emitLoginStates({
+    required String email,
+    required String password,
+  }) async {
     emit(AuthLoading());
 
     final cleanEmail = email.trim();
@@ -29,4 +31,5 @@ class AuthCubit extends Cubit<AuthState> {
     }
 
     emit(AuthError("البريد الإلكتروني أو كلمة المرور غير صحيحة"));
-  }}
+  }
+}

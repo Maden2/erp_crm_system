@@ -12,9 +12,6 @@ class GetOrdersUseCase {
     String? status,
     String? query,
   }) {
-    return repository.getOrders(
-      status: status,
-      query: query,
-    );
+    return repository.getOrders(status: status, query: query);
   }
 }

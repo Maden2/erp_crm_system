@@ -28,13 +28,10 @@ class PriceChart extends StatelessWidget {
               children: [
                 Text(
                   "مبيعات آخر 7 أيام",
-                  style: TextStyles.font14lightGrayTextRegular
+                  style: TextStyles.font14lightGrayTextRegular,
                 ),
                 SizedBox(height: 4.h),
-                Text(
-                  "$totalSales",
-                  style: TextStyles.font16lightBlueMedium
-                ),
+                Text("$totalSales", style: TextStyles.font16lightBlueMedium),
               ],
             ),
           ),
@@ -56,7 +53,7 @@ class PriceChart extends StatelessWidget {
                       .map(
                         (day) => Text(
                           day,
-                          style: TextStyles.font12lightGrayTextRegular
+                          style: TextStyles.font12lightGrayTextRegular,
                         ),
                       )
                       .toList(),

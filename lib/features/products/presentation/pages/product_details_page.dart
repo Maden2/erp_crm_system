@@ -20,10 +20,7 @@ import '../widgets/details/size_selector.dart';
 class ProductDetailsPage extends StatelessWidget {
   final String productId;
 
-  const ProductDetailsPage({
-    super.key,
-    required this.productId,
-  });
+  const ProductDetailsPage({super.key, required this.productId});
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +30,9 @@ class ProductDetailsPage extends StatelessWidget {
         child: BlocBuilder<ProductDetailsCubit, ProductDetailsState>(
           builder: (context, state) {
             if (state is ProductDetailsLoading) {
-              return const Center(child: CircularProgressIndicator(color: AppColors.mainBlue));
+              return const Center(
+                child: CircularProgressIndicator(color: AppColors.mainBlue),
+              );
             } else if (state is ProductDetailsSuccess) {
               final p = state.product;
 
@@ -70,9 +69,24 @@ class ProductDetailsPage extends StatelessWidget {
                               }
                             },
                             itemBuilder: (context) => [
-                              _buildPopupItem("تعديل", Icons.edit_outlined, "edit", const Color(0xFF1E293B)),
-                              _buildPopupItem("نسخ", Icons.copy_all_outlined, "copy", const Color(0xFF1E293B)),
-                              _buildPopupItem("حذف", Icons.delete_outline_rounded, "delete", const Color(0xFFEF4444)),
+                              _buildPopupItem(
+                                "تعديل",
+                                Icons.edit_outlined,
+                                "edit",
+                                const Color(0xFF1E293B),
+                              ),
+                              _buildPopupItem(
+                                "نسخ",
+                                Icons.copy_all_outlined,
+                                "copy",
+                                const Color(0xFF1E293B),
+                              ),
+                              _buildPopupItem(
+                                "حذف",
+                                Icons.delete_outline_rounded,
+                                "delete",
+                                const Color(0xFFEF4444),
+                              ),
                             ],
                           ),
                         ),
@@ -100,9 +114,14 @@ class ProductDetailsPage extends StatelessWidget {
                                 children: [
                                   SizedBox(height: 20.h),
                                   Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
-                                      Text(p.name, style: TextStyles.font16graphiteGreyMedium),
+                                      Text(
+                                        p.name,
+                                        style:
+                                            TextStyles.font16graphiteGreyMedium,
+                                      ),
                                       ProductStockBadge(stock: p.stock),
                                     ],
                                   ),
@@ -110,11 +129,20 @@ class ProductDetailsPage extends StatelessWidget {
                                   Align(
                                     alignment: Alignment.centerRight,
                                     child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
-                                        Text("${p.price} ج.م", style: TextStyles.font22graphiteGreyMedium),
+                                        Text(
+                                          "${p.price} ج.م",
+                                          style: TextStyles
+                                              .font22graphiteGreyMedium,
+                                        ),
                                         SizedBox(height: 14.h),
-                                        Text("${p.stock} قطعة", style: TextStyles.font16graphiteGreyMedium),
+                                        Text(
+                                          "${p.stock} قطعة",
+                                          style: TextStyles
+                                              .font16graphiteGreyMedium,
+                                        ),
                                       ],
                                     ),
                                   ),
@@ -175,7 +203,9 @@ class ProductDetailsPage extends StatelessWidget {
                               child: Column(
                                 children: [
                                   _buildSectionTitle("وصف المنتج"),
-                                  ProductDescriptionSection(description: p.description),
+                                  ProductDescriptionSection(
+                                    description: p.description,
+                                  ),
                                 ],
                               ),
                             ),
@@ -197,7 +227,12 @@ class ProductDetailsPage extends StatelessWidget {
     );
   }
 
-  PopupMenuItem<String> _buildPopupItem(String title, IconData icon, String value, Color color) {
+  PopupMenuItem<String> _buildPopupItem(
+    String title,
+    IconData icon,
+    String value,
+    Color color,
+  ) {
     return PopupMenuItem<String>(
       value: value,
       child: Row(
@@ -207,9 +242,7 @@ class ProductDetailsPage extends StatelessWidget {
           SizedBox(width: 12.w),
           Text(
             title,
-            style: TextStyles.font12blackColorRegular.copyWith(
-              color: color,
-            ),
+            style: TextStyles.font12blackColorRegular.copyWith(color: color),
           ),
         ],
       ),
@@ -221,7 +254,11 @@ class ProductDetailsPage extends StatelessWidget {
       padding: EdgeInsets.only(top: 20.h, bottom: 10.h),
       child: Align(
         alignment: Alignment.centerRight,
-        child: Text(title, textDirection: TextDirection.rtl, style: TextStyles.font18graphiteGreyMedium),
+        child: Text(
+          title,
+          textDirection: TextDirection.rtl,
+          style: TextStyles.font18graphiteGreyMedium,
+        ),
       ),
     );
   }

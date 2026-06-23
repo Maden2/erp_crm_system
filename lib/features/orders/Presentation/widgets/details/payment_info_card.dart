@@ -10,15 +10,14 @@ import '../../../domain/entities/order_entity.dart';
 class PaymentInfoCard extends StatelessWidget {
   final OrderEntity order;
 
-  const PaymentInfoCard({
-    super.key,
-    required this.order,
-  });
+  const PaymentInfoCard({super.key, required this.order});
 
   @override
   Widget build(BuildContext context) {
     final bool isOrderCancelled = order.status == "ملغى";
-    final String displayPaymentStatus = isOrderCancelled ? "فشل" : order.paymentStatus;
+    final String displayPaymentStatus = isOrderCancelled
+        ? "فشل"
+        : order.paymentStatus;
     final Color statusColor = _getPaymentStatusColor(displayPaymentStatus);
 
     return Container(
@@ -28,20 +27,14 @@ class PaymentInfoCard extends StatelessWidget {
         color: AppColors.authBgColor,
         borderRadius: BorderRadius.circular(8.r),
         boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.02),
-            blurRadius: 10,
-          ),
+          BoxShadow(color: Colors.black.withOpacity(0.02), blurRadius: 10),
         ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // ================= TITLE =================
-          Text(
-            "الدفع",
-            style: TextStyles.font12darkTextMedium,
-          ),
+          Text("الدفع", style: TextStyles.font12darkTextMedium),
 
           SizedBox(height: 18.h),
 
@@ -117,10 +110,7 @@ class PaymentInfoCard extends StatelessWidget {
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              title,
-              style: TextStyles.font10GreyTextRegular,
-            ),
+            Text(title, style: TextStyles.font10GreyTextRegular),
             SizedBox(height: 4.h),
             Text(
               value,

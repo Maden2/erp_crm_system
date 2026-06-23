@@ -22,17 +22,14 @@ class OrdersCubit extends Cubit<OrdersState> {
       query: searchQuery,
     );
 
-    result.fold(
-          (failure) => emit(OrdersFailure(failure.message)),
-          (orders) {
-        allOrders = orders;
-        if (orders.isEmpty) {
-          emit(OrdersEmpty());
-        } else {
-          emit(OrdersSuccess(orders));
-        }
-      },
-    );
+    result.fold((failure) => emit(OrdersFailure(failure.message)), (orders) {
+      allOrders = orders;
+      if (orders.isEmpty) {
+        emit(OrdersEmpty());
+      } else {
+        emit(OrdersSuccess(orders));
+      }
+    });
   }
 
   void changeStatus(String status) {

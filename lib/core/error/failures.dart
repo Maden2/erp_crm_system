@@ -10,7 +10,8 @@ abstract class Failure extends Equatable {
 
 // خطأ من طرف السيرفر (API Error)
 class ServerFailure extends Failure {
-  const ServerFailure([String message = 'حدث خطأ في الاتصال بالسيرفر']) : super(message);
+  const ServerFailure([String message = 'حدث خطأ في الاتصال بالسيرفر'])
+    : super(message);
 }
 
 // خطأ بسبب الإنترنت (No Internet)

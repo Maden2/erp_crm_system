@@ -30,18 +30,13 @@ class AppTextButton extends StatelessWidget {
             return AppColors.primary;
           }),
           shape: WidgetStateProperty.all(
-            RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(15.r),
-            ),
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.r)),
           ),
         ),
         onPressed: isLoading ? null : onPressed,
         child: isLoading
             ? const CircularProgressIndicator(color: Colors.white)
-            : Text(
-          buttonText,
-          style: TextStyles.font16WhiteBold,
-        ),
+            : Text(buttonText, style: TextStyles.font16WhiteBold),
       ),
     );
   }

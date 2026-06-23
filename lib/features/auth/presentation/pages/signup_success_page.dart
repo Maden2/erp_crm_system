@@ -22,9 +22,12 @@ class SignupSuccessPage extends StatelessWidget {
               // الجزء الخاص بالصورة بعد ضبط الـ fit
               Center(
                 child: Container(
-                  height: 250.h, // حددنا ارتفاع مناسب عشان الصورة ماتاخدش الشاشة كلها
+                  height: 250
+                      .h, // حددنا ارتفاع مناسب عشان الصورة ماتاخدش الشاشة كلها
                   width: double.infinity,
-                  padding: EdgeInsets.symmetric(horizontal: 20.w), // مسافة بسيطة من الجوانب
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 20.w,
+                  ), // مسافة بسيطة من الجوانب
                   child: Image.asset(
                     'assets/images/signup.png', // تأكد من المسار عندك
                     // contain: بيحافظ على أبعاد الصورة الأصلية وبيخليها جوه الـ Container بالكامل
@@ -59,7 +62,7 @@ class SignupSuccessPage extends StatelessWidget {
                   Navigator.pushNamedAndRemoveUntil(
                     context,
                     Routes.dashboard, // تأكد إن الاسم ده هو اللي في ملف Routes
-                        (route) => false,
+                    (route) => false,
                   );
                 },
               ),

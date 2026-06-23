@@ -31,14 +31,8 @@ class CustomBottomNavBar extends StatelessWidget {
         type: BottomNavigationBarType.fixed,
         backgroundColor: Colors.white,
 
-
-
-
         selectedLabelStyle: TextStyles.fontNavSelected,
-        unselectedLabelStyle: TextStyle(
-          fontSize: 12.sp,
-          fontFamily: 'Cairo',
-        ),
+        unselectedLabelStyle: TextStyle(fontSize: 12.sp, fontFamily: 'Cairo'),
 
         items: [
           _buildNavItem(
@@ -79,19 +73,11 @@ class CustomBottomNavBar extends StatelessWidget {
     return BottomNavigationBarItem(
       icon: Padding(
         padding: EdgeInsets.only(bottom: 4.h),
-        child: Image.asset(
-          imagePath,
-          width: 24.w,
-          height: 24.h,
-        ),
+        child: Image.asset(imagePath, width: 24.w, height: 24.h),
       ),
       activeIcon: Padding(
         padding: EdgeInsets.only(bottom: 4.h),
-        child: Image.asset(
-          activeImagePath,
-          width: 24.w,
-          height: 24.h,
-        ),
+        child: Image.asset(activeImagePath, width: 24.w, height: 24.h),
       ),
       label: label,
     );

@@ -15,8 +15,16 @@ class OrderRepositoryImpl implements OrderRepository {
       await Future.delayed(const Duration(milliseconds: 800));
 
       List<String> names = [
-        "محمد أحمد مبارك", "محمود حسن", "إبراهيم علي", "سارة أحمد",
-        "عمر خالد", "ليلى محمود", "ياسين محمد", "هاني شاكر", "منى زكي", "أحمد عز"
+        "محمد أحمد مبارك",
+        "محمود حسن",
+        "إبراهيم علي",
+        "سارة أحمد",
+        "عمر خالد",
+        "ليلى محمود",
+        "ياسين محمد",
+        "هاني شاكر",
+        "منى زكي",
+        "أحمد عز",
       ];
 
       List<OrderEntity> mockOrders = List.generate(20, (index) {
@@ -39,13 +47,19 @@ class OrderRepositoryImpl implements OrderRepository {
       });
 
       if (status != null && status != "الكل") {
-        mockOrders = mockOrders.where((order) => order.status == status).toList();
+        mockOrders = mockOrders
+            .where((order) => order.status == status)
+            .toList();
       }
 
       if (query != null && query.isNotEmpty) {
-        mockOrders = mockOrders.where((order) =>
-        order.customerName.contains(query) ||
-            order.orderNumber.contains(query)).toList();
+        mockOrders = mockOrders
+            .where(
+              (order) =>
+                  order.customerName.contains(query) ||
+                  order.orderNumber.contains(query),
+            )
+            .toList();
       }
 
       return Right(mockOrders);
@@ -54,7 +68,14 @@ class OrderRepositoryImpl implements OrderRepository {
     }
   }
 
-  OrderEntity _createOrder(String id, String num, String name, String status, double basePrice, int count) {
+  OrderEntity _createOrder(
+    String id,
+    String num,
+    String name,
+    String status,
+    double basePrice,
+    int count,
+  ) {
     final random = Random();
 
     List<OrderItemEntity> orderItems = List.generate(count, (index) {
@@ -86,7 +107,9 @@ class OrderRepositoryImpl implements OrderRepository {
       customerPhone: "+20 10${random.nextInt(90000000) + 10000000}",
       customerEmail: "user$id@pivot-app.com",
       shippingAddress: "كفر الشيخ، مركز دسوق، عمارة رقم ${random.nextInt(100)}",
-      date: DateTime.now().subtract(Duration(days: random.nextInt(5), hours: random.nextInt(24))),
+      date: DateTime.now().subtract(
+        Duration(days: random.nextInt(5), hours: random.nextInt(24)),
+      ),
 
       items: orderItems,
       itemsCount: count,
@@ -103,8 +126,7 @@ class OrderRepositoryImpl implements OrderRepository {
       trackingNumber: "TRK-${random.nextInt(900000)}",
       deliveryStatus: status == "قيد الشحن" ? "في الطريق" : "معلق",
 
-      staffNotes: int.parse(id) % 2 == 0
-          ? "يرجى الاتصال قبل التوصيل"
-          : "",
+      staffNotes: int.parse(id) % 2 == 0 ? "يرجى الاتصال قبل التوصيل" : "",
     );
-  }}
+  }
+}

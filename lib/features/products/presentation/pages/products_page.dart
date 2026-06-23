@@ -65,11 +65,24 @@ class _ProductsPageState extends State<ProductsPage>
       isScrollControlled: true,
       builder: (context) => CustomBottomSheetSelector<WarehouseEntity>(
         title: "اختر المخزون",
-        subTitle: "اختر مخزوناً لعرض منتجاته، أو اختر \"لا يوجد مخزون\" لرؤية المنتجات بدون تعيين.",
+        subTitle:
+            "اختر مخزوناً لعرض منتجاته، أو اختر \"لا يوجد مخزون\" لرؤية المنتجات بدون تعيين.",
         items: [
-          WarehouseEntity(id: "1", name: "لا يوجد مخزون", icon: Icons.inventory_2_outlined),
-          WarehouseEntity(id: "2", name: "إلكترونيات", icon: Icons.inventory_2_outlined),
-          WarehouseEntity(id: "3", name: "ملابس", icon: Icons.inventory_2_outlined),
+          WarehouseEntity(
+            id: "1",
+            name: "لا يوجد مخزون",
+            icon: Icons.inventory_2_outlined,
+          ),
+          WarehouseEntity(
+            id: "2",
+            name: "إلكترونيات",
+            icon: Icons.inventory_2_outlined,
+          ),
+          WarehouseEntity(
+            id: "3",
+            name: "ملابس",
+            icon: Icons.inventory_2_outlined,
+          ),
         ],
         itemBuilder: (warehouse) => InkWell(
           onTap: () {
@@ -92,10 +105,19 @@ class _ProductsPageState extends State<ProductsPage>
             ),
             child: Row(
               children: [
-                Icon(warehouse.icon, color: const Color(0xFF2DD4BF), size: 20.sp),
+                Icon(
+                  warehouse.icon,
+                  color: const Color(0xFF2DD4BF),
+                  size: 20.sp,
+                ),
                 const Spacer(),
-                Text(warehouse.name,
-                    style: const TextStyle(fontFamily: 'Cairo', fontWeight: FontWeight.w600)),
+                Text(
+                  warehouse.name,
+                  style: const TextStyle(
+                    fontFamily: 'Cairo',
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
               ],
             ),
           ),
@@ -109,117 +131,129 @@ class _ProductsPageState extends State<ProductsPage>
     return BlocProvider(
       create: (_) => getIt<ProductsCubit>()..getProducts(),
       child: Builder(
-          builder: (context) {
-            return Scaffold(
-              backgroundColor: AppColors.homeBg,
-              appBar: CustomAppBar(
-                leading: IconButton(
-                  icon: const Icon(Icons.tune, color: Colors.white),
-                  onPressed: () => _showFilterBottomSheet(context),
-                ),
-                title: Text(
-                  "المنتجات",
-                  style: TextStyles.font18WhiteBold.copyWith(fontFamily: 'Cairo'),
-                ),
-                actions: [
-                  IconButton(
-                    icon: const Icon(Icons.search, color: Colors.white),
-                    onPressed: () {
-                      showSearch(
-                        context: context,
-                        delegate: ProductsSearchDelegate((query) {
-                          context.read<ProductsCubit>().searchProducts(query);
-                        }),
-                      );
-                    },
-                  ),
-                  SizedBox(width: 8.w),
-                ],
+        builder: (context) {
+          return Scaffold(
+            backgroundColor: AppColors.homeBg,
+            appBar: CustomAppBar(
+              leading: IconButton(
+                icon: const Icon(Icons.tune, color: Colors.white),
+                onPressed: () => _showFilterBottomSheet(context),
               ),
-
-              floatingActionButton: AppAddButton(
-                title: "إضافة منتج",
-                onTap: () {
-                  print("إضافة منتج جديد");
-                },
+              title: Text(
+                "المنتجات",
+                style: TextStyles.font18WhiteBold.copyWith(fontFamily: 'Cairo'),
               ),
-              floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+              actions: [
+                IconButton(
+                  icon: const Icon(Icons.search, color: Colors.white),
+                  onPressed: () {
+                    showSearch(
+                      context: context,
+                      delegate: ProductsSearchDelegate((query) {
+                        context.read<ProductsCubit>().searchProducts(query);
+                      }),
+                    );
+                  },
+                ),
+                SizedBox(width: 8.w),
+              ],
+            ),
 
-              body: Column(
-                children: [
-                  BlocBuilder<ProductsCubit, ProductsState>(
-                    buildWhen: (prev, curr) => curr is WarehouseChanged,
+            floatingActionButton: AppAddButton(
+              title: "إضافة منتج",
+              onTap: () {
+                print("إضافة منتج جديد");
+              },
+            ),
+            floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+
+            body: Column(
+              children: [
+                BlocBuilder<ProductsCubit, ProductsState>(
+                  buildWhen: (prev, curr) => curr is WarehouseChanged,
+                  builder: (context, state) {
+                    return WarehouseFilterHeader(
+                      selectedWarehouseName: context
+                          .read<ProductsCubit>()
+                          .selectedWarehouseName,
+                      onWarehouseTap: () => _showWarehouseBottomSheet(context),
+                      onSettingsTap: () {
+                        Navigator.pushNamed(
+                          context,
+                          Routes.warehousesManagement,
+                        );
+                      },
+                    );
+                  },
+                ),
+
+                ProductsCategoriesTabBar(
+                  tabController: _tabController,
+                  tabs: _tabs,
+                  onTap: (index) {
+                    context.read<ProductsCubit>().filterByCategory(
+                      _tabs[index],
+                    );
+                  },
+                ),
+
+                Expanded(
+                  child: BlocBuilder<ProductsCubit, ProductsState>(
+                    buildWhen: (prev, curr) => curr is! WarehouseChanged,
                     builder: (context, state) {
-                      return WarehouseFilterHeader(
-                        selectedWarehouseName: context.read<ProductsCubit>().selectedWarehouseName,
-                        onWarehouseTap: () => _showWarehouseBottomSheet(context),
-                        onSettingsTap: () {
-                          Navigator.pushNamed(context, Routes.warehousesManagement);
-                        },
-                      );
-                    },
-                  ),
+                      if (state is ProductsLoading)
+                        return const Center(child: CircularProgressIndicator());
 
-                  ProductsCategoriesTabBar(
-                    tabController: _tabController,
-                    tabs: _tabs,
-                    onTap: (index) {
-                      context.read<ProductsCubit>().filterByCategory(_tabs[index]);
-                    },
-                  ),
+                      if (state is ProductsSuccess) {
+                        final cubit = context.read<ProductsCubit>();
+                        final lowStockAlerts = cubit.lowStockItems;
 
-                  Expanded(
-                    child: BlocBuilder<ProductsCubit, ProductsState>(
-                      buildWhen: (prev, curr) => curr is! WarehouseChanged,
-                      builder: (context, state) {
-                        if (state is ProductsLoading) return const Center(child: CircularProgressIndicator());
-
-                        if (state is ProductsSuccess) {
-                          final cubit = context.read<ProductsCubit>();
-                          final lowStockAlerts = cubit.lowStockItems;
-
-                          return ListView(
-                            padding: EdgeInsets.only(
-                                left: 16.w,
-                                right: 16.w,
-                                top: 0,
-                                bottom: 100.h
-                            ),
-                            physics: const BouncingScrollPhysics(),
-                            children: [
-                              if (lowStockAlerts.isNotEmpty) ...[
-                                SizedBox(height: 12.h),
-                                ...lowStockAlerts.map((product) => LowStockAlertCard(
+                        return ListView(
+                          padding: EdgeInsets.only(
+                            left: 16.w,
+                            right: 16.w,
+                            top: 0,
+                            bottom: 100.h,
+                          ),
+                          physics: const BouncingScrollPhysics(),
+                          children: [
+                            if (lowStockAlerts.isNotEmpty) ...[
+                              SizedBox(height: 12.h),
+                              ...lowStockAlerts.map(
+                                (product) => LowStockAlertCard(
                                   productName: product.name,
                                   remainingQuantity: product.quantity,
-                                )),
-                              ],
-                              SizedBox(height: 16.h),
-
-                              ProductsList(
-                                products: state.products,
-                                onProductTap: (product) {
-                                  Navigator.pushNamed(
-                                    context,
-                                    Routes.productDetails,
-                                    arguments: product.id,
-                                  );
-                                },
+                                ),
                               ),
                             ],
-                          );
-                        }
+                            SizedBox(height: 16.h),
 
-                        if (state is ProductsEmpty) return const EmptyProductsWidget();
-                        if (state is ProductsFailure) return Center(child: Text(state.message));
-                        return const SizedBox();
-                      },
-                    ),
+                            ProductsList(
+                              products: state.products,
+                              onProductTap: (product) {
+                                Navigator.pushNamed(
+                                  context,
+                                  Routes.productDetails,
+                                  arguments: product.id,
+                                );
+                              },
+                            ),
+                          ],
+                        );
+                      }
+
+                      if (state is ProductsEmpty)
+                        return const EmptyProductsWidget();
+                      if (state is ProductsFailure)
+                        return Center(child: Text(state.message));
+                      return const SizedBox();
+                    },
                   ),
-                ],
-              ),
-            );
-          }
+                ),
+              ],
+            ),
+          );
+        },
       ),
     );
   }

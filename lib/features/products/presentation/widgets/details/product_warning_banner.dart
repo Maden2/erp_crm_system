@@ -13,7 +13,7 @@ class ProductWarningBanner extends StatelessWidget {
 
     return Column(
       children: [
-        SizedBox(height: 16.h,),
+        SizedBox(height: 16.h),
         Container(
           width: double.infinity,
           padding: EdgeInsets.symmetric(vertical: 12.h),
@@ -40,7 +40,7 @@ class ProductWarningBanner extends StatelessWidget {
             ],
           ),
         ),
-        SizedBox(height: 16.h,),
+        SizedBox(height: 16.h),
         _buildFullWidthDivider(),
       ],
     );

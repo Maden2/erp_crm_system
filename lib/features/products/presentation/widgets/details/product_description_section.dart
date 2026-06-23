@@ -14,7 +14,7 @@ class ProductDescriptionSection extends StatelessWidget {
         Text(
           description,
           textDirection: TextDirection.rtl,
-          style: TextStyles.font14graphiteGreyRegular
+          style: TextStyles.font14graphiteGreyRegular,
         ),
       ],
     );

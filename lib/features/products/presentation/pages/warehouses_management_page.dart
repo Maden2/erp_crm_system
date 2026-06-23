@@ -13,7 +13,11 @@ class WarehousesManagementPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final List<WarehouseEntity> warehouses = [
-      WarehouseEntity(id: "1", name: "الكترونيات", icon: Icons.inventory_2_outlined),
+      WarehouseEntity(
+        id: "1",
+        name: "الكترونيات",
+        icon: Icons.inventory_2_outlined,
+      ),
       WarehouseEntity(id: "2", name: "ملابس", icon: Icons.inventory_2_outlined),
       WarehouseEntity(id: "3", name: "العاب", icon: Icons.inventory_2_outlined),
     ];
@@ -39,10 +43,7 @@ class WarehousesManagementPage extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                    "جميع المخزون",
-                    style: TextStyles.font20PrimaryMedium
-                ),
+                Text("جميع المخزون", style: TextStyles.font20PrimaryMedium),
                 _buildAddSmallButton(context),
               ],
             ),
@@ -57,7 +58,8 @@ class WarehousesManagementPage extends StatelessWidget {
               child: ListView.builder(
                 itemCount: warehouses.length,
                 physics: const BouncingScrollPhysics(),
-                itemBuilder: (context, index) => _buildWarehouseCard(warehouses[index]),
+                itemBuilder: (context, index) =>
+                    _buildWarehouseCard(warehouses[index]),
               ),
             ),
           ],
@@ -81,10 +83,7 @@ class WarehousesManagementPage extends StatelessWidget {
           children: [
             Icon(Icons.add, color: AppColors.homeBg, size: 16.sp),
             SizedBox(width: 4.w),
-            Text(
-                "إضافة مخزون",
-                style: TextStyles.font14lightWhiteRegular
-            ),
+            Text("إضافة مخزون", style: TextStyles.font14lightWhiteRegular),
           ],
         ),
       ),
@@ -109,8 +108,8 @@ class WarehousesManagementPage extends StatelessWidget {
             Icon(Icons.history, color: AppColors.homeBg, size: 20.sp),
             SizedBox(width: 8.w),
             Text(
-                "تاريخ إضافة المخزون",
-                style: TextStyles.font14lightWhiteRegular
+              "تاريخ إضافة المخزون",
+              style: TextStyles.font14lightWhiteRegular,
             ),
           ],
         ),
@@ -148,12 +147,9 @@ class WarehousesManagementPage extends StatelessWidget {
             ),
           ),
           SizedBox(width: 10.w),
-          Text(
-              warehouse.name,
-              style: TextStyles.font14BlackMedium
-          ),
+          Text(warehouse.name, style: TextStyles.font14BlackMedium),
           const Spacer(),
-          Icon(Icons.more_vert, color:AppColors.lightGrayText, size: 20.sp),
+          Icon(Icons.more_vert, color: AppColors.lightGrayText, size: 20.sp),
         ],
       ),
     );

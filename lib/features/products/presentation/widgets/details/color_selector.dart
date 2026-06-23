@@ -15,7 +15,6 @@ class ColorSelector extends StatelessWidget {
     final double s = hsl.saturation;
     final double l = hsl.lightness;
 
-
     if (l >= 0.9) return 'أبيض';
     if (l <= 0.1) return 'أسود';
     if (s <= 0.1) {
@@ -23,7 +22,6 @@ class ColorSelector extends StatelessWidget {
       if (l < 0.7) return 'رمادي';
       return 'رمادي فاتح';
     }
-
 
     if (h < 15 || h >= 345) return 'أحمر';
     if (h < 40) return 'برتقالي';
@@ -77,10 +75,10 @@ class ColorSelector extends StatelessWidget {
                   borderRadius: BorderRadius.circular(5.r),
                 ),
               ),
-              SizedBox(width: 8.w,),
+              SizedBox(width: 8.w),
               Text(
                 _getColorName(colors[index]),
-                style: TextStyles.font14graphiteGreyRegular
+                style: TextStyles.font14graphiteGreyRegular,
               ),
             ],
           ),

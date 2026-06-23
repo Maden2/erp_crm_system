@@ -50,7 +50,7 @@ class _SalesChartWidgetState extends State<SalesChartWidget> {
 
     return Container(
       width: double.infinity,
-      padding: EdgeInsets.symmetric(horizontal:21.w ,vertical:11.h ),
+      padding: EdgeInsets.symmetric(horizontal: 21.w, vertical: 11.h),
       decoration: BoxDecoration(
         color: AppColors.authBgColor,
         borderRadius: BorderRadius.circular(14.r),
@@ -61,10 +61,7 @@ class _SalesChartWidgetState extends State<SalesChartWidget> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                'مخطط المبيعات',
-                style: TextStyles.font12darkTextMedium
-              ),
+              Text('مخطط المبيعات', style: TextStyles.font12darkTextMedium),
               _buildToggle(),
             ],
           ),
@@ -94,16 +91,23 @@ class _SalesChartWidgetState extends State<SalesChartWidget> {
                 ),
                 titlesData: FlTitlesData(
                   show: true,
-                  rightTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
-                  topTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
-                  leftTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                  rightTitles: const AxisTitles(
+                    sideTitles: SideTitles(showTitles: false),
+                  ),
+                  topTitles: const AxisTitles(
+                    sideTitles: SideTitles(showTitles: false),
+                  ),
+                  leftTitles: const AxisTitles(
+                    sideTitles: SideTitles(showTitles: false),
+                  ),
                   bottomTitles: AxisTitles(
                     sideTitles: SideTitles(
                       showTitles: true,
                       interval: 1,
                       getTitlesWidget: (value, meta) {
                         final index = value.toInt();
-                        if (index < 0 || index >= _days.length) return const SizedBox();
+                        if (index < 0 || index >= _days.length)
+                          return const SizedBox();
                         return Padding(
                           padding: EdgeInsets.only(top: 8.h),
                           child: Text(
@@ -156,15 +160,23 @@ class _SalesChartWidgetState extends State<SalesChartWidget> {
 
   Widget _buildToggle() {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 12.w,vertical:5.h ),
+      padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 5.h),
       decoration: BoxDecoration(
         color: AppColors.homeBg,
         borderRadius: BorderRadius.circular(13.r),
       ),
       child: Row(
         children: [
-          _toggleItem('المبيعات', _isSales, () => setState(() => _isSales = true)),
-          _toggleItem('الطلبات', !_isSales, () => setState(() => _isSales = false)),
+          _toggleItem(
+            'المبيعات',
+            _isSales,
+            () => setState(() => _isSales = true),
+          ),
+          _toggleItem(
+            'الطلبات',
+            !_isSales,
+            () => setState(() => _isSales = false),
+          ),
         ],
       ),
     );
@@ -184,7 +196,9 @@ class _SalesChartWidgetState extends State<SalesChartWidget> {
           style: TextStyle(
             fontFamily: 'Cairo',
             fontSize: 10.sp,
-            color: isSelected ? AppColors.authBgColor : AppColors.navSelectedColor,
+            color: isSelected
+                ? AppColors.authBgColor
+                : AppColors.navSelectedColor,
             fontWeight: FontWeight.w400,
           ),
         ),

@@ -7,11 +7,7 @@ class AppAddButton extends StatelessWidget {
   final String title;
   final VoidCallback onTap;
 
-  const AppAddButton({
-    super.key,
-    required this.title,
-    required this.onTap,
-  });
+  const AppAddButton({super.key, required this.title, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -35,16 +31,9 @@ class AppAddButton extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           textDirection: TextDirection.rtl,
           children: [
-            Icon(
-              Icons.add,
-              color: Colors.white,
-              size: 15.sp,
-            ),
+            Icon(Icons.add, color: Colors.white, size: 15.sp),
             SizedBox(width: 4.w),
-            Text(
-              title,
-              style: TextStyles.font14WhiteRegular
-            ),
+            Text(title, style: TextStyles.font14WhiteRegular),
           ],
         ),
       ),

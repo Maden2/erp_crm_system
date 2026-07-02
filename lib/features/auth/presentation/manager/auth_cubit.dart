@@ -1,35 +1,71 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'auth_state.dart';
+
+import '../../domain/usecases/get_current_user_use_case.dart';
 import '../../domain/usecases/login_use_case.dart';
-import '../../domain/entities/user_entity.dart';
+import '../../domain/usecases/logout_use_case.dart';
+import 'auth_state.dart';
 
 class AuthCubit extends Cubit<AuthState> {
   final LoginUseCase loginUseCase;
+  final GetCurrentUserUseCase getCurrentUserUseCase;
+  final LogoutUseCase logoutUseCase;
 
-  AuthCubit(this.loginUseCase) : super(AuthInitial());
+  AuthCubit(
+      this.loginUseCase,
+      this.getCurrentUserUseCase,
+      this.logoutUseCase,
+      ) : super(AuthInitial());
 
   Future<void> emitLoginStates({
     required String email,
     required String password,
+    required bool rememberMe,
   }) async {
     emit(AuthLoading());
 
-    final cleanEmail = email.trim();
-    final cleanPassword = password.trim();
-
-    if (cleanEmail == "pivot@mail.com" && cleanPassword == "12345678") {
-      await Future.delayed(const Duration(seconds: 1));
-
-      final mockUser = UserEntity(
-        name: "Maden Elmoatasem",
-        email: cleanEmail,
-        token: "static_mock_token_12345",
+    try {
+      final result = await loginUseCase(
+        email: email.trim(),
+        password: password.trim(),
+        rememberMe: rememberMe,
       );
 
-      emit(AuthSuccess(mockUser));
-      return;
+      result.fold(
+            (failure) => emit(AuthError(failure.message)),
+            (user) => emit(AuthSuccess(user)),
+      );
+    } catch (e) {
+      emit(AuthError(e.toString()));
     }
+  }
 
-    emit(AuthError("البريد الإلكتروني أو كلمة المرور غير صحيحة"));
+  Future<void> getProfile() async {
+    emit(ProfileLoading());
+
+    try {
+      final result = await getCurrentUserUseCase();
+
+      result.fold(
+            (failure) => emit(ProfileError(failure.message)),
+            (user) => emit(ProfileSuccess(user)),
+      );
+    } catch (e) {
+      emit(ProfileError(e.toString()));
+    }
+  }
+
+  Future<void> logout() async {
+    emit(LogoutLoading());
+
+    try {
+      final result = await logoutUseCase();
+
+      result.fold(
+            (failure) => emit(LogoutError(failure.message)),
+            (_) => emit(LogoutSuccess()),
+      );
+    } catch (e) {
+      emit(LogoutError(e.toString()));
+    }
   }
 }

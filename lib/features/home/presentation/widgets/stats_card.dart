@@ -28,8 +28,6 @@ class StatsCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 255.w,
-      height: 108.h,
       margin: EdgeInsets.symmetric(horizontal: 4.w),
       padding: EdgeInsets.all(14.w),
       decoration: BoxDecoration(
@@ -37,7 +35,7 @@ class StatsCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(8.r),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.07),
+            color: Colors.black.withValues(alpha: 0.07),
             blurRadius: 12,
             offset: const Offset(0, 2),
           ),
@@ -48,11 +46,10 @@ class StatsCard extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Container(
-                width: 49.w,
-                height: 49.h,
+                width: 49.r,
+                height: 49.r,
                 decoration: BoxDecoration(
                   color: iconBgColor,
                   shape: BoxShape.circle,
@@ -73,18 +70,24 @@ class StatsCard extends StatelessWidget {
                   children: [
                     Text(
                       title,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                       style: TextStyles.font14GreyBold.copyWith(
                         fontSize: 14.sp,
                       ),
                     ),
                     SizedBox(height: 8.h),
-                    Text(value, style: TextStyles.font16BlackBold),
+                    Text(
+                      value,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyles.font16BlackBold,
+                    ),
                   ],
                 ),
               ),
             ],
           ),
-
           Row(
             children: [
               Image.asset(
@@ -93,10 +96,11 @@ class StatsCard extends StatelessWidget {
                 height: 15.sp,
                 color: const Color(0xFF0052B5),
               ),
-
               SizedBox(width: 4.w),
               Expanded(
                 child: RichText(
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
                   text: TextSpan(
                     style: TextStyle(
                       fontSize: 10.sp,

@@ -8,18 +8,22 @@ abstract class Failure extends Equatable {
   List<Object> get props => [message];
 }
 
-// خطأ من طرف السيرفر (API Error)
 class ServerFailure extends Failure {
-  const ServerFailure([String message = 'حدث خطأ في الاتصال بالسيرفر'])
-    : super(message);
+  final int? statusCode;
+
+  const ServerFailure([
+    String message = 'حدث خطأ في الاتصال بالسيرفر',
+    this.statusCode,
+  ]) : super(message);
+
+  @override
+  List<Object> get props => [message, statusCode ?? 0];
 }
 
-// خطأ بسبب الإنترنت (No Internet)
 class NetworkFailure extends Failure {
   const NetworkFailure() : super('لا يوجد اتصال بالإنترنت');
 }
 
-// خطأ في معالجة البيانات (Parsing JSON)
 class ParsingFailure extends Failure {
   const ParsingFailure() : super('خطأ في معالجة البيانات');
 }

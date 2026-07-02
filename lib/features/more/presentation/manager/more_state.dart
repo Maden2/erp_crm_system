@@ -16,11 +16,5 @@ class MoreProfileError extends MoreState {
   MoreProfileError(this.message);
 }
 
-class MoreLogoutLoading extends MoreState {}
 
-class MoreLogoutSuccess extends MoreState {}
 
-class MoreLogoutError extends MoreState {
-  final String message;
-  MoreLogoutError(this.message);
-}

@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:pivot/core/utils/app_assets.dart';
-import 'package:pivot/core/utils/app_colors.dart';
-import '../../../../core/di/service_locator.dart';
-import '../../../invoices/presentation/manager/invoices_cubit.dart';
-import '../../../invoices/presentation/pages/invoices_screen.dart';
-import '../manager/more_cubit.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+
+import '../../../../app/app_routes.dart';
+import '../../../../core/utils/app_assets.dart';
+import '../../../../core/utils/app_colors.dart';
+import '../../../auth/presentation/manager/auth_cubit.dart';
+import '../../../auth/presentation/manager/auth_state.dart';
 import '../widgets/menu_tile.dart';
 
 class MorePage extends StatelessWidget {
@@ -15,11 +15,25 @@ class MorePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => MoreCubit(),
-      child: Scaffold(
-        backgroundColor: AppColors.homeBg,
-        body: SafeArea(
+    return Scaffold(
+      backgroundColor: AppColors.homeBg,
+      body: BlocListener<AuthCubit, AuthState>(
+        listener: (context, state) {
+          if (state is LogoutSuccess) {
+            Navigator.pushNamedAndRemoveUntil(
+              context,
+              Routes.login,
+                  (route) => false,
+            );
+          }
+
+          if (state is LogoutError) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text(state.message)),
+            );
+          }
+        },
+        child: SafeArea(
           child: SingleChildScrollView(
             padding: EdgeInsets.symmetric(horizontal: 24.w),
             child: Column(
@@ -35,23 +49,16 @@ class MorePage extends StatelessWidget {
                   subtitle: "ادارة وعرض الفواتير",
                   icon: AppAssets.invoicesIcon,
                   onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => BlocProvider(
-                          create: (context) =>
-                              getIt<InvoicesCubit>()..fetchInvoices(),
-                          child: const InvoicesScreen(),
-                        ),
-                      ),
-                    );
+                    Navigator.pushNamed(context, Routes.invoicesPage);
                   },
                 ),
                 MenuTile(
                   title: "الأرباح",
                   subtitle: "تحليل الأرباح وصافي الدخل",
                   icon: AppAssets.profitsMoreIcon,
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.pushNamed(context, Routes.profitsPage);
+                  },
                 ),
 
                 SizedBox(height: 16.h),
@@ -109,6 +116,7 @@ class MorePage extends StatelessWidget {
                 ),
 
                 _buildLogoutButton(),
+
                 SizedBox(height: 30.h),
               ],
             ),
@@ -145,7 +153,7 @@ class MorePage extends StatelessWidget {
         children: [
           Container(
             padding: EdgeInsets.all(12.5.w),
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               color: AppColors.homeBg,
               shape: BoxShape.circle,
             ),
@@ -194,19 +202,17 @@ class MorePage extends StatelessWidget {
   }
 
   Widget _buildLogoutButton() {
-    return BlocConsumer<MoreCubit, MoreState>(
-      listener: (context, state) {
-        if (state is MoreLogoutSuccess) {
-          // Navigator.pushNamedAndRemoveUntil(context, '/login', (route) => false);
-        }
-      },
+    return BlocBuilder<AuthCubit, AuthState>(
       builder: (context, state) {
         return MenuTile(
           title: "تسجيل الخروج",
           icon: AppAssets.logoutIcon,
           textColor: const Color(0xFFEF4444),
           iconContainerColor: AppColors.redColor,
-          onTap: () => context.read<MoreCubit>().logout(),
+          isLoading: state is LogoutLoading,
+          onTap: () {
+            context.read<AuthCubit>().logout();
+          },
         );
       },
     );

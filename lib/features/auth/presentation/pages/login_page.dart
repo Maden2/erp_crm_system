@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 import '../../../../app/app_routes.dart';
 import '../../../../core/utils/app_colors.dart';
 import '../../../../core/utils/app_styles.dart';
@@ -21,13 +22,12 @@ class _LoginPageState extends State<LoginPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   final TextEditingController emailController = TextEditingController(
-    text: "pivot@mail.com",
-  );
-  final TextEditingController passwordController = TextEditingController(
-    text: "12345678",
   );
 
-  bool rememberMe = false;
+  final TextEditingController passwordController = TextEditingController(
+  );
+
+  bool rememberMe = true;
   bool isButtonEnabled = false;
 
   @override
@@ -35,12 +35,14 @@ class _LoginPageState extends State<LoginPage> {
     super.initState();
     emailController.addListener(_validateInputs);
     passwordController.addListener(_validateInputs);
+    _validateInputs(); // ✅ استدعيها من الأول عشان الزرار يكون active
   }
 
   void _validateInputs() {
     setState(() {
       isButtonEnabled =
-          emailController.text.isNotEmpty && passwordController.text.isNotEmpty;
+          emailController.text.trim().isNotEmpty &&
+              passwordController.text.trim().isNotEmpty;
     });
   }
 
@@ -61,9 +63,11 @@ class _LoginPageState extends State<LoginPage> {
             Navigator.pushNamedAndRemoveUntil(
               context,
               Routes.navigationPage,
-              (route) => false,
+                  (route) => false,
             );
-          } else if (state is AuthError) {
+          }
+
+          if (state is AuthError) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 content: Text(state.message),
@@ -75,12 +79,12 @@ class _LoginPageState extends State<LoginPage> {
         child: SafeArea(
           child: SingleChildScrollView(
             padding: EdgeInsets.symmetric(horizontal: 24.w),
-
             child: Form(
               key: _formKey,
               child: Column(
                 children: [
                   SizedBox(height: 100.h),
+
                   Center(
                     child: Image.asset(
                       'assets/images/logo.png',
@@ -93,29 +97,39 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                     ),
                   ),
+
                   SizedBox(height: 30.h),
-                  Text("مرحباً بعودتك 👋", style: TextStyles.font24PrimaryBold),
+
+                  Text(
+                    "مرحباً بعودتك 👋",
+                    style: TextStyles.font24PrimaryBold,
+                  ),
+
                   SizedBox(height: 8.h),
+
                   Text(
                     "مرحباً، قم بتسجيل الدخول للمتابعة.",
                     style: TextStyles.font14GreyRegular,
                   ),
+
                   SizedBox(height: 36.h),
 
                   AppTextField(
                     controller: emailController,
                     label: "البريد الإلكتروني",
                     hintText: "البريد الإلكتروني",
-                    validator: (value) => AppValidators.validateEmail(value),
+                    validator: AppValidators.validateEmail,
                     prefixIcon: const Icon(Icons.email_outlined),
                   ),
+
                   SizedBox(height: 20.h),
+
                   AppTextField(
                     controller: passwordController,
                     label: "كلمة المرور",
                     hintText: "كلمة المرور",
                     isPassword: true,
-                    validator: (value) => AppValidators.validatePassword(value),
+                    validator: AppValidators.validatePassword,
                     prefixIcon: const Icon(Icons.lock_outline),
                   ),
 
@@ -128,20 +142,31 @@ class _LoginPageState extends State<LoginPage> {
                         children: [
                           Checkbox(
                             value: rememberMe,
-                            onChanged: (value) =>
-                                setState(() => rememberMe = value ?? false),
+                            onChanged: (value) {
+                              setState(() {
+                                rememberMe = value ?? true;
+                              });
+                            },
                             activeColor: AppColors.primary,
-                            side: BorderSide(color: Colors.grey.shade300),
+                            side: BorderSide(
+                              color: Colors.grey.shade300,
+                            ),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(4.r),
                             ),
                           ),
-                          Text("تذكرني", style: TextStyles.font14GreyRegular),
+                          Text(
+                            "تذكرني",
+                            style: TextStyles.font14GreyRegular,
+                          ),
                         ],
                       ),
                       GestureDetector(
                         onTap: () {
-                          Navigator.pushNamed(context, Routes.forgotPassword);
+                          Navigator.pushNamed(
+                            context,
+                            Routes.forgotPassword,
+                          );
                         },
                         child: Text(
                           "نسيت كلمة المرور؟",
@@ -160,33 +185,41 @@ class _LoginPageState extends State<LoginPage> {
                         isLoading: state is AuthLoading,
                         onPressed: isButtonEnabled
                             ? () {
-                                if (_formKey.currentState!.validate()) {
-                                  context.read<AuthCubit>().emitLoginStates(
-                                    email: emailController.text,
-                                    password: passwordController.text,
-                                  );
-                                }
-                              }
+                          if (_formKey.currentState!.validate()) {
+                            context.read<AuthCubit>().emitLoginStates(
+                              email: emailController.text.trim(),
+                              password: passwordController.text.trim(),
+                              rememberMe: rememberMe,
+                            );
+                          }
+                        }
                             : null,
                       );
                     },
                   ),
 
                   SizedBox(height: 40.h),
+
                   Icon(
                     Icons.fingerprint,
                     size: 70.sp,
                     color: AppColors.primary.withOpacity(0.5),
                   ),
+
                   SizedBox(height: 20.h),
+
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       const Text("ليس لديك حساب؟ "),
                       SizedBox(width: 12.w),
                       GestureDetector(
-                        onTap: () =>
-                            Navigator.pushNamed(context, Routes.signup),
+                        onTap: () {
+                          Navigator.pushNamed(
+                            context,
+                            Routes.signup,
+                          );
+                        },
                         child: Text(
                           "إنشاء حساب",
                           style: TextStyles.font14PrimaryBold.copyWith(
@@ -196,6 +229,7 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                     ],
                   ),
+
                   SizedBox(height: 20.h),
                 ],
               ),

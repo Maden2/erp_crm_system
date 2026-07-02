@@ -3,14 +3,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pivot/core/utils/app_colors.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+
 import '../../../../core/utils/app_assets.dart';
 import '../../../../core/utils/app_styles.dart';
-import '../../domain/entities/home_banner_entity.dart';
+import '../../domain/entities/greeting_entity.dart';
 
 class HomeBanner extends StatefulWidget {
-  final HomeBannerEntity? data;
+  final GreetingEntity greeting;
 
-  const HomeBanner({super.key, this.data});
+  const HomeBanner({
+    super.key,
+    required this.greeting,
+  });
 
   @override
   State<HomeBanner> createState() => _HomeBannerState();
@@ -21,28 +25,24 @@ class _HomeBannerState extends State<HomeBanner> {
   int _currentPage = 0;
   late Timer _timer;
 
-  late final HomeBannerEntity _dummyData = HomeBannerEntity(
-    userName: "محمد",
-    orderNumber: "2483",
-  );
-
-  HomeBannerEntity get data => widget.data ?? _dummyData;
-
   @override
   void initState() {
     super.initState();
-    _timer = Timer.periodic(const Duration(seconds: 5), (Timer timer) {
-      if (_pageController.hasClients) {
+    _timer = Timer.periodic(
+      const Duration(seconds: 5),
+          (timer) {
+        if (!_pageController.hasClients) return;
         _currentPage++;
-        if (_currentPage > 2) _currentPage = 0;
-
+        if (_currentPage > 2) {
+          _currentPage = 0;
+        }
         _pageController.animateToPage(
           _currentPage,
           duration: const Duration(milliseconds: 600),
           curve: Curves.easeInOut,
         );
-      }
-    });
+      },
+    );
   }
 
   @override
@@ -57,26 +57,30 @@ class _HomeBannerState extends State<HomeBanner> {
     return Stack(
       alignment: Alignment.bottomCenter,
       children: [
-        SizedBox(
-          height: 100.h,
+        AspectRatio(
+          aspectRatio: 3.2,
           child: PageView(
             controller: _pageController,
-            onPageChanged: (index) => setState(() => _currentPage = index),
+            onPageChanged: (index) {
+              setState(() {
+                _currentPage = index;
+              });
+            },
             children: [
               _buildBannerItem(
                 image: AppAssets.welcomeBannerBg,
-                title: "أهلاً ${data.userName} 👋",
-                subtitle: "لنبدأ رحلتك في تنظيم عملك… كل شيء جاهز للانطلاق!",
+                title: "أهلاً ${widget.greeting.fullName} 👋",
+                subtitle: widget.greeting.message,
               ),
               _buildBannerItem(
                 image: AppAssets.ordersBannerBg,
-                title: "تم استلام طلب جديد رقم #${data.orderNumber}",
+                title: "تابع لوحة التحكم لمتابعة آخر الطلبات الحالية",
                 hasIcon: true,
                 iconPath: AppAssets.alarmIcon,
               ),
               _buildBannerItem(
                 image: AppAssets.paymentsBannerBg,
-                title: "تم تسجيل عملية دفع معلّقة",
+                title: "مبيعاتك وأرباحك محدثة لحظياً من السيرفر",
                 hasIcon: true,
                 iconPath: AppAssets.walletIcon,
               ),
@@ -84,17 +88,17 @@ class _HomeBannerState extends State<HomeBanner> {
           ),
         ),
         Positioned(
-          bottom: 10.h,
+          bottom: 8.h,
           child: SmoothPageIndicator(
             controller: _pageController,
             count: 3,
             effect: WormEffect(
               dotHeight: 6.h,
               dotWidth: 6.w,
-              activeDotColor: AppColors.activeDotColor,
-              dotColor: AppColors.grey,
               spacing: 4.w,
               type: WormType.thin,
+              activeDotColor: AppColors.activeDotColor,
+              dotColor: AppColors.grey,
             ),
           ),
         ),
@@ -113,15 +117,18 @@ class _HomeBannerState extends State<HomeBanner> {
       margin: EdgeInsets.symmetric(horizontal: 2.w),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(16.r),
-        image: DecorationImage(image: AssetImage(image), fit: BoxFit.cover),
+        image: DecorationImage(
+          image: AssetImage(image),
+          fit: BoxFit.cover,
+        ),
       ),
       child: Padding(
-        padding: EdgeInsets.all(20.w),
+        padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 12.h),
         child: Row(
           children: [
             if (hasIcon && iconPath != null) ...[
               Container(
-                padding: EdgeInsets.all(12.w),
+                padding: EdgeInsets.all(10.r),
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(16.r),
@@ -132,14 +139,25 @@ class _HomeBannerState extends State<HomeBanner> {
             ],
             Expanded(
               child: Column(
+                mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   if (title != null)
-                    Text(title, style: TextStyles.font16WhiteBold),
+                    Text(
+                      title,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyles.font16WhiteBold,
+                    ),
                   if (subtitle != null) ...[
-                    SizedBox(height: 8.h),
-                    Text(subtitle, style: TextStyles.font12WhiteRegular),
+                    SizedBox(height: 6.h),
+                    Text(
+                      subtitle,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyles.font12WhiteRegular,
+                    ),
                   ],
                 ],
               ),

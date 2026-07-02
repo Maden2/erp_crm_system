@@ -3,15 +3,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/utils/app_colors.dart';
 import '../../../../core/utils/app_styles.dart';
-import '../../domain/entities/low_stock_entity.dart';
+import '../../domain/entities/dashboard_low_stock_entity.dart';
 
 class LowStockSection extends StatelessWidget {
-  final List<LowStockEntity> products;
+  final List<DashboardLowStockEntity> products;
 
   const LowStockSection({super.key, required this.products});
 
   @override
   Widget build(BuildContext context) {
+    if (products.isEmpty) return const SizedBox();
+
     return Container(
       padding: EdgeInsets.all(20.w),
       decoration: BoxDecoration(
@@ -41,14 +43,8 @@ class LowStockSection extends StatelessWidget {
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              "منتجات قاربت على النفاد",
-              style: TextStyles.font12BlackMedium,
-            ),
-            Text(
-              "راجع المخزون لتجنب نفاد المعروض",
-              style: TextStyles.font8BlackRegular,
-            ),
+            Text("منتجات قاربت على النفاد", style: TextStyles.font12BlackMedium),
+            Text("راجع المخزون لتجنب نفاد المعروض", style: TextStyles.font8BlackRegular),
           ],
         ),
         Container(
@@ -59,11 +55,7 @@ class LowStockSection extends StatelessWidget {
           ),
           child: Row(
             children: [
-              const Icon(
-                Icons.warning_amber_rounded,
-                color: AppColors.redColor,
-                size: 14,
-              ),
+              const Icon(Icons.warning_amber_rounded, color: AppColors.redColor, size: 14),
               SizedBox(width: 4.w),
               Text("تنبيه مخزون", style: TextStyles.font12redRegular),
             ],
@@ -73,7 +65,7 @@ class LowStockSection extends StatelessWidget {
     );
   }
 
-  Widget _buildProductItem(LowStockEntity product) {
+  Widget _buildProductItem(DashboardLowStockEntity product) {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 11.w, vertical: 8.h),
       decoration: BoxDecoration(
@@ -85,54 +77,42 @@ class LowStockSection extends StatelessWidget {
           ClipRRect(
             borderRadius: BorderRadius.circular(8.r),
             child: CachedNetworkImage(
-              imageUrl: product.imageUrl ?? "",
-
+              imageUrl: product.image ?? "",
               width: 48.w,
               height: 48.w,
               fit: BoxFit.cover,
-
               placeholder: (context, url) => Container(
                 width: 48.w,
                 height: 48.w,
                 color: Colors.grey.shade200,
-                child: const Center(
-                  child: CircularProgressIndicator(strokeWidth: 2),
-                ),
+                child: const Center(child: CircularProgressIndicator(strokeWidth: 2)),
               ),
-
               errorWidget: (context, url, error) => Container(
                 width: 48.w,
                 height: 48.w,
                 color: Colors.grey.shade200,
-                child: Icon(
-                  Icons.image_not_supported,
-                  size: 20.sp,
-                  color: Colors.grey,
-                ),
+                child: Icon(Icons.image_not_supported, size: 20.sp, color: Colors.grey),
               ),
             ),
           ),
-
           SizedBox(width: 10.w),
-
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(product.productName, style: TextStyles.font12BlackMedium),
+                Text(product.name, style: TextStyles.font12BlackMedium),
                 SizedBox(height: 6.h),
                 Text(
-                  "المتبقي ${product.remainingQuantity} قطع",
+                  "المتبقي ${product.quantity} قطع",
                   style: TextStyles.font12redRegular,
                 ),
               ],
             ),
           ),
-
           SizedBox(width: 10.w),
           Expanded(
             child: Text(
-              product.categoryName,
+              product.category,
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
               textAlign: TextAlign.end,

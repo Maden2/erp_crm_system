@@ -10,6 +10,7 @@ class MenuTile extends StatelessWidget {
   final VoidCallback onTap;
   final Color? textColor;
   final Color? iconContainerColor;
+  final bool isLoading;
 
   const MenuTile({
     super.key,
@@ -19,6 +20,7 @@ class MenuTile extends StatelessWidget {
     required this.onTap,
     this.textColor,
     this.iconContainerColor,
+    this.isLoading = false,
   });
 
   @override
@@ -30,7 +32,7 @@ class MenuTile extends StatelessWidget {
         borderRadius: BorderRadius.circular(12.r),
       ),
       child: InkWell(
-        onTap: onTap,
+        onTap: isLoading ? null : onTap,
         borderRadius: BorderRadius.circular(12.r),
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
@@ -74,7 +76,15 @@ class MenuTile extends StatelessWidget {
                   ],
                 ),
               ),
-              Icon(
+              isLoading
+                  ? SizedBox(
+                width: 20.w,
+                height: 20.w,
+                child: const CircularProgressIndicator(
+                  strokeWidth: 2,
+                ),
+              )
+                  : Icon(
                 Icons.arrow_forward_ios,
                 color: textColor ?? const Color(0xFF6B7280),
                 size: 20.sp,

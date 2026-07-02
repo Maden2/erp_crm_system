@@ -4,13 +4,19 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:pivot/core/utils/app_assets.dart';
 import 'package:pivot/core/utils/app_colors.dart';
-import '../../domain/entities/home_stats_entity.dart';
+import '../../domain/entities/kpi_entity.dart';
+import '../../domain/entities/profit_entity.dart';
 import 'stats_card.dart';
 
 class StatsSection extends StatefulWidget {
-  final HomeStatsEntity? data;
+  final KpiEntity kpi;
+  final ProfitEntity profit;
 
-  const StatsSection({super.key, this.data});
+  const StatsSection({
+    super.key,
+    required this.kpi,
+    required this.profit,
+  });
 
   @override
   State<StatsSection> createState() => _StatsSectionState();
@@ -22,19 +28,6 @@ class _StatsSectionState extends State<StatsSection> {
   Timer? _timer;
   static const int _totalCards = 4;
 
-  late final HomeStatsEntity dummy = HomeStatsEntity(
-    salesValue: '24,000',
-    salesPercentage: '12%',
-    profitsValue: '390,800',
-    profitsPercentage: '8%',
-    ordersValue: '145',
-    ordersPercentage: '20%',
-    reportsValue: '90,000',
-    reportsPercentage: '25%',
-  );
-
-  HomeStatsEntity get data => widget.data ?? dummy;
-
   @override
   void initState() {
     super.initState();
@@ -42,15 +35,18 @@ class _StatsSectionState extends State<StatsSection> {
   }
 
   void _startAutoScroll() {
-    _timer = Timer.periodic(const Duration(seconds: 3), (_) {
-      if (!_controller.hasClients) return;
-      final nextPage = (currentIndex + 1) % _totalCards;
-      _controller.animateToPage(
-        nextPage,
-        duration: const Duration(milliseconds: 500),
-        curve: Curves.easeInOut,
-      );
-    });
+    _timer = Timer.periodic(
+      const Duration(seconds: 3),
+          (_) {
+        if (!_controller.hasClients) return;
+        final nextPage = (currentIndex + 1) % _totalCards;
+        _controller.animateToPage(
+          nextPage,
+          duration: const Duration(milliseconds: 500),
+          curve: Curves.easeInOut,
+        );
+      },
+    );
   }
 
   @override
@@ -62,47 +58,55 @@ class _StatsSectionState extends State<StatsSection> {
 
   @override
   Widget build(BuildContext context) {
+    // 🟢 لقطة ذكية: التأكد من النسب وحسابها بدقة لتجنب السالب الثابت
+    final double todayPct = widget.kpi.todayVsYesterdayPct.toDouble();
+    final double monthPct = widget.kpi.monthVsLastMonthPct.toDouble();
+
     return Column(
       children: [
         SizedBox(
-          height: 108.h,
-          width: 400.w,
+          height: 120.h,
           child: PageView(
             controller: _controller,
-            onPageChanged: (index) => setState(() => currentIndex = index),
+            onPageChanged: (index) {
+              setState(() {
+                currentIndex = index;
+              });
+            },
             children: [
               StatsCard(
                 title: 'إجمالي مبيعات اليوم',
-                value: data.salesValue,
-                percentage: data.salesPercentage,
-                subTitlePrefix: 'زيادة بنسبة ',
+                value: widget.kpi.todaySales.toString(),
+                // 🟢 إظهار القيمة المطلقة للنسبة
+                percentage: '${todayPct.abs().toStringAsFixed(0)}%',
+                subTitlePrefix: todayPct >= 0 ? 'زيادة بنسبة ' : 'انخفاض بنسبة ',
                 subTitleSuffix: ' عن أمس',
                 icon: AppAssets.salesIcon,
                 iconBgColor: const Color(0xFFE3F2FD),
               ),
               StatsCard(
                 title: 'إجمالي مبيعات هذا الشهر',
-                value: data.profitsValue,
-                percentage: data.profitsPercentage,
-                subTitlePrefix: 'زيادة بنسبة ',
+                value: widget.kpi.monthlySales.toString(),
+                percentage: '${monthPct.abs().toStringAsFixed(0)}%',
+                subTitlePrefix: monthPct >= 0 ? 'زيادة بنسبة ' : 'انخفاض بنسبة ',
                 subTitleSuffix: ' عن الشهر السابق',
                 icon: AppAssets.profitsIcon,
                 iconBgColor: const Color(0xFFE8F5E9),
               ),
               StatsCard(
                 title: 'عدد الطلبات الجديدة',
-                value: data.ordersValue,
-                percentage: data.ordersPercentage,
-                subTitlePrefix: 'انخفاض بنسبة ',
-                subTitleSuffix: ' في آخر ساعة',
+                value: widget.kpi.todayOrdersCount.toString(),
+                percentage: '${widget.kpi.newOrdersLastHour}',
+                subTitlePrefix: 'تم تسجيل ',
+                subTitleSuffix: ' طلب آخر ساعة',
                 icon: AppAssets.ordersIcon,
                 iconBgColor: const Color(0xFFFFF3E0),
               ),
               StatsCard(
                 title: 'الأرباح الصافية',
-                value: data.reportsValue,
-                percentage: data.reportsPercentage,
-                subTitlePrefix: 'زيادة بنسبة ',
+                value: widget.profit.monthlyProfit.toString(),
+                percentage: '${widget.profit.profitMarginPct.toStringAsFixed(0)}%',
+                subTitlePrefix: 'هامش ربح ',
                 subTitleSuffix: ' هذا الشهر',
                 icon: AppAssets.reportsIcon,
                 iconBgColor: const Color(0x2E4170F1),
@@ -117,9 +121,9 @@ class _StatsSectionState extends State<StatsSection> {
           effect: WormEffect(
             dotHeight: 6.h,
             dotWidth: 6.w,
+            spacing: 6.w,
             activeDotColor: AppColors.statsActiveDotColor,
             dotColor: AppColors.statsDotColor,
-            spacing: 6.w,
           ),
         ),
       ],

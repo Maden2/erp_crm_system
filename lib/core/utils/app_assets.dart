@@ -7,7 +7,7 @@ class AppAssets {
   static const String _iconsPath = "assets/images/icons/";
   static const String _ordersIconsPath = "assets/images/icons/orders/";
   static const String _moreIconsPath =
-      "assets/images/icons/more/"; // 💡 المسار الجديد
+      "assets/images/icons/more/";
 
   // --- Navigation Icons (Bottom NavBar) ---
   static const String homeSelected = "${_navIconsPath}home_selected.png";
@@ -98,4 +98,7 @@ class AppAssets {
   static const String cashPaymentIcon = '${_iconsPath}cash_payment_icon.svg';
   static const String downloadPdfIcon = '${_iconsPath}download_pdf_icon.svg';
   static const String shareInvoiceIcon = '${_iconsPath}share_invoice_icon.svg';
+  static const String logoWhite = '${_iconsPath}logo_white.png';
+  static const String logoColored = '${_iconsPath}logo_colored.png';
+
 }

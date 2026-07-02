@@ -11,7 +11,8 @@ class LoginUseCase {
   Future<Either<Failure, UserEntity>> call({
     required String email,
     required String password,
+    required bool rememberMe,
   }) async {
-    return await repository.login(email: email, password: password);
+    return await repository.login(email: email, password: password,rememberMe: rememberMe);
   }
 }

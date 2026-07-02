@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../core/di/service_locator.dart';
 
+// Splash Import
+import '../features/splash/presentation/manager/splash_cubit.dart';
+import '../features/splash/presentation/pages/splash_page.dart';
+
 // Auth Imports
 import '../features/auth/presentation/manager/auth_cubit.dart';
 import '../features/auth/presentation/pages/forgot_password_page.dart';
@@ -19,7 +23,6 @@ import '../features/navigation/presentation/pages/navigation_page.dart';
 // Products Imports
 import '../features/orders/Presentation/pages/order_details_page.dart';
 import '../features/orders/Presentation/pages/orders_page.dart';
-import '../features/orders/domain/entities/order_entity.dart';
 import '../features/products/domain/entities/product_details_entity.dart';
 import '../features/products/presentation/manager/copy_product_cubit.dart';
 import '../features/products/presentation/manager/product_details_cubit.dart';
@@ -30,12 +33,17 @@ import '../features/products/presentation/pages/product_details_page.dart';
 import '../features/products/presentation/pages/warehouse_history_page.dart';
 import '../features/products/presentation/pages/warehouses_management_page.dart';
 
-// Orders Imports
-import '../features/orders/presentation/manager/orders_cubit.dart';
+// 🟢 LIVE ORDERS IMPORTS (تم تحديث الـ Imports لقراءة الملفات الحقيقية لايف)
+import '../features/orders/domain/entities/live_order_entity.dart';
+import '../features/orders/presentation/manager/live_orders_cubit.dart';
 
-// ================== INVOICES IMPORTS ==================
+// ================== INVOICES ==================
 import '../features/invoices/presentation/manager/invoices_cubit.dart';
 import '../features/invoices/presentation/pages/invoices_screen.dart';
+
+// ================== PROFITS ==================
+import '../features/profits/presentation/manager/profits_cubit.dart';
+import '../features/profits/presentation/pages/profits_screen.dart';
 
 import 'app_routes.dart';
 
@@ -44,8 +52,14 @@ class AppRouter {
     final arguments = settings.arguments;
 
     switch (settings.name) {
-      // ================== AUTH ==================
-      case Routes.initial:
+    // ================== SPLASH & AUTH ==================
+      case Routes.splash:
+        return MaterialPageRoute(
+          builder: (_) => BlocProvider(
+            create: (_) => getIt<SplashCubit>(),
+            child: const SplashPage(),
+          ),
+        );
       case Routes.login:
       case Routes.forgotPassword:
       case Routes.resetPassword:
@@ -55,33 +69,37 @@ class AppRouter {
       case Routes.signupSuccess:
         return _authRoutes(settings);
 
-      // ================== MAIN APP & HOME ==================
+    // ================== MAIN APP & HOME ==================
       case Routes.navigationPage:
       case Routes.dashboard:
         return _homeRoutes(settings);
 
-      // ================== PRODUCTS ==================
+    // ================== PRODUCTS ==================
       case Routes.productsPage:
       case Routes.productDetails:
       case Routes.copyProductPage:
         return _productRoutes(settings, arguments);
 
-      // ================== WAREHOUSES ==================
+    // ================== WAREHOUSES ==================
       case Routes.warehousesManagement:
       case Routes.addWarehouse:
       case Routes.warehouseHistory:
         return _warehouseRoutes(settings);
 
-      // ================== ORDERS ==================
+    // ================== ORDERS ==================
       case Routes.ordersPage:
       case Routes.orderDetails:
         return _orderRoutes(settings, arguments);
 
-      // ================== INVOICES ==================
+    // ================== INVOICES ==================
       case Routes.invoicesPage:
         return _invoiceRoutes(settings);
 
-      // ================== DEFAULT ==================
+    // ================== PROFITS ==================
+      case Routes.profitsPage:
+        return _profitsRoutes(settings);
+
+    // ================== DEFAULT ==================
       default:
         return _errorRoute(settings);
     }
@@ -90,7 +108,6 @@ class AppRouter {
   // ------------------ 1. Auth Module ------------------
   static Route<dynamic> _authRoutes(RouteSettings settings) {
     switch (settings.name) {
-      case Routes.initial:
       case Routes.login:
         return MaterialPageRoute(
           builder: (_) => BlocProvider(
@@ -123,8 +140,7 @@ class AppRouter {
           builder: (_) => MultiBlocProvider(
             providers: [
               BlocProvider(
-                create: (_) =>
-                    getIt<SalesChartCubit>()..getSalesChart(filter: "1أ"),
+                create: (_) => getIt<SalesChartCubit>()..getSalesChart(filter: "1أ"),
               ),
             ],
             child: const NavigationPage(),
@@ -132,8 +148,7 @@ class AppRouter {
         );
       case Routes.dashboard:
         return MaterialPageRoute(
-          builder: (_) =>
-              const Scaffold(body: Center(child: Text("Dashboard"))),
+          builder: (_) => const Scaffold(body: Center(child: Text("Dashboard"))),
         );
       default:
         return _errorRoute(settings);
@@ -141,22 +156,17 @@ class AppRouter {
   }
 
   // ------------------ 3. Product Module ------------------
-  static Route<dynamic> _productRoutes(
-    RouteSettings settings,
-    dynamic arguments,
-  ) {
+  static Route<dynamic> _productRoutes(RouteSettings settings, dynamic arguments) {
     switch (settings.name) {
       case Routes.productsPage:
         return MaterialPageRoute(
-          builder: (_) =>
-              Scaffold(body: Center(child: Text("Product: $arguments"))),
+          builder: (_) => Scaffold(body: Center(child: Text("Product: $arguments"))),
         );
       case Routes.productDetails:
         final productId = arguments as String;
         return MaterialPageRoute(
           builder: (_) => BlocProvider(
-            create: (_) =>
-                getIt<ProductDetailsCubit>()..getProductDetails(productId),
+            create: (_) => getIt<ProductDetailsCubit>()..getProductDetails(productId),
             child: ProductDetailsPage(productId: productId),
           ),
         );
@@ -177,9 +187,7 @@ class AppRouter {
   static Route<dynamic> _warehouseRoutes(RouteSettings settings) {
     switch (settings.name) {
       case Routes.warehousesManagement:
-        return MaterialPageRoute(
-          builder: (_) => const WarehousesManagementPage(),
-        );
+        return MaterialPageRoute(builder: (_) => const WarehousesManagementPage());
       case Routes.addWarehouse:
         return MaterialPageRoute(builder: (_) => const AddWarehousePage());
       case Routes.warehouseHistory:
@@ -195,25 +203,20 @@ class AppRouter {
   }
 
   // ------------------ 5. Order Module ------------------
-  static Route<dynamic> _orderRoutes(
-    RouteSettings settings,
-    dynamic arguments,
-  ) {
+  static Route<dynamic> _orderRoutes(RouteSettings settings, dynamic arguments) {
     switch (settings.name) {
       case Routes.ordersPage:
         return MaterialPageRoute(
           builder: (_) => BlocProvider(
-            create: (context) =>
-                getIt<OrdersCubit>()..getOrders(status: "جديد"),
+            // 🟢 تم التحديث لقراءة الـ LiveOrdersCubit وجلب الداتا "الكل" كبداية مأمنة
+            create: (context) => getIt<LiveOrdersCubit>()..getLiveOrders(statusTab: "الكل"),
             child: const OrdersPage(),
           ),
         );
-
       case Routes.orderDetails:
-        final order = arguments as OrderEntity;
-        return MaterialPageRoute(
-          builder: (_) => OrderDetailsPage(order: order),
-        );
+      // 🟢 تم التحديث لاستقبال الـ LiveOrderEntity المنقولة من الـ Card بنجاح
+        final order = arguments as LiveOrderEntity;
+        return MaterialPageRoute(builder: (_) => OrderDetailsPage(order: order));
       default:
         return _errorRoute(settings);
     }
@@ -227,6 +230,21 @@ class AppRouter {
           builder: (_) => BlocProvider(
             create: (context) => getIt<InvoicesCubit>()..fetchInvoices(),
             child: const InvoicesScreen(),
+          ),
+        );
+      default:
+        return _errorRoute(settings);
+    }
+  }
+
+  // ------------------ 7. Profits Module ------------------
+  static Route<dynamic> _profitsRoutes(RouteSettings settings) {
+    switch (settings.name) {
+      case Routes.profitsPage:
+        return MaterialPageRoute(
+          builder: (_) => BlocProvider(
+            create: (context) => getIt<ProfitsCubit>()..fetchProfitsData(),
+            child: const ProfitsScreen(),
           ),
         );
       default:

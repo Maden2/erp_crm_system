@@ -13,27 +13,23 @@ class OrdersTabBar extends StatefulWidget {
 }
 
 class _OrdersTabBarState extends State<OrdersTabBar> {
-  int selectedIndex = 3;
+  // 🟢 تعديل الـ index المبدئي ليكون 4 (تابة "الكل") ليطابق ريكويست البداية صراحة
+  int selectedIndex = 4;
 
   @override
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
       color: AppColors.primary,
-
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 24.w),
-
         decoration: BoxDecoration(color: AppColors.homeBg),
-
         child: Container(
           padding: EdgeInsets.all(4.w),
-
           decoration: BoxDecoration(
             color: AppColors.authBgColor,
             borderRadius: BorderRadius.circular(30.r),
           ),
-
           child: Row(
             children: List.generate(widget.tabs.length, (index) {
               bool isSelected = selectedIndex == index;
@@ -45,25 +41,23 @@ class _OrdersTabBarState extends State<OrdersTabBar> {
                   },
                   child: Container(
                     alignment: Alignment.center,
-                    padding: EdgeInsets.symmetric(vertical: 12.h),
-
+                    padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 4.w), // إضافة padding جانبي لحماية النص
                     decoration: BoxDecoration(
-                      color: isSelected
-                          ? AppColors.primary
-                          : Colors.transparent,
+                      color: isSelected ? AppColors.primary : Colors.transparent,
                       borderRadius: BorderRadius.circular(30.r),
                     ),
-
-                    child: Text(
-                      widget.tabs[index],
-                      maxLines: 1,
-                      style: TextStyle(
-                        fontFamily: 'Cairo',
-                        fontWeight: isSelected
-                            ? FontWeight.bold
-                            : FontWeight.normal,
-                        fontSize: 13.sp,
-                        color: isSelected ? Colors.white : Colors.grey,
+                    // 🟢 إضافة FittedBox لحماية كلمة "قيد الانتظار" الطويلة من البكسلة أو الانضغاط
+                    child: FittedBox(
+                      fit: BoxFit.scaleDown,
+                      child: Text(
+                        widget.tabs[index],
+                        maxLines: 1,
+                        style: TextStyle(
+                          fontFamily: 'Cairo',
+                          fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                          fontSize: 12.sp, // تقليل طفيف لضمان التناسق التام
+                          color: isSelected ? Colors.white : Colors.grey[600],
+                        ),
                       ),
                     ),
                   ),

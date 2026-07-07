@@ -19,13 +19,13 @@ class OrdersPage extends StatefulWidget {
 }
 
 class _OrdersPageState extends State<OrdersPage> {
-  // 🟢 تم تحديث الـ Tabs لتطابق مسميات السيرفر العربي
+  // 🟢 الـ Tabs مرتبة كما في التصميم تماماً
   final List<String> _tabs = ["ملغى", "تم التسليم", "قيد الشحن", "قيد الانتظار", "الكل"];
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      // 🟢 الربط بالـ LiveOrdersCubit وجلب داتا السيرفر لأول مرة
+      // 🟢 بنسيب الـ Cubit يستقبل الكلمة العربي صريحة "الكل" وهو بيهندلها جوه
       create: (context) => getIt<LiveOrdersCubit>()..getLiveOrders(statusTab: "الكل"),
       child: Scaffold(
         backgroundColor: AppColors.homeBg,
@@ -51,7 +51,7 @@ class _OrdersPageState extends State<OrdersPage> {
                 return OrdersTabBar(
                   tabs: _tabs,
                   onTap: (index) {
-                    // 🟢 تنده على الـ Cubit الحقيقي بالـ Tab المختار
+                    // 🟢 بنبعت الكلمة العربي مباشرة للـ Cubit ("ملغى"، "قيد الشحن"...) بدون أي تحويل خارجي هنا
                     blocContext.read<LiveOrdersCubit>().getLiveOrders(statusTab: _tabs[index]);
                   },
                 );
@@ -66,6 +66,8 @@ class _OrdersPageState extends State<OrdersPage> {
                     );
                   } else if (state is LiveOrdersSuccess) {
                     return ListView.builder(
+                      // 🟢 إضافة التوجيه والـ Key لضمان إعادة بناء الـ List وإجبار التحديث الفوري عند تغيير الـ Tabs
+                      key: ValueKey(state.orders.length),
                       padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 12.h),
                       itemCount: state.orders.length,
                       itemBuilder: (context, index) {
@@ -78,7 +80,7 @@ class _OrdersPageState extends State<OrdersPage> {
                     return Center(
                       child: Text(
                         state.message,
-                        style: TextStyle(fontFamily: 'Cairo', fontSize: 14.sp),
+                        style: TextStyle(fontFamily: 'Cairo', fontSize: 14.sp, color: Colors.red),
                       ),
                     );
                   }

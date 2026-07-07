@@ -1,21 +1,34 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:pivot/core/widgets/custom_app_bar.dart';
 import '../../../../core/utils/app_assets.dart';
 import '../../../../core/utils/app_colors.dart';
 import '../../../../core/utils/app_styles.dart';
-import '../../domain/entities/invoice_entity.dart';
-import 'package:pivot/core/widgets/custom_app_bar.dart';
 
+import '../manager/full_invoices_cubit.dart';
+import '../manager/full_invoices_state.dart';
 import '../widgets/details/invoice_header_card.dart';
 import '../widgets/details/invoice_products_section.dart';
 import '../widgets/details/invoice_payment_section.dart';
 import '../widgets/details/invoice_summary_section.dart';
 
-class InvoiceDetailsScreen extends StatelessWidget {
-  final InvoiceEntity invoice;
+class InvoiceDetailsScreen extends StatefulWidget {
+  final String invoiceId;
 
-  const InvoiceDetailsScreen({super.key, required this.invoice});
+  const InvoiceDetailsScreen({super.key, required this.invoiceId});
+
+  @override
+  State<InvoiceDetailsScreen> createState() => _InvoiceDetailsScreenState();
+}
+
+class _InvoiceDetailsScreenState extends State<InvoiceDetailsScreen> {
+  @override
+  void initState() {
+    super.initState();
+    context.read<FullInvoicesCubit>().fetchInvoiceDetails(widget.invoiceId);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -32,24 +45,44 @@ class InvoiceDetailsScreen extends StatelessWidget {
         ),
         title: Text("تفاصيل الفاتورة", style: TextStyles.font20WhiteMedium),
       ),
-      body: SingleChildScrollView(
-        padding: EdgeInsets.all(24.w),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            InvoiceHeaderCard(invoice: invoice),
-            SizedBox(height: 14.h),
+      body: BlocBuilder<FullInvoicesCubit, FullInvoicesState>(
+        builder: (context, state) {
+          if (state is FullInvoiceDetailsLoading) {
+            return const Center(
+              child: CircularProgressIndicator(color: Color(0xff0D256F)),
+            );
+          } else if (state is FullInvoiceDetailsFailure) {
+            return Center(
+              child: Text(
+                state.message,
+                style: const TextStyle(fontFamily: 'Cairo'),
+              ),
+            );
+          } else if (state is FullInvoiceDetailsSuccess) {
+            final invoice = state.invoiceDetail;
 
-            InvoiceProductsSection(invoice: invoice),
-            SizedBox(height: 14.h),
+            return SingleChildScrollView(
+              padding: EdgeInsets.all(24.w),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  InvoiceHeaderCard(invoice: invoice),
+                  SizedBox(height: 14.h),
 
-            InvoicePaymentSection(invoice: invoice),
-            SizedBox(height: 14.h),
+                  InvoiceProductsSection(invoice: invoice),
+                  SizedBox(height: 14.h),
 
-            InvoiceSummarySection(invoice: invoice),
-            SizedBox(height: 40.h),
-          ],
-        ),
+                  InvoicePaymentSection(invoice: invoice),
+                  SizedBox(height: 14.h),
+
+                  InvoiceSummarySection(invoice: invoice),
+                  SizedBox(height: 40.h),
+                ],
+              ),
+            );
+          }
+          return const SizedBox.shrink();
+        },
       ),
       bottomNavigationBar: Container(
         padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 10.h),
@@ -63,18 +96,17 @@ class InvoiceDetailsScreen extends StatelessWidget {
                   AppAssets.downloadPdfIcon,
                   width: 14.w,
                   height: 14.w,
-                  colorFilter: ColorFilter.mode(
+                  colorFilter: const ColorFilter.mode(
                     AppColors.greyText,
                     BlendMode.srcIn,
                   ),
                 ),
-
                 label: Text(
                   "تحميل PDF",
                   style: TextStyles.font12GrayTextRegular,
                 ),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Color(0xFFEEF0F4),
+                  backgroundColor: const Color(0xFFEEF0F4),
                   elevation: 0,
                   shadowColor: Colors.transparent,
                   padding: EdgeInsets.symmetric(vertical: 13.h),
@@ -85,7 +117,6 @@ class InvoiceDetailsScreen extends StatelessWidget {
               ),
             ),
             SizedBox(width: 14.w),
-
             Expanded(
               child: ElevatedButton.icon(
                 onPressed: () {},
@@ -98,7 +129,6 @@ class InvoiceDetailsScreen extends StatelessWidget {
                     BlendMode.srcIn,
                   ),
                 ),
-
                 label: Text("مشاركة", style: TextStyles.font12GrayTextRegular),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xffEEF0F4),

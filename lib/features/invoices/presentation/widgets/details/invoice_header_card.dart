@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../../core/utils/app_colors.dart';
 import '../../../../../core/utils/app_styles.dart';
-import '../../../domain/entities/invoice_entity.dart';
+import '../../../domain/entities/full_invoice_entities.dart';
 import '../status_badge.dart';
 
 class InvoiceHeaderCard extends StatelessWidget {
-  final InvoiceEntity invoice;
+  final FullInvoiceDetailEntity invoice;
 
   const InvoiceHeaderCard({super.key, required this.invoice});
 
@@ -35,7 +35,10 @@ class InvoiceHeaderCard extends StatelessWidget {
               Text(invoice.invoiceNumber, style: TextStyles.font12BlackMedium),
             ],
           ),
-          StatusBadge(status: invoice.status),
+          StatusBadge(
+            label: invoice.statusLabel,
+            colorHex: invoice.statusBadge,
+          ),
         ],
       ),
     );

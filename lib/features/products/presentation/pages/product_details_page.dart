@@ -5,8 +5,9 @@ import 'package:pivot/core/utils/app_colors.dart';
 import 'package:pivot/core/utils/app_styles.dart';
 
 import '../../../../app/app_routes.dart';
-import '../manager/product_details_cubit.dart';
-import '../manager/product_details_state.dart';
+import '../../../../core/di/service_locator.dart';
+import '../manager/website_product_details_cubit.dart';
+import '../manager/website_product_details_state.dart';
 
 import '../widgets/details/color_selector.dart';
 import '../widgets/details/price_chart.dart';
@@ -24,215 +25,233 @@ class ProductDetailsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.authBgColor,
-      body: SafeArea(
-        child: BlocBuilder<ProductDetailsCubit, ProductDetailsState>(
-          builder: (context, state) {
-            if (state is ProductDetailsLoading) {
-              return const Center(
-                child: CircularProgressIndicator(color: AppColors.mainBlue),
-              );
-            } else if (state is ProductDetailsSuccess) {
-              final p = state.product;
+    return BlocProvider(
+      create: (_) => getIt<WebsiteProductDetailsCubit>()..fetchProductDetails(productId),
+      child: Scaffold(
+        backgroundColor: AppColors.authBgColor,
+        body: SafeArea(
+          // 🟢 تحويل الـ BlocBuilder لـ BlocConsumer لإضافة الـ listener الشرعي
+          child: BlocConsumer<WebsiteProductDetailsCubit, WebsiteProductDetailsState>(
+            listener: (context, state) {
+              // 🟢 لقط حالة حذف المنتج بنجاح والرجوع فوراً للشاشة السابقة ومنع الشاشة البيضاء
+              if (state is WebsiteProductDeleteSuccess) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text("تم إزالة المنتج من المتجر بنجاح", textAlign: TextAlign.right, style: TextStyle(fontFamily: 'Cairo')),
+                    backgroundColor: Colors.green,
+                  ),
+                );
+                Navigator.pop(context); // الرجوع لشاشة المنتجات
+              }
+            },
+            builder: (context, state) {
+              if (state is WebsiteProductDetailsLoading) {
+                return const Center(
+                  child: CircularProgressIndicator(color: AppColors.mainBlue),
+                );
+              } else if (state is WebsiteProductDetailsSuccess) {
+                final p = state.productDetail;
 
-              return SingleChildScrollView(
-                physics: const BouncingScrollPhysics(),
-                child: Column(
-                  children: [
-                    // ================= PRODUCT IMAGES & ACTIONS =================
-                    Stack(
-                      children: [
-                        ProductImageSlider(images: p.images),
+                return SingleChildScrollView(
+                  physics: const BouncingScrollPhysics(),
+                  child: Column(
+                    children: [
+                      // ================= PRODUCT IMAGES & ACTIONS =================
+                      Stack(
+                        children: [
+                          ProductImageSlider(images: p.images),
 
-                        Positioned(
-                          top: 12.h,
-                          left: 12.w,
-                          child: PopupMenuButton<String>(
-                            icon: Icon(
-                              Icons.more_vert,
-                              color: const Color(0xFF1E293B),
-                              size: 28.sp,
+                          Positioned(
+                            top: 12.h,
+                            left: 12.w,
+                            child: PopupMenuButton<String>(
+                              icon: Icon(
+                                Icons.more_vert,
+                                color: const Color(0xFF1E293B),
+                                size: 28.sp,
+                              ),
+                              padding: EdgeInsets.zero,
+                              constraints: const BoxConstraints(),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12.r),
+                              ),
+                              onSelected: (value) {
+                                if (value == 'copy') {
+                                  Navigator.pushNamed(
+                                    context,
+                                    Routes.copyProductPage,
+                                    arguments: p,
+                                  );
+                                } else if (value == 'delete') {
+                                  context.read<WebsiteProductDetailsCubit>().deleteProduct(p.id);
+                                }
+                              },
+                              itemBuilder: (context) => [
+                                _buildPopupItem(
+                                  "تعديل",
+                                  Icons.edit_outlined,
+                                  "edit",
+                                  const Color(0xFF1E293B),
+                                ),
+                                _buildPopupItem(
+                                  "نسخ",
+                                  Icons.copy_all_outlined,
+                                  "copy",
+                                  const Color(0xFF1E293B),
+                                ),
+                                _buildPopupItem(
+                                  "حذف",
+                                  Icons.delete_outline_rounded,
+                                  "delete",
+                                  const Color(0xFFEF4444),
+                                ),
+                              ],
                             ),
-                            padding: EdgeInsets.zero,
-                            constraints: const BoxConstraints(),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12.r),
+                          ),
+                        ],
+                      ),
+
+                      // ================= CONTENT =================
+                      Transform.translate(
+                        offset: Offset(0, -45.h),
+                        child: Container(
+                          width: double.infinity,
+                          decoration: BoxDecoration(
+                            color: AppColors.authBgColor,
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(17.r),
+                              topRight: Radius.circular(17.r),
                             ),
-                            onSelected: (value) {
-                              if (value == 'copy') {
-                                Navigator.pushNamed(
-                                  context,
-                                  Routes.copyProductPage,
-                                  arguments: p,
-                                );
-                              }
-                            },
-                            itemBuilder: (context) => [
-                              _buildPopupItem(
-                                "تعديل",
-                                Icons.edit_outlined,
-                                "edit",
-                                const Color(0xFF1E293B),
+                          ),
+                          child: Column(
+                            children: [
+                              Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 17.w),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                  children: [
+                                    SizedBox(height: 20.h),
+                                    Row(
+                                      mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          p.name,
+                                          style:
+                                          TextStyles.font16graphiteGreyMedium,
+                                        ),
+                                        ProductStockBadge(stock: p.quantity),
+                                      ],
+                                    ),
+                                    SizedBox(height: 10.h),
+                                    Align(
+                                      alignment: Alignment.centerRight,
+                                      child: Column(
+                                        crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            "${p.price} ج.م",
+                                            style: TextStyles
+                                                .font22graphiteGreyMedium,
+                                          ),
+                                          SizedBox(height: 14.h),
+                                          Text(
+                                            "${p.quantity} قطعة",
+                                            style: TextStyles
+                                                .font16graphiteGreyMedium,
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
-                              _buildPopupItem(
-                                "نسخ",
-                                Icons.copy_all_outlined,
-                                "copy",
-                                const Color(0xFF1E293B),
+                              SizedBox(height: 16.h),
+                              _buildDivider(),
+                              ProductWarningBanner(stock: p.quantity),
+                              SizedBox(height: 16.h),
+                              Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 17.w),
+                                child: Column(
+                                  children: [
+                                    _buildSectionTitle("الألوان المتوفرة"),
+                                    ColorSelector(colors: const []),
+                                  ],
+                                ),
                               ),
-                              _buildPopupItem(
-                                "حذف",
-                                Icons.delete_outline_rounded,
-                                "delete",
-                                const Color(0xFFEF4444),
+                              Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 17.w),
+                                child: Column(
+                                  children: [
+                                    _buildSectionTitle("المقاسات"),
+                                    SizeSelector(sizes: const []),
+                                    SizedBox(height: 16.h),
+                                  ],
+                                ),
                               ),
+                              _buildDivider(),
+                              Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 17.w),
+                                child: Column(
+                                  children: [
+                                    _buildSectionTitle("تفاصيل المنتج"),
+                                    ProductInfoTable(product: p),
+                                    SizedBox(height: 16.h),
+                                  ],
+                                ),
+                              ),
+                              _buildDivider(),
+                              Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 17.w),
+                                child: Column(
+                                  children: [
+                                    _buildSectionTitle("معدل السعر"),
+                                    PriceChart(
+                                      key: ValueKey(p.id),
+                                      data: const [],
+                                    ),
+                                    SizedBox(height: 16.h),
+                                  ],
+                                ),
+                              ),
+                              _buildDivider(),
+                              Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 17.w),
+                                child: Column(
+                                  children: [
+                                    _buildSectionTitle("وصف المنتج"),
+                                    ProductDescriptionSection(
+                                      description: p.description,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              SizedBox(height: 40.h),
                             ],
                           ),
                         ),
-                      ],
-                    ),
-
-                    // ================= CONTENT =================
-                    Transform.translate(
-                      offset: Offset(0, -45.h),
-                      child: Container(
-                        width: double.infinity,
-                        decoration: BoxDecoration(
-                          color: AppColors.authBgColor,
-                          borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(17.r),
-                            topRight: Radius.circular(17.r),
-                          ),
-                        ),
-                        child: Column(
-                          children: [
-                            Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 17.w),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.end,
-                                children: [
-                                  SizedBox(height: 20.h),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(
-                                        p.name,
-                                        style:
-                                            TextStyles.font16graphiteGreyMedium,
-                                      ),
-                                      ProductStockBadge(stock: p.stock),
-                                    ],
-                                  ),
-                                  SizedBox(height: 10.h),
-                                  Align(
-                                    alignment: Alignment.centerRight,
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          "${p.price} ج.م",
-                                          style: TextStyles
-                                              .font22graphiteGreyMedium,
-                                        ),
-                                        SizedBox(height: 14.h),
-                                        Text(
-                                          "${p.stock} قطعة",
-                                          style: TextStyles
-                                              .font16graphiteGreyMedium,
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            SizedBox(height: 16.h),
-                            _buildDivider(),
-                            ProductWarningBanner(stock: p.stock),
-                            SizedBox(height: 16.h),
-                            Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 17.w),
-                              child: Column(
-                                children: [
-                                  _buildSectionTitle("الألوان المتوفرة"),
-                                  ColorSelector(colors: p.colors),
-                                ],
-                              ),
-                            ),
-                            Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 17.w),
-                              child: Column(
-                                children: [
-                                  _buildSectionTitle("المقاسات"),
-                                  SizeSelector(sizes: p.sizes),
-                                  SizedBox(height: 16.h),
-                                ],
-                              ),
-                            ),
-                            _buildDivider(),
-                            Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 17.w),
-                              child: Column(
-                                children: [
-                                  _buildSectionTitle("تفاصيل المنتج"),
-                                  ProductInfoTable(product: p),
-                                  SizedBox(height: 16.h),
-                                ],
-                              ),
-                            ),
-                            _buildDivider(),
-                            Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 17.w),
-                              child: Column(
-                                children: [
-                                  _buildSectionTitle("معدل السعر"),
-                                  PriceChart(
-                                    key: ValueKey(p.id),
-                                    data: p.priceHistory,
-                                  ),
-                                  SizedBox(height: 16.h),
-                                ],
-                              ),
-                            ),
-                            _buildDivider(),
-                            Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 17.w),
-                              child: Column(
-                                children: [
-                                  _buildSectionTitle("وصف المنتج"),
-                                  ProductDescriptionSection(
-                                    description: p.description,
-                                  ),
-                                ],
-                              ),
-                            ),
-                            SizedBox(height: 40.h),
-                          ],
-                        ),
                       ),
-                    ),
-                  ],
-                ),
-              );
-            } else if (state is ProductDetailsFailure) {
-              return Center(child: Text(state.message));
-            }
-            return const SizedBox.shrink();
-          },
+                    ],
+                  ),
+                );
+              } else if (state is WebsiteProductDetailsError) {
+                return Center(child: Text(state.message));
+              }
+              return const SizedBox.shrink();
+            },
+          ),
         ),
       ),
     );
   }
 
   PopupMenuItem<String> _buildPopupItem(
-    String title,
-    IconData icon,
-    String value,
-    Color color,
-  ) {
+      String title,
+      IconData icon,
+      String value,
+      Color color,
+      ) {
     return PopupMenuItem<String>(
       value: value,
       child: Row(

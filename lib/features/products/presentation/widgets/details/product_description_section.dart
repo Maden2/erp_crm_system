@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import '../../../../../core/utils/app_styles.dart';
 
 class ProductDescriptionSection extends StatelessWidget {

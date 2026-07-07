@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../../core/utils/app_colors.dart';
 import '../../../../../core/utils/app_styles.dart';
-import '../../../domain/entities/invoice_entity.dart';
+import '../../../domain/entities/full_invoice_entities.dart';
 
 class InvoiceProductsSection extends StatelessWidget {
-  final InvoiceEntity invoice;
+  final FullInvoiceDetailEntity invoice;
 
   const InvoiceProductsSection({super.key, required this.invoice});
 
@@ -33,7 +33,7 @@ class InvoiceProductsSection extends StatelessWidget {
           ListView.separated(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
-            itemCount: invoice.products.length,
+            itemCount: invoice.items.length,
             separatorBuilder: (context, index) => Padding(
               padding: EdgeInsets.symmetric(horizontal: 16.w),
               child: Divider(
@@ -43,7 +43,7 @@ class InvoiceProductsSection extends StatelessWidget {
               ),
             ),
             itemBuilder: (context, index) {
-              final product = invoice.products[index];
+              final product = invoice.items[index];
               return Padding(
                 padding: EdgeInsets.all(16.w),
                 child: Row(
@@ -73,7 +73,7 @@ class InvoiceProductsSection extends StatelessWidget {
                       children: [
                         SizedBox(height: 30.h),
                         Text(
-                          product.price,
+                          "${product.finalPrice.toStringAsFixed(2)} EGP",
                           style: TextStyle(
                             fontWeight: FontWeight.w700,
                             fontSize: 10.sp,

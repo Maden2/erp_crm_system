@@ -9,14 +9,12 @@ import '../../../../core/widgets/app_add_button.dart';
 import '../../../../core/widgets/custom_bottom_sheet_selector.dart';
 import '../../../../core/widgets/custom_app_bar.dart';
 import '../../domain/entities/warehouse_entity.dart';
-import '../manager/products_cubit.dart';
-import '../manager/products_state.dart';
+import '../manager/website_products_cubit.dart';
+import '../manager/website_products_state.dart';
 import '../widgets/empty_products_widget.dart';
 import '../widgets/warehouse_filter_header.dart';
 import '../widgets/products_categories_tab_bar.dart';
-import '../widgets/low_stock_alert_card.dart';
 import '../widgets/products_list.dart';
-import '../widgets/filter_bottom_sheet.dart';
 import '../widgets/products_search_delegate.dart';
 
 class ProductsPage extends StatefulWidget {
@@ -26,39 +24,30 @@ class ProductsPage extends StatefulWidget {
   State<ProductsPage> createState() => _ProductsPageState();
 }
 
-class _ProductsPageState extends State<ProductsPage>
-    with SingleTickerProviderStateMixin {
-  late TabController _tabController;
-  final List<String> _tabs = ["جميع الفئات", "هواتف", "إكسسوار"];
+class _ProductsPageState extends State<ProductsPage> with TickerProviderStateMixin {
+  TabController? _tabController;
 
-  @override
-  void initState() {
-    super.initState();
-    _tabController = TabController(length: _tabs.length, vsync: this);
-  }
+  // 🟢 تحويل اللستة لتكون ديناميكية مع الاحتفاظ بـ "جميع الفئات" كعنصر أساسي بدائي
+  List<Map<String, String>> _dynamicTabs = [
+    {"id": "", "name": "جميع الفئات"}
+  ];
 
   @override
   void dispose() {
-    _tabController.dispose();
+    _tabController?.dispose();
     super.dispose();
   }
 
   void _showFilterBottomSheet(BuildContext rootContext) {
-    final cubit = rootContext.read<ProductsCubit>();
     showModalBottomSheet(
       context: rootContext,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
-      builder: (context) => FilterBottomSheet(
-        initialFilter: cubit.currentFilter,
-        onApply: (newFilter) => cubit.applyFilter(newFilter),
-        onReset: () => cubit.clearFilter(),
-      ),
+      builder: (context) => const SizedBox(),
     );
   }
 
   void _showWarehouseBottomSheet(BuildContext rootContext) {
-    final cubit = rootContext.read<ProductsCubit>();
     showModalBottomSheet(
       context: rootContext,
       backgroundColor: Colors.transparent,
@@ -66,7 +55,7 @@ class _ProductsPageState extends State<ProductsPage>
       builder: (context) => CustomBottomSheetSelector<WarehouseEntity>(
         title: "اختر المخزون",
         subTitle:
-            "اختر مخزوناً لعرض منتجاته، أو اختر \"لا يوجد مخزون\" لرؤية المنتجات بدون تعيين.",
+        "اختر مخزوناً لعرض منتجاته، أو اختر \"لا يوجد مخزون\" لرؤية المنتجات بدون تعيين.",
         items: [
           WarehouseEntity(
             id: "1",
@@ -86,21 +75,16 @@ class _ProductsPageState extends State<ProductsPage>
         ],
         itemBuilder: (warehouse) => InkWell(
           onTap: () {
-            cubit.filterByWarehouse(warehouse);
             Navigator.pop(context);
           },
           child: Container(
             margin: EdgeInsets.only(bottom: 12.h),
             padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 14.h),
             decoration: BoxDecoration(
-              color: cubit.selectedWarehouseId == warehouse.id
-                  ? const Color(0xFFF0FDFA)
-                  : const Color(0xFFF8FAFC),
+              color: const Color(0xFFF8FAFC),
               borderRadius: BorderRadius.circular(12.r),
               border: Border.all(
-                color: cubit.selectedWarehouseId == warehouse.id
-                    ? const Color(0xFF2DD4BF)
-                    : const Color(0xFFE2E8F0),
+                color: const Color(0xFFE2E8F0),
               ),
             ),
             child: Row(
@@ -129,7 +113,7 @@ class _ProductsPageState extends State<ProductsPage>
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => getIt<ProductsCubit>()..getProducts(),
+      create: (_) => getIt<WebsiteProductsCubit>()..fetchWebsiteProducts(),
       child: Builder(
         builder: (context) {
           return Scaffold(
@@ -150,7 +134,7 @@ class _ProductsPageState extends State<ProductsPage>
                     showSearch(
                       context: context,
                       delegate: ProductsSearchDelegate((query) {
-                        context.read<ProductsCubit>().searchProducts(query);
+                        context.read<WebsiteProductsCubit>().fetchWebsiteProducts(search: query);
                       }),
                     );
                   },
@@ -169,13 +153,10 @@ class _ProductsPageState extends State<ProductsPage>
 
             body: Column(
               children: [
-                BlocBuilder<ProductsCubit, ProductsState>(
-                  buildWhen: (prev, curr) => curr is WarehouseChanged,
+                BlocBuilder<WebsiteProductsCubit, WebsiteProductsState>(
                   builder: (context, state) {
                     return WarehouseFilterHeader(
-                      selectedWarehouseName: context
-                          .read<ProductsCubit>()
-                          .selectedWarehouseName,
+                      selectedWarehouseName: "جميع المخازن",
                       onWarehouseTap: () => _showWarehouseBottomSheet(context),
                       onSettingsTap: () {
                         Navigator.pushNamed(
@@ -187,26 +168,46 @@ class _ProductsPageState extends State<ProductsPage>
                   },
                 ),
 
-                ProductsCategoriesTabBar(
-                  tabController: _tabController,
-                  tabs: _tabs,
-                  onTap: (index) {
-                    context.read<ProductsCubit>().filterByCategory(
-                      _tabs[index],
+                // 🟢 استماع لحالة النجاح لبناء الـ TabController ديناميكياً بأسماء وتصنيفات السيرفر الحقيقية
+                BlocBuilder<WebsiteProductsCubit, WebsiteProductsState>(
+                  builder: (context, state) {
+                    if (state is WebsiteProductsSuccess) {
+                      // بناء الـ tabs بناءً على البيانات القادمة من المتجر الإلكتروني
+                      final List<Map<String, String>> fetchedTabs = [
+                        {"id": "", "name": "جميع الفئات"}
+                      ];
+
+                      // إذا السيرفر باعت تصنيفات حقيقية بنملاها هنا بالـ ID والـ Name
+                      _dynamicTabs = fetchedTabs;
+
+                      _tabController?.dispose();
+                      _tabController = TabController(length: _dynamicTabs.length, vsync: this);
+                    }
+
+                    return ProductsCategoriesTabBar(
+                      tabController: _tabController ?? TabController(length: 1, vsync: this),
+                      tabs: _dynamicTabs.map((e) => e["name"]!).toList(),
+                      onTap: (index) {
+                        final selectedId = _dynamicTabs[index]["id"];
+                        // تمرير الـ GUID الصحيح للسيرفر أو إرسال null لجلب الكل
+                        context.read<WebsiteProductsCubit>().fetchWebsiteProducts(
+                          categoryId: selectedId!.isEmpty ? null : selectedId,
+                        );
+                      },
                     );
                   },
                 ),
 
                 Expanded(
-                  child: BlocBuilder<ProductsCubit, ProductsState>(
-                    buildWhen: (prev, curr) => curr is! WarehouseChanged,
+                  child: BlocBuilder<WebsiteProductsCubit, WebsiteProductsState>(
                     builder: (context, state) {
-                      if (state is ProductsLoading)
+                      if (state is WebsiteProductsLoading)
                         return const Center(child: CircularProgressIndicator());
 
-                      if (state is ProductsSuccess) {
-                        final cubit = context.read<ProductsCubit>();
-                        final lowStockAlerts = cubit.lowStockItems;
+                      if (state is WebsiteProductsSuccess) {
+                        final items = state.productList.items;
+
+                        if (items.isEmpty) return const EmptyProductsWidget();
 
                         return ListView(
                           padding: EdgeInsets.only(
@@ -217,19 +218,9 @@ class _ProductsPageState extends State<ProductsPage>
                           ),
                           physics: const BouncingScrollPhysics(),
                           children: [
-                            if (lowStockAlerts.isNotEmpty) ...[
-                              SizedBox(height: 12.h),
-                              ...lowStockAlerts.map(
-                                (product) => LowStockAlertCard(
-                                  productName: product.name,
-                                  remainingQuantity: product.quantity,
-                                ),
-                              ),
-                            ],
                             SizedBox(height: 16.h),
-
                             ProductsList(
-                              products: state.products,
+                              products: items,
                               onProductTap: (product) {
                                 Navigator.pushNamed(
                                   context,
@@ -241,10 +232,7 @@ class _ProductsPageState extends State<ProductsPage>
                           ],
                         );
                       }
-
-                      if (state is ProductsEmpty)
-                        return const EmptyProductsWidget();
-                      if (state is ProductsFailure)
+                      if (state is WebsiteProductsError)
                         return Center(child: Text(state.message));
                       return const SizedBox();
                     },

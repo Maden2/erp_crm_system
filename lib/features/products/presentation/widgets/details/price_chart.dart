@@ -52,10 +52,10 @@ class PriceChart extends StatelessWidget {
                   children: days
                       .map(
                         (day) => Text(
-                          day,
-                          style: TextStyles.font12lightGrayTextRegular,
-                        ),
-                      )
+                      day,
+                      style: TextStyles.font12lightGrayTextRegular,
+                    ),
+                  )
                       .toList(),
                 ),
               ),

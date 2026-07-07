@@ -21,28 +21,36 @@ class LiveOrderModel extends LiveOrderEntity {
     required super.shippingAddressCountry,
     super.customerNote,
     super.phoneNumber,
-    List<LiveOrderItemModel>? super.items, // كـ Model جوه الـ Data Layer
+    List<LiveOrderItemModel>? super.items,
   });
 
   factory LiveOrderModel.fromJson(Map<String, dynamic> json) {
     return LiveOrderModel(
-      id: json['Id'] as String,
-      orderNumber: json['OrderNumber'] as String,
-      status: json['Status'] as int,
-      statusLabel: json['StatusLabel'] as String,
-      statusMeta: LiveOrderStatusMetaModel.fromJson(json['StatusMeta'] as Map<String, dynamic>),
-      totalAmount: (json['TotalAmount'] as num).toDouble(),
-      subTotal: (json['SubTotal'] as num).toDouble(),
-      discountTotal: (json['DiscountTotal'] as num).toDouble(),
-      paymentMethod: json['PaymentMethod'] as String,
-      orderDate: DateTime.parse(json['OrderDate'] as String),
-      customerName: json['CustomerName'] as String,
-      customerEmail: json['CustomerEmail'] as String,
-      itemCount: json['ItemCount'] as int,
-      shippingAddressCity: json['ShippingAddress_City'] as String,
-      shippingAddressCountry: json['ShippingAddress_Country'] as String,
-      customerNote: json['CustomerNote'] as String?,
-      phoneNumber: json['PhoneNumber'] as String?,
+      id: json['Id'] ?? '',
+      orderNumber: json['OrderNumber'] ?? '',
+      status: json['Status'] ?? 0,
+      statusLabel: json['StatusLabel'] ?? '',
+      statusMeta: LiveOrderStatusMetaModel.fromJson(json['StatusMeta'] ?? {}),
+      totalAmount: (json['TotalAmount'] ?? 0 as num).toDouble(),
+      subTotal: (json['SubTotal'] ?? 0 as num).toDouble(),
+      discountTotal: (json['DiscountTotal'] ?? 0 as num).toDouble(),
+      paymentMethod: (json['PaymentMethod'] ?? '').toString(),
+      orderDate: DateTime.parse(json['OrderDate'] ?? DateTime.now().toIso8601String()),
+
+      // 🟢 الحل السحري لتأمين حقل اسم العميل: لو راجع لستة بياخد أول عنصر، لو نص عادي بيحوله String بأمان
+      customerName: json['CustomerName'] is List
+          ? (json['CustomerName'] as List).first.toString()
+          : (json['CustomerName'] ?? '').toString(),
+
+      customerEmail: json['CustomerEmail'] ?? '',
+      itemCount: json['ItemCount'] ?? 0,
+      shippingAddressCity: json['ShippingAddress_City'] ?? '',
+      shippingAddressCountry: json['ShippingAddress_Country'] ?? '',
+
+      // 🟢 تأمين إضافي للحقول دي لو الباكيند باعتها بأسماء مختلفة في ريكويست التفاصيل
+      customerNote: (json['CustomerNote'] ?? json['Notes'])?.toString(),
+      phoneNumber: (json['PhoneNumber'] ?? json['CustomerPhone'] ?? json['ShippingAddress_Phone'])?.toString(),
+
       items: json['items'] != null
           ? (json['items'] as List)
           .map((item) => LiveOrderItemModel.fromJson(item as Map<String, dynamic>))

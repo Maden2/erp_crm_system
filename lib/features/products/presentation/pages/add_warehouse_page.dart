@@ -15,7 +15,7 @@ class AddWarehousePage extends StatefulWidget {
 
 class _AddWarehousePageState extends State<AddWarehousePage> {
   final TextEditingController _warehouseNameController =
-      TextEditingController();
+  TextEditingController();
   bool _isButtonEnabled = false;
 
   @override
@@ -65,8 +65,8 @@ class _AddWarehousePageState extends State<AddWarehousePage> {
               buttonText: "إضافة مخزون",
               onPressed: _isButtonEnabled
                   ? () {
-                      _handleSave();
-                    }
+                _handleSave();
+              }
                   : null,
             ),
 

@@ -31,7 +31,7 @@ import '../../features/home/domain/usecases/get_low_stock_usecase.dart';
 import '../../features/home/presentation/manager/low_stock_cubit.dart';
 import '../../features/home/presentation/manager/latest_support_ticket_cubit.dart';
 
-// ================== PRODUCTS ==================
+// ================== PRODUCTS (OLD INVENTORY) ==================
 import '../../features/products/data/repositories/product_repository_impl.dart';
 import '../../features/products/domain/repositories/product_repository.dart';
 import '../../features/products/domain/usecases/get_product_details_usecase.dart';
@@ -43,32 +43,59 @@ import '../../features/products/presentation/manager/products_cubit.dart';
 import '../../features/products/presentation/manager/copy_product_cubit.dart';
 import '../../features/products/presentation/manager/warehouse_history_cubit.dart';
 
+//  ================== WEBSITE PRODUCTS (SERVER REAL LINK) ==================
+import '../../features/products/data/datasources/website_product_remote_data_source.dart';
+import '../../features/products/data/repositories/website_product_repository_impl.dart';
+import '../../features/products/domain/repositories/website_product_repository.dart';
+import '../../features/products/domain/usecases/website_product_usecases.dart';
+import '../../features/products/presentation/manager/website_products_cubit.dart';
+import '../../features/products/presentation/manager/website_product_details_cubit.dart';
+import '../../features/products/presentation/manager/website_copy_product_cubit.dart';
+import '../../features/products/presentation/manager/website_warehouse_cubit.dart';
+
 // ================== ORDERS (MOCK) ==================
 import '../../features/orders/presentation/manager/orders_cubit.dart';
 import '../../features/orders/data/repositories/order_repository_impl.dart';
 import '../../features/orders/domain/repositories/order_repository.dart';
 import '../../features/orders/domain/usecases/get_orders_usecase.dart';
 
-// 🟢 ================== LIVE ORDERS (SERVER REAL) ==================
+// ================== LIVE ORDERS (SERVER REAL) ==================
 import '../../features/orders/data/datasources/live_orders_remote_data_source.dart';
 import '../../features/orders/data/repositories/live_orders_repository_impl.dart';
 import '../../features/orders/domain/repositories/live_orders_repository.dart';
 import '../../features/orders/domain/usecases/get_live_orders_usecase.dart';
 import '../../features/orders/domain/usecases/update_live_order_status_usecase.dart';
-import '../../features/orders/presentation/manager/live_orders_cubit.dart'; // 🟢 مضاف هنا
+import '../../features/orders/presentation/manager/live_orders_cubit.dart';
 
-// ================== ANALYTICS ==================
+//  ================== FULL ANALYTICS (NEW REQUEST OPTIMIZED) ==================
+import '../../features/analytics/data/datasources/full_analytics_remote_data_source.dart';
+import '../../features/analytics/data/repositories/full_analytics_repository_impl.dart';
+import '../../features/analytics/domain/repositories/full_analytics_repository.dart';
+import '../../features/analytics/domain/usecases/get_full_analytics_usecase.dart';
+import '../../features/analytics/presentation/manager/full_analytics_cubit.dart';
+
+// ================== ANALYTICS (OLD BACKUP) ==================
 import '../../features/analytics/data/repositories/analytics_repository_impl.dart';
 import '../../features/analytics/domain/repositories/analytics_repository.dart';
 import '../../features/analytics/presentation/manager/analytics_cubit.dart';
 import '../../features/analytics/domain/usecases/get_analytics_use_case.dart';
 
-// ================== INVOICES ==================
+// ================== INVOICES (OLD / MOCK COEXISTING) ==================
 import '../../features/invoices/data/datasources/invoice_remote_data_source.dart';
 import '../../features/invoices/data/repositories/invoice_repository_impl.dart';
 import '../../features/invoices/domain/repositories/invoice_repository.dart';
 import '../../features/invoices/domain/usecases/get_invoices_use_case.dart';
 import '../../features/invoices/presentation/manager/invoices_cubit.dart';
+
+//  ================== NEW FULL INVOICES FEATURE (SERVER REAL) ==================
+import '../../features/invoices/data/datasources/full_invoice_remote_data_source.dart';
+import '../../features/invoices/data/repositories/full_invoice_repository_impl.dart';
+import '../../features/invoices/domain/repositories/full_invoice_repository.dart';
+import '../../features/invoices/domain/usecases/get_full_invoice_details_usecase.dart';
+import '../../features/invoices/domain/usecases/get_full_invoice_stats_usecase.dart';
+import '../../features/invoices/domain/usecases/get_full_invoice_statuses_usecase.dart';
+import '../../features/invoices/domain/usecases/get_full_invoices_usecase.dart';
+import '../../features/invoices/presentation/manager/full_invoices_cubit.dart';
 
 // ================== PROFITS ==================
 import '../../features/profits/presentation/manager/profits_cubit.dart';
@@ -148,7 +175,7 @@ Future<void> setupServiceLocator() async {
   getIt.registerLazySingleton(() => GetLatestSupportTicketUseCase(getIt<HomeRepository>()));
   getIt.registerFactory(() => LatestSupportTicketCubit(getIt<GetLatestSupportTicketUseCase>()));
 
-  // ================== PRODUCTS ==================
+  // ================== PRODUCTS (OLD INVENTORY) ==================
   getIt.registerLazySingleton<ProductRepository>(() => ProductRepositoryImpl());
   getIt.registerLazySingleton(() => GetProductsUseCase(getIt<ProductRepository>()));
   getIt.registerFactory(() => ProductsCubit(getIt<GetProductsUseCase>()));
@@ -162,12 +189,51 @@ Future<void> setupServiceLocator() async {
   getIt.registerLazySingleton(() => GetWarehouseHistoryUseCase(getIt<ProductRepository>()));
   getIt.registerFactory(() => WarehouseHistoryCubit(getIt<GetWarehouseHistoryUseCase>()));
 
+
+  //  ================== WEBSITE PRODUCTS (SERVER REAL LINK) ==================
+  // 1. Data Source
+  getIt.registerLazySingleton<WebsiteProductRemoteDataSource>(
+        () => WebsiteProductRemoteDataSourceImpl(getIt<ApiConsumer>()),
+  );
+
+  // 2. Repository
+  getIt.registerLazySingleton<WebsiteProductRepository>(
+        () => WebsiteProductRepositoryImpl(getIt<WebsiteProductRemoteDataSource>()),
+  );
+
+  // 3. Use Cases
+  getIt.registerLazySingleton(() => GetWebsiteProductsUseCase(getIt<WebsiteProductRepository>()));
+  getIt.registerLazySingleton(() => GetWebsiteCategoriesUseCase(getIt<WebsiteProductRepository>()));
+  getIt.registerLazySingleton(() => GetWebsiteProductDetailsUseCase(getIt<WebsiteProductRepository>()));
+  getIt.registerLazySingleton(() => TogglePublishStateUseCase(getIt<WebsiteProductRepository>()));
+  getIt.registerLazySingleton(() => DeleteWebsiteProductUseCase(getIt<WebsiteProductRepository>()));
+
+  // 4. Cubits
+  getIt.registerFactory(() => WebsiteProductsCubit(
+    getWebsiteProductsUseCase: getIt<GetWebsiteProductsUseCase>(),
+    togglePublishStateUseCase: getIt<TogglePublishStateUseCase>(),
+  ));
+
+  getIt.registerFactory(() => WebsiteProductDetailsCubit(
+    getWebsiteProductDetailsUseCase: getIt<GetWebsiteProductDetailsUseCase>(),
+    deleteWebsiteProductUseCase: getIt<DeleteWebsiteProductUseCase>(),
+  ));
+
+  getIt.registerFactory(() => WebsiteCopyProductCubit(
+    repository: getIt<WebsiteProductRepository>(),
+  ));
+
+  getIt.registerFactory(() => WebsiteWarehouseCubit(
+    repository: getIt<WebsiteProductRepository>(),
+  ));
+
+
   // ================== ORDERS (MOCK OLD) ==================
   getIt.registerLazySingleton<OrderRepository>(() => OrderRepositoryImpl());
   getIt.registerLazySingleton(() => GetOrdersUseCase(getIt<OrderRepository>()));
   getIt.registerFactory(() => OrdersCubit(getIt<GetOrdersUseCase>()));
 
-  // 🟢 ================== LIVE ORDERS (NEW REAL LINK) ==================
+  //  ================== LIVE ORDERS (NEW REAL LINK) ==================
   getIt.registerLazySingleton<LiveOrdersRemoteDataSource>(
         () => LiveOrdersRemoteDataSourceImpl(apiConsumer: getIt<ApiConsumer>()),
   );
@@ -179,22 +245,50 @@ Future<void> setupServiceLocator() async {
   getIt.registerLazySingleton(() => GetLiveOrdersUseCase(getIt<LiveOrdersRepository>()));
   getIt.registerLazySingleton(() => UpdateLiveOrderStatusUseCase(getIt<LiveOrdersRepository>()));
 
-  // 4️⃣ تسجيل الـ LiveOrdersCubit الجديد بنجاح هنا
   getIt.registerFactory(() => LiveOrdersCubit(
     getLiveOrdersUseCase: getIt<GetLiveOrdersUseCase>(),
     updateLiveOrderStatusUseCase: getIt<UpdateLiveOrderStatusUseCase>(),
   ));
 
-  // ================== ANALYTICS ==================
+  //  ================== NEW FULL ANALYTICS FEATURE ==================
+  getIt.registerLazySingleton<FullAnalyticsRemoteDataSource>(
+        () => FullAnalyticsRemoteDataSourceImpl(apiConsumer: getIt<ApiConsumer>()),
+  );
+  getIt.registerLazySingleton<FullAnalyticsRepository>(
+        () => FullAnalyticsRepositoryImpl(remoteDataSource: getIt<FullAnalyticsRemoteDataSource>()),
+  );
+  getIt.registerLazySingleton(() => GetFullAnalyticsUseCase(getIt<FullAnalyticsRepository>()));
+  getIt.registerFactory(() => FullAnalyticsCubit(getFullAnalyticsUseCase: getIt<GetFullAnalyticsUseCase>()));
+
+  // ================== ANALYTICS (OLD BACKUP) ==================
   getIt.registerLazySingleton<AnalyticsRepository>(() => AnalyticsRepositoryImpl());
   getIt.registerLazySingleton(() => GetAnalyticsUseCase(getIt<AnalyticsRepository>()));
   getIt.registerFactory(() => AnalyticsCubit(getIt<GetAnalyticsUseCase>()));
 
-  // ================== INVOICES ==================
+  // ================== INVOICES (OLD / MOCK) ==================
   getIt.registerLazySingleton<InvoiceRemoteDataSource>(() => InvoiceRemoteDataSourceImpl());
   getIt.registerLazySingleton<InvoiceRepository>(
         () => InvoiceRepositoryImpl(remoteDataSource: getIt<InvoiceRemoteDataSource>()),
   );
   getIt.registerLazySingleton(() => GetInvoicesUseCase(getIt<InvoiceRepository>()));
   getIt.registerFactory(() => InvoicesCubit(getInvoicesUseCase: getIt<GetInvoicesUseCase>()));
+
+  //  ================== NEW FULL INVOICES FEATURE (SERVER REAL LINK) ==================
+  getIt.registerLazySingleton<FullInvoiceRemoteDataSource>(
+        () => FullInvoiceRemoteDataSourceImpl(apiConsumer: getIt<ApiConsumer>()),
+  );
+  getIt.registerLazySingleton<FullInvoiceRepository>(
+        () => FullInvoiceRepositoryImpl(remoteDataSource: getIt<FullInvoiceRemoteDataSource>()),
+  );
+  getIt.registerLazySingleton(() => GetFullInvoicesUseCase(getIt<FullInvoiceRepository>()));
+  getIt.registerLazySingleton(() => GetFullInvoiceStatsUseCase(getIt<FullInvoiceRepository>()));
+  getIt.registerLazySingleton(() => GetFullInvoiceStatusesUseCase(getIt<FullInvoiceRepository>()));
+  getIt.registerLazySingleton(() => GetFullInvoiceDetailsUseCase(getIt<FullInvoiceRepository>()));
+
+  getIt.registerFactory(() => FullInvoicesCubit(
+    getFullInvoicesUseCase: getIt<GetFullInvoicesUseCase>(),
+    getFullInvoiceStatsUseCase: getIt<GetFullInvoiceStatsUseCase>(),
+    getFullInvoiceStatusesUseCase: getIt<GetFullInvoiceStatusesUseCase>(),
+    getFullInvoiceDetailsUseCase: getIt<GetFullInvoiceDetailsUseCase>(),
+  ));
 }

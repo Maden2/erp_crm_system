@@ -1,48 +1,48 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:pivot/core/utils/app_colors.dart';
-import '../../domain/entities/invoice_entity.dart';
 
 class StatusBadge extends StatelessWidget {
-  final InvoiceStatus status;
-  const StatusBadge({super.key, required this.status});
+  final String label;
+  final String colorHex;
+
+  const StatusBadge({super.key, required this.label, required this.colorHex});
 
   @override
   Widget build(BuildContext context) {
-    Color bgColor;
-    Color textColor;
-    String text;
+    Color baseColor;
 
-    switch (status) {
-      case InvoiceStatus.paid:
-        bgColor = AppColors.lightBlue.withValues(alpha: 0.1);
-        textColor = AppColors.lightBlue;
-        text = "مدفوعة";
-        break;
-      case InvoiceStatus.unpaid:
-        bgColor = const Color(0xffCF90351A).withValues(alpha: 0.1);
-        textColor = const Color(0xffA16207);
-        text = "غير مدفوع";
-        break;
-      case InvoiceStatus.canceled:
-        bgColor = AppColors.redColor.withValues(alpha: 0.1);
-        textColor = AppColors.redColor;
-        text = "ملغاة";
-        break;
+    if (colorHex.contains('green')) {
+      baseColor = const Color(0xFF16A34A);
+    } else if (colorHex.contains('orange')) {
+      baseColor = const Color(0xFFEA580C);
+    } else if (colorHex.contains('red')) {
+      baseColor = const Color(0xFFDC2626);
+    } else if (colorHex.contains('blue')) {
+      baseColor = const Color(0xFF2563EB);
+    } else if (colorHex.contains('purple')) {
+      baseColor = const Color(0xFF9333EA);
+    } else {
+      try {
+        final hex = colorHex.replaceAll('#', '');
+        baseColor = Color(int.parse("FF$hex", radix: 16));
+      } catch (_) {
+        baseColor = Colors.grey;
+      }
     }
 
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 9.w, vertical: 2.h),
       decoration: BoxDecoration(
-        color: bgColor,
+        color: baseColor.withOpacity(0.12),
         borderRadius: BorderRadius.circular(9.r),
       ),
       child: Text(
-        text,
+        label,
         style: TextStyle(
-          color: textColor,
+          color: baseColor,
           fontSize: 10.sp,
-          fontWeight: FontWeight.w400,
+          fontWeight: FontWeight.bold,
+          fontFamily: 'Cairo',
         ),
       ),
     );

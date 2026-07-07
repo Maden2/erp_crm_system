@@ -14,14 +14,17 @@ class LiveOrderItemModel extends LiveOrderItemEntity {
 
   factory LiveOrderItemModel.fromJson(Map<String, dynamic> json) {
     return LiveOrderItemModel(
-      productNameSnapshot: json['ProductNameSnapshot'] as String,
-      quantity: json['Quantity'] as int,
-      unitPrice: (json['UnitPrice'] as num).toDouble(),
-      discountAmount: (json['DiscountAmount'] as num).toDouble(),
-      finalPrice: (json['FinalPrice'] as num).toDouble(),
-      appliedOfferName: json['AppliedOfferName'] as String?,
-      sku: json['Sku'] as String,
-      primaryImage: json['PrimaryImage'] as String?,
+      // 🟢 تأمين تحويل الحقول النصية حتى لو الباكيند غير نوعها أو بعتها Null
+      productNameSnapshot: json['ProductNameSnapshot']?.toString() ?? '',
+      quantity: json['Quantity'] ?? 0,
+      unitPrice: (json['UnitPrice'] ?? 0 as num).toDouble(),
+      discountAmount: (json['DiscountAmount'] ?? 0 as num).toDouble(),
+      finalPrice: (json['FinalPrice'] ?? 0 as num).toDouble(),
+      appliedOfferName: json['AppliedOfferName']?.toString(),
+
+      // 🟢 القضاء على الكراش: تحويل آمن للـ Sku لو جاي Null بياخد String فاضي مأمن
+      sku: json['Sku']?.toString() ?? '',
+      primaryImage: json['PrimaryImage']?.toString(),
     );
   }
 

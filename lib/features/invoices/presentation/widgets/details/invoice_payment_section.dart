@@ -1,21 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
-
 import '../../../../../core/utils/app_assets.dart';
 import '../../../../../core/utils/app_colors.dart';
 import '../../../../../core/utils/app_styles.dart';
-import '../../../domain/entities/invoice_entity.dart';
+import '../../../domain/entities/full_invoice_entities.dart';
 
 class InvoicePaymentSection extends StatelessWidget {
-  final InvoiceEntity invoice;
+  final FullInvoiceDetailEntity invoice;
 
   const InvoicePaymentSection({super.key, required this.invoice});
 
   String _getPaymentIcon(String methodName) {
-    if (methodName.contains("تحويل بنكي")) {
+    if (methodName.contains("تحويل بنكي") || methodName.toLowerCase().contains("transfer")) {
       return AppAssets.bankTransferIcon;
-    } else if (methodName.contains("دفع نقدي") || methodName.contains("كاش")) {
+    } else if (methodName.contains("دفع نقدي") || methodName.contains("كاش") || methodName.toLowerCase().contains("cash")) {
       return AppAssets.cashPaymentIcon;
     } else {
       return AppAssets.paymentIcon;
@@ -52,11 +51,11 @@ class InvoicePaymentSection extends StatelessWidget {
                   height: 29.w,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: AppColors.lightBlue.withValues(alpha: 0.1),
+                    color: AppColors.lightBlue.withOpacity(0.1),
                   ),
                   child: Center(
                     child: SvgPicture.asset(
-                      _getPaymentIcon(invoice.paymentMethod.methodName),
+                      _getPaymentIcon(invoice.paymentMethod),
                       width: 17.w,
                       height: 17.w,
                       colorFilter: const ColorFilter.mode(
@@ -71,7 +70,7 @@ class InvoicePaymentSection extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      invoice.paymentMethod.methodName,
+                      invoice.paymentMethod,
                       style: TextStyle(
                         fontWeight: FontWeight.w400,
                         fontSize: 11.sp,
@@ -80,7 +79,7 @@ class InvoicePaymentSection extends StatelessWidget {
                     ),
                     SizedBox(height: 4.h),
                     Text(
-                      invoice.paymentMethod.paymentStatus,
+                      invoice.statusLabel,
                       style: TextStyles.font10GreyTextRegular,
                     ),
                   ],

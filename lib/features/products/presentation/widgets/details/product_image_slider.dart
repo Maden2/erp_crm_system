@@ -39,7 +39,7 @@ class _ProductImageSliderState extends State<ProductImageSlider> {
                 fit: BoxFit.cover,
                 alignment: Alignment.center,
                 errorBuilder: (context, error, stackTrace) =>
-                    const Icon(Icons.image, color: Colors.grey),
+                const Icon(Icons.image, color: Colors.grey),
               );
             },
           ),

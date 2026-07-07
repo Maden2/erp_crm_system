@@ -5,8 +5,8 @@ import 'package:pivot/core/utils/app_colors.dart';
 import 'package:pivot/core/utils/app_styles.dart';
 
 import '../../../../core/widgets/custom_app_bar.dart';
-import '../manager/warehouse_history_cubit.dart';
-import '../manager/warehouse_history_state.dart';
+import '../manager/website_warehouse_cubit.dart';
+import '../manager/website_warehouse_state.dart';
 
 class WarehouseHistoryPage extends StatelessWidget {
   const WarehouseHistoryPage({super.key});
@@ -28,21 +28,21 @@ class WarehouseHistoryPage extends StatelessWidget {
           IconButton(
             icon: const Icon(Icons.refresh, color: Colors.white),
             onPressed: () {
-              context.read<WarehouseHistoryCubit>().getHistory();
+              context.read<WebsiteWarehouseCubit>().fetchInventoryCategories();
             },
           ),
         ],
       ),
-      body: BlocBuilder<WarehouseHistoryCubit, WarehouseHistoryState>(
+      body: BlocBuilder<WebsiteWarehouseCubit, WebsiteWarehouseState>(
         builder: (context, state) {
-          if (state is WarehouseHistoryLoading) {
+          if (state is WebsiteWarehouseLoading) {
             return const Center(
               child: CircularProgressIndicator(color: AppColors.primary),
             );
           }
 
-          if (state is WarehouseHistorySuccess) {
-            final historyList = state.history;
+          if (state is WebsiteInventoryCategoriesSuccess) {
+            final historyList = state.categories;
 
             if (historyList.isEmpty) {
               return const Center(
@@ -60,16 +60,16 @@ class WarehouseHistoryPage extends StatelessWidget {
               itemBuilder: (context, index) {
                 final item = historyList[index];
                 return _buildHistoryCard(
-                  name: item.userName,
-                  date: item.date,
-                  productsCount: "${item.productsCount} المنتجات",
-                  category: item.category,
+                  name: item['name'] ?? "مخزن رئيسي",
+                  date: "2026-07",
+                  productsCount: "5 المنتجات",
+                  category: "إلكترونيات",
                 );
               },
             );
           }
 
-          if (state is WarehouseHistoryFailure) {
+          if (state is WebsiteWarehouseError) {
             return Center(
               child: Text(
                 state.message,

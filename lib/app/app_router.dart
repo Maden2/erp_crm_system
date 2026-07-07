@@ -3,6 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../core/di/service_locator.dart';
 
 // Splash Import
+import '../features/invoices/presentation/manager/full_invoices_cubit.dart';
+import '../features/products/presentation/manager/website_warehouse_cubit.dart';
 import '../features/splash/presentation/manager/splash_cubit.dart';
 import '../features/splash/presentation/pages/splash_page.dart';
 
@@ -23,17 +25,16 @@ import '../features/navigation/presentation/pages/navigation_page.dart';
 // Products Imports
 import '../features/orders/Presentation/pages/order_details_page.dart';
 import '../features/orders/Presentation/pages/orders_page.dart';
-import '../features/products/domain/entities/product_details_entity.dart';
-import '../features/products/presentation/manager/copy_product_cubit.dart';
-import '../features/products/presentation/manager/product_details_cubit.dart';
-import '../features/products/presentation/manager/warehouse_history_cubit.dart';
+import '../features/products/domain/entities/website_product_entities.dart'; // 🟢 استدعاء كيانات الويب المطورة
+import '../features/products/presentation/manager/website_copy_product_cubit.dart'; // 🟢 حقن الكيوبيت الجديد للنسخ
+import '../features/products/presentation/manager/website_product_details_cubit.dart'; // 🟢 حقن الكيوبيت الجديد للتفاصيل
 import '../features/products/presentation/pages/add_warehouse_page.dart';
 import '../features/products/presentation/pages/copy_product_page.dart';
 import '../features/products/presentation/pages/product_details_page.dart';
 import '../features/products/presentation/pages/warehouse_history_page.dart';
 import '../features/products/presentation/pages/warehouses_management_page.dart';
 
-// 🟢 LIVE ORDERS IMPORTS (تم تحديث الـ Imports لقراءة الملفات الحقيقية لايف)
+// 🟢 LIVE ORDERS IMPORTS
 import '../features/orders/domain/entities/live_order_entity.dart';
 import '../features/orders/presentation/manager/live_orders_cubit.dart';
 
@@ -166,15 +167,18 @@ class AppRouter {
         final productId = arguments as String;
         return MaterialPageRoute(
           builder: (_) => BlocProvider(
-            create: (_) => getIt<ProductDetailsCubit>()..getProductDetails(productId),
+            // 🟢 التحديث لحقن الـ WebsiteProductDetailsCubit الجديد والمطور للشاشة
+            create: (_) => getIt<WebsiteProductDetailsCubit>()..fetchProductDetails(productId),
             child: ProductDetailsPage(productId: productId),
           ),
         );
       case Routes.copyProductPage:
-        final product = arguments as ProductDetailsEntity;
+      // 🟢 حل الـ Exception الفوري: تحويل الـ Cast لـ WebsiteProductDetailEntity
+        final product = arguments as WebsiteProductDetailEntity;
         return MaterialPageRoute(
           builder: (_) => BlocProvider(
-            create: (_) => getIt<CopyProductCubit>(),
+            // 🟢 التحديث لحقن الـ WebsiteCopyProductCubit الجديد لصفحة النسخ
+            create: (_) => getIt<WebsiteCopyProductCubit>(),
             child: CopyProductPage(product: product),
           ),
         );
@@ -193,7 +197,7 @@ class AppRouter {
       case Routes.warehouseHistory:
         return MaterialPageRoute(
           builder: (_) => BlocProvider(
-            create: (context) => getIt<WarehouseHistoryCubit>()..getHistory(),
+            create: (context) => getIt<WebsiteWarehouseCubit>()..fetchInventoryCategories(),
             child: const WarehouseHistoryPage(),
           ),
         );
@@ -208,13 +212,11 @@ class AppRouter {
       case Routes.ordersPage:
         return MaterialPageRoute(
           builder: (_) => BlocProvider(
-            // 🟢 تم التحديث لقراءة الـ LiveOrdersCubit وجلب الداتا "الكل" كبداية مأمنة
             create: (context) => getIt<LiveOrdersCubit>()..getLiveOrders(statusTab: "الكل"),
             child: const OrdersPage(),
           ),
         );
       case Routes.orderDetails:
-      // 🟢 تم التحديث لاستقبال الـ LiveOrderEntity المنقولة من الـ Card بنجاح
         final order = arguments as LiveOrderEntity;
         return MaterialPageRoute(builder: (_) => OrderDetailsPage(order: order));
       default:
@@ -228,7 +230,7 @@ class AppRouter {
       case Routes.invoicesPage:
         return MaterialPageRoute(
           builder: (_) => BlocProvider(
-            create: (context) => getIt<InvoicesCubit>()..fetchInvoices(),
+            create: (context) => getIt<FullInvoicesCubit>(),
             child: const InvoicesScreen(),
           ),
         );

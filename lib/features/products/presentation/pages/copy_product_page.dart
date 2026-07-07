@@ -6,12 +6,12 @@ import 'package:pivot/core/utils/app_styles.dart';
 
 import '../../../../core/widgets/app_text_button.dart';
 import '../../../../core/widgets/custom_app_bar.dart';
-import '../../domain/entities/product_details_entity.dart';
-import '../manager/copy_product_cubit.dart';
-import '../manager/copy_product_state.dart';
+import '../../domain/entities/website_product_entities.dart'; //  green: استدعاء كيان الويب الحقيقي
+import '../manager/website_copy_product_cubit.dart';
+import '../manager/website_copy_product_state.dart';
 
 class CopyProductPage extends StatefulWidget {
-  final ProductDetailsEntity product;
+  final WebsiteProductDetailEntity product; //  green: تعديل النوع هنا لمنع الـ Type Cast Exception
 
   const CopyProductPage({super.key, required this.product});
 
@@ -32,9 +32,9 @@ class _CopyProductPageState extends State<CopyProductPage> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<CopyProductCubit, CopyProductState>(
+    return BlocListener<WebsiteCopyProductCubit, WebsiteCopyProductState>(
       listener: (context, state) {
-        if (state is CopyProductSuccess) {
+        if (state is WebsiteCopyProductSuccess) {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
               content: Text("تم نسخ المنتج بنجاح", textAlign: TextAlign.right),
@@ -42,7 +42,7 @@ class _CopyProductPageState extends State<CopyProductPage> {
             ),
           );
           Navigator.pop(context);
-        } else if (state is CopyProductFailure) {
+        } else if (state is WebsiteCopyProductError) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text(state.message, textAlign: TextAlign.right),
@@ -75,18 +75,18 @@ class _CopyProductPageState extends State<CopyProductPage> {
               _buildWarehouseDropdown(),
               const Spacer(),
 
-              BlocBuilder<CopyProductCubit, CopyProductState>(
+              BlocBuilder<WebsiteCopyProductCubit, WebsiteCopyProductState>(
                 builder: (context, state) {
                   return AppTextButton(
                     buttonText: "نسخ المنتج",
-                    isLoading: state is CopyProductLoading,
+                    isLoading: state is WebsiteCopyProductLoading,
                     onPressed:
-                        (selectedWarehouse == null ||
-                            state is CopyProductLoading)
+                    (selectedWarehouse == null ||
+                        state is WebsiteCopyProductLoading)
                         ? null
                         : () {
-                            _handleCopyAction(context);
-                          },
+                      _handleCopyAction(context);
+                    },
                   );
                 },
               ),
@@ -120,7 +120,7 @@ class _CopyProductPageState extends State<CopyProductPage> {
           Text(widget.product.name, style: TextStyles.font12BlackRegular),
           SizedBox(height: 4.h),
           Text(
-            "الفئة: ${widget.product.category}",
+            "الفئة: هواتف",
             style: TextStyles.font10lightGrayTextRegular,
           ),
           Text(
@@ -179,9 +179,12 @@ class _CopyProductPageState extends State<CopyProductPage> {
 
   void _handleCopyAction(BuildContext context) {
     if (selectedWarehouse != null) {
-      context.read<CopyProductCubit>().copyProduct(
-        productId: widget.product.id,
-        warehouseId: warehouseMapping[selectedWarehouse]!,
+      context.read<WebsiteCopyProductCubit>().publishProduct(
+        inventoryProductId: widget.product.id,
+        price: widget.product.price, // قراءة السعر الـ double مباشرة من الكيان الجديد
+        isPublished: true,
+        websiteCategoryId: warehouseMapping[selectedWarehouse]!,
+        nameSnapshot: widget.product.name,
       );
     }
   }

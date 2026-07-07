@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-
 import '../../../../../core/utils/app_colors.dart';
-import '../../../domain/entities/invoice_entity.dart';
+import '../../../domain/entities/full_invoice_entities.dart';
 
 class InvoiceSummarySection extends StatelessWidget {
-  final InvoiceEntity invoice;
+  final FullInvoiceDetailEntity invoice;
 
   const InvoiceSummarySection({super.key, required this.invoice});
 
@@ -19,13 +18,13 @@ class InvoiceSummarySection extends StatelessWidget {
       ),
       child: Column(
         children: [
-          _buildPriceRow("المجموع قبل الضريبة", invoice.subTotal),
+          _buildPriceRow("المجموع قبل الضريبة", "${invoice.financials.subTotal.toStringAsFixed(2)} EGP"),
           Divider(color: Colors.grey.shade100, height: 24.h),
-          _buildPriceRow("الضريبة (15%)", invoice.tax),
+          _buildPriceRow("الضريبة (${(invoice.financials.taxRate * 100).toInt()}%)", "${invoice.financials.taxAmount.toStringAsFixed(2)} EGP"),
           Divider(color: Colors.grey.shade100, height: 24.h),
           _buildPriceRow(
             "الإجمالي النهائي",
-            invoice.totalAmount,
+            "${invoice.financials.grandTotal.toStringAsFixed(2)} EGP",
             isTotal: true,
           ),
         ],

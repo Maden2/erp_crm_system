@@ -19,66 +19,66 @@ class WarehouseFilterHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.transparent,
-      padding: EdgeInsets.fromLTRB(16.w, 16.h, 16.w, 8.h),
+      color: Colors.transparent, //[cite: 15]
+      padding: EdgeInsets.fromLTRB(16.w, 16.h, 16.w, 8.h), //[cite: 15]
       child: Container(
-        height: 48.h,
+        height: 48.h, //[cite: 15]
         decoration: BoxDecoration(
-          color: Color(0xFFF6F9FF),
-          borderRadius: BorderRadius.circular(8.r),
-          border: Border.all(color: const Color(0xFFE2E8F0), width: 1.w),
+          color: const Color(0xFFF6F9FF), //[cite: 15]
+          borderRadius: BorderRadius.circular(8.r), //[cite: 15]
+          border: Border.all(color: const Color(0xFFE2E8F0), width: 1.w), //[cite: 15]
         ),
         child: Row(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
+          crossAxisAlignment: CrossAxisAlignment.stretch, //[cite: 15]
           children: [
             Expanded(
               child: InkWell(
-                onTap: onWarehouseTap,
+                onTap: onWarehouseTap, //[cite: 15]
                 borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(8.r),
-                  bottomLeft: Radius.circular(8.r),
+                  bottomLeft: Radius.circular(8.r), //[cite: 15]
                 ),
                 child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 14.w),
+                  padding: EdgeInsets.symmetric(horizontal: 14.w), //[cite: 15]
                   child: Row(
                     children: [
                       Image.asset(
-                        AppAssets.categoryIcon,
-                        width: 17.w,
-                        height: 17.h,
+                        AppAssets.categoryIcon, //[cite: 15]
+                        width: 17.w, //[cite: 15]
+                        height: 17.h, //[cite: 15]
                       ),
-                      SizedBox(width: 8.w),
+                      SizedBox(width: 8.w), //[cite: 15]
                       Expanded(
                         child: Text(
-                          selectedWarehouseName,
-                          style: TextStyles.font13darkOliveGreyRegular,
-                          overflow: TextOverflow.ellipsis,
+                          selectedWarehouseName, //[cite: 15]
+                          style: TextStyles.font13darkOliveGreyRegular, //[cite: 15]
+                          overflow: TextOverflow.ellipsis, //[cite: 15]
                         ),
                       ),
-                      SizedBox(width: 6.w),
+                      SizedBox(width: 6.w), //[cite: 15]
                       Icon(
                         Icons.keyboard_arrow_down,
-                        size: 20.sp,
-                        color: AppColors.darkOliveGrey,
+                        size: 20.sp, //[cite: 15]
+                        color: AppColors.darkOliveGrey, //[cite: 15]
                       ),
                     ],
                   ),
                 ),
               ),
             ),
-            Container(width: 1.w, color: const Color(0xFFD9D9D9)),
+            Container(width: 1.w, color: const Color(0xFFD9D9D9)), //[cite: 15]
             InkWell(
-              onTap: onSettingsTap,
+              onTap: onSettingsTap, //[cite: 15]
               borderRadius: BorderRadius.only(
                 topRight: Radius.circular(8.r),
-                bottomRight: Radius.circular(8.r),
+                bottomRight: Radius.circular(8.r), //[cite: 15]
               ),
               child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 14.w),
+                padding: EdgeInsets.symmetric(horizontal: 14.w), //[cite: 15]
                 child: Icon(
                   Icons.settings_outlined,
-                  size: 22.sp,
-                  color: AppColors.darkOliveGrey,
+                  size: 22.sp, //[cite: 15]
+                  color: AppColors.darkOliveGrey, //[cite: 15]
                 ),
               ),
             ),

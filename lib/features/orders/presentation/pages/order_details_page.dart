@@ -1,79 +1,86 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:pivot/core/utils/app_colors.dart';
 import 'package:pivot/core/utils/app_styles.dart';
 import 'package:pivot/core/widgets/custom_app_bar.dart';
-import 'package:pivot/features/orders/Presentation/widgets/details/customer_note_box.dart';
-
 import '../../../../core/utils/app_assets.dart';
-import '../../domain/entities/live_order_entity.dart'; // 🟢 تم التحديث للـ Entity الجديدة
-
+import '../../domain/entities/live_order_entity.dart';
+import '../manager/live_orders_cubit.dart';
+import '../manager/live_orders_state.dart';
 import '../widgets/details/customer_info_card.dart';
+import '../widgets/details/customer_note_box.dart';
 import '../widgets/details/order_products_card.dart';
 import '../widgets/details/order_status_header.dart';
 import '../widgets/details/order_summary_card.dart';
 import '../widgets/details/shipping_info_card.dart';
 import '../widgets/details/payment_info_card.dart';
 
-class OrderDetailsPage extends StatelessWidget {
-  final LiveOrderEntity order; // 🟢 تم التحديث هنا
+class OrderDetailsPage extends StatefulWidget {
+  final LiveOrderEntity order;
 
   const OrderDetailsPage({super.key, required this.order});
 
   @override
+  State<OrderDetailsPage> createState() => _OrderDetailsPageState();
+}
+
+class _OrderDetailsPageState extends State<OrderDetailsPage> {
+  @override
   Widget build(BuildContext context) {
+    // 🟢 مفيش BlocProvider هنا نهائياً، الشاشة بتقرأ الـ Cubit الممرر لها من الخارج مباشرة بأمان
     return Scaffold(
       backgroundColor: AppColors.homeBg,
       appBar: CustomAppBar(
-        title: Text(
-          "تفاصيل الطلب ${order.orderNumber}",
-          style: TextStyles.font20WhiteMedium,
-        ),
+        title: Text("تفاصيل الطلب ${widget.order.orderNumber}", style: TextStyles.font20WhiteMedium),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.white),
           onPressed: () => Navigator.pop(context),
         ),
       ),
-      body: SingleChildScrollView(
-        padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 16.h),
-        child: Column(
-          children: [
-            OrderStatusHeader(
-              order: order, // 🟢 مررنا الـ order كاملة لقراءة الـ StatusMeta لايف
-              date: _formatDate(order.orderDate), // 🟢 استخدام orderDate
+      body: BlocBuilder<LiveOrdersCubit, LiveOrdersState>(
+        builder: (context, state) {
+          // الاستجابة لحالة التحميل الحية للمنتجات من السيرفر
+          if (state is LiveOrderDetailsLoading) {
+            return const Center(child: CircularProgressIndicator(color: AppColors.primary));
+          }
+
+          // عند نجاح جلب البيانات الكاملة من السيرفر بالمنتجات
+          LiveOrderEntity currentOrder = widget.order;
+          if (state is LiveOrderDetailsSuccess) {
+            currentOrder = state.order;
+          }
+
+          return SingleChildScrollView(
+            padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 16.h),
+            child: Column(
+              children: [
+                OrderStatusHeader(
+                  order: currentOrder,
+                  date: _formatDate(currentOrder.orderDate),
+                ),
+                SizedBox(height: 16.h),
+                CustomerInfoCard(order: currentOrder),
+                SizedBox(height: 14.h),
+                // 🟢 المنتجات تفرش لايف الحين لأن الداتا بقت كاملة من السيرفر!
+                OrderProductsCard(order: currentOrder),
+                SizedBox(height: 14.h),
+                OrderSummaryCard(order: currentOrder),
+                SizedBox(height: 14.h),
+                PaymentInfoCard(order: currentOrder),
+                SizedBox(height: 14.h),
+                ShippingInfoCard(order: currentOrder),
+                if (currentOrder.customerNote != null && currentOrder.customerNote!.isNotEmpty) ...[
+                  SizedBox(height: 14.h),
+                  CustomerNoteBox(note: currentOrder.customerNote!),
+                ],
+                SizedBox(height: 16.h),
+                _buildActionButtons(context, currentOrder.id),
+              ],
             ),
-
-            SizedBox(height: 16.h),
-
-            CustomerInfoCard(order: order),
-
-            SizedBox(height: 14.h),
-
-            OrderProductsCard(order: order),
-
-            SizedBox(height: 14.h),
-
-            OrderSummaryCard(order: order),
-
-            SizedBox(height: 14.h),
-
-            PaymentInfoCard(order: order),
-
-            SizedBox(height: 14.h),
-
-            ShippingInfoCard(order: order),
-
-            // 🟢 تحقق آمن من ملاحظة العميل القادمة من السيرفر كـ Nullable
-            if (order.customerNote != null && order.customerNote!.isNotEmpty) ...[
-              SizedBox(height: 14.h),
-              CustomerNoteBox(note: order.customerNote!),
-            ],
-            SizedBox(height: 8.h),
-
-            _buildActionButtons(),
-          ],
-        ),
+          );
+        },
       ),
     );
   }
@@ -82,62 +89,50 @@ class OrderDetailsPage extends StatelessWidget {
     return "${date.day}/${date.month}/${date.year} - ${date.hour}:${date.minute}";
   }
 
-  Widget _buildActionButtons() {
+  Widget _buildActionButtons(BuildContext context, String orderId) {
     return Row(
       children: [
         Expanded(
           flex: 2,
           child: ElevatedButton(
             onPressed: () {
-              // TODO: ربط ميثود إلغاء الطلب عبر الـ PATCH (status: 4)
+              // إلغاء الطلب لايف بكود الحالة 4 (ملغى)
+              context.read<LiveOrdersCubit>().updateStatus(orderId, 4);
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: const Color(0x1AEF4C53),
               elevation: 0,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(7.r),
-              ),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(7.r)),
               padding: EdgeInsets.symmetric(vertical: 14.h, horizontal: 8.w),
             ),
             child: FittedBox(
               fit: BoxFit.scaleDown,
-              child: Text("الغاء الطلب", style: TextStyles.font12RedMedium),
+              child: Text("إلغاء الطلب", style: TextStyles.font12RedMedium),
             ),
           ),
         ),
-
         SizedBox(width: 20.w),
-
         Expanded(
           flex: 3,
           child: ElevatedButton(
             onPressed: () {
-              // TODO: فتح الـ BottomSheet لتحديث الحالة وربطها بالـ Cubit الجديد
+              // فتح الـ BottomSheet للتحديث
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: AppColors.navSelectedColor,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(7.r),
-              ),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(7.r)),
               padding: EdgeInsets.symmetric(vertical: 13.h, horizontal: 8.w),
             ),
             child: FittedBox(
               fit: BoxFit.scaleDown,
               child: Text(
                 "تحديث حالة الطلب",
-                style: TextStyle(
-                  color: Colors.white,
-                  fontFamily: 'Cairo',
-                  fontSize: 12.sp,
-                  fontWeight: FontWeight.w500,
-                ),
+                style: TextStyle(color: Colors.white, fontFamily: 'Cairo', fontSize: 12.sp, fontWeight: FontWeight.w500),
               ),
             ),
           ),
         ),
-
         SizedBox(width: 20.w),
-
         Container(
           decoration: BoxDecoration(
             border: Border.all(color: Colors.grey[300]!),
@@ -145,25 +140,16 @@ class OrderDetailsPage extends StatelessWidget {
           ),
           child: TextButton.icon(
             onPressed: () {},
-            style: TextButton.styleFrom(
-              padding: EdgeInsets.symmetric(vertical: 12.h, horizontal: 8.w),
-            ),
+            style: TextButton.styleFrom(padding: EdgeInsets.symmetric(vertical: 12.h, horizontal: 8.w)),
             icon: SvgPicture.asset(
               AppAssets.printIcon,
               width: 14.w,
               height: 14.h,
-              colorFilter: const ColorFilter.mode(
-                Colors.black,
-                BlendMode.srcIn,
-              ),
+              colorFilter: const ColorFilter.mode(Colors.black, BlendMode.srcIn),
             ),
             label: Text(
               "طباعة الفاتورة",
-              style: TextStyle(
-                fontFamily: 'Cairo',
-                fontSize: 12.sp,
-                color: const Color(0xFF333333),
-              ),
+              style: TextStyle(fontFamily: 'Cairo', fontSize: 12.sp, color: const Color(0xFF333333)),
             ),
           ),
         ),

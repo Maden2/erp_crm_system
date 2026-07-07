@@ -12,24 +12,21 @@ class LiveOrdersCubit extends Cubit<LiveOrdersState> {
     required this.updateLiveOrderStatusUseCase,
   }) : super(LiveOrdersInitial());
 
-  // لستة للحفاظ على الداتا في الذاكرة لو احتجنا فلترة سريعة
   List<dynamic> _allOrders = [];
 
-  // 🟢 ميثود جلب الطلبات لايف مع تحويل الـ Tabs لنظام السيرفر (int)
+  // جلب اللستة الرئيسية
   Future<void> getLiveOrders({String? statusTab, String? search}) async {
     emit(LiveOrdersLoading());
-
-    // تحويل مسمى الـ Tab العربي لرقم الـ Status المطابق في السيرفر (0 - 8)
     int? statusCode;
-    if (statusTab != null && statusTab != "الكل") {
+    if (statusTab != null && statusTab != "الكل" && statusTab.isNotEmpty) {
       statusCode = _mapTabToStatusCode(statusTab);
     }
 
     final result = await getLiveOrdersUseCase.call(
       status: statusCode,
       search: search,
-      page: 1, // البداية بالصفحة الأولى دائمًا
-      limit: 50, // جلب لستة كافية للعرض
+      page: 1,
+      limit: 50,
     );
 
     result.fold(
@@ -45,29 +42,38 @@ class LiveOrdersCubit extends Cubit<LiveOrdersState> {
     );
   }
 
-  // 🟢 ميثود تحديث حالة الطلب لايف (PATCH)
+  // 🟢 الميثود الجديدة لجلب تفاصيل الأوردر بالمنتجات لايف من السيرفر
+  Future<void> getLiveOrderDetails({required String orderId}) async {
+    emit(LiveOrderDetailsLoading()); // تأكد من إضافة الحالة دي في الـ States عندك
+
+    // هنا بتنده الـ UseCase بتاعة الـ Details (لو مش موجودة انده الـ repositoryImpl علطول)
+    // لتسهيل الربط الحين، هنفترض إن الـ UseCase بترجع الأوردر كامل بالمنتجات:
+    final result = await getLiveOrdersUseCase.repository.getOrderDetails(orderId);
+
+    result.fold(
+          (failure) => emit(LiveOrderDetailsFailure(message: failure.message)),
+          (detailedOrder) => emit(LiveOrderDetailsSuccess(order: detailedOrder)),
+    );
+  }
+
   Future<void> updateStatus(String orderId, int newStatus) async {
     emit(UpdateOrderStatusLoading());
-
     final result = await updateLiveOrderStatusUseCase.call(orderId, newStatus);
-
     result.fold(
           (failure) => emit(UpdateOrderStatusFailure(message: failure.message)),
           (successData) {
         emit(UpdateOrderStatusSuccess(orderId: orderId, newStatus: newStatus));
-        // إعادة جلب الداتا لتحديث الشاشة تلقائيًا بعد التعديل
-        getLiveOrders();
+        getLiveOrderDetails(orderId: orderId); // إعادة جلب التفاصيل لتحديث الشاشة فوراً
       },
     );
   }
 
-  // دالة مساعدة ذكية لتحويل الـ Tabs لـ الأكواد المطلوبة في السيرفر
   int _mapTabToStatusCode(String tab) {
     switch (tab) {
       case "قيد الانتظار": return 0;
       case "تم الدفع": return 1;
       case "قيد الشحن": return 2;
-      case "تم التوصيل": return 3;
+      case "تم التوصيل": case "تم التسليم": return 3;
       case "ملغى": return 4;
       case "جاري التجهيز": return 5;
       case "مكتمل": return 6;

@@ -2,17 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pivot/core/utils/app_colors.dart';
 import 'package:pivot/core/utils/app_styles.dart';
-import '../../domain/entities/customer_entities.dart';
+import '../../domain/entities/client_entities.dart'; // 🟢 الاستيراد من الكيان الجديد المعزول
 
 class CustomerCard extends StatelessWidget {
-  final CustomerItemEntity customer;
+  final ClientListItemEntity client; // 🟢 استخدام الـ Entity الجديد المربوط بالـ API
   final VoidCallback onTap;
 
-  const CustomerCard({super.key, required this.customer, required this.onTap});
+  const CustomerCard({super.key, required this.client, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
-    final String initials = customer.name.split(' ').take(2).map((e) => e[0]).join(' ');
+    final String initials = client.name.split(' ').take(2).map((e) => e[0]).join(' ');
 
     return Container(
       margin: EdgeInsets.only(bottom: 10.h),
@@ -34,14 +34,14 @@ class CustomerCard extends StatelessWidget {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(customer.name, style: TextStyles.font12mediumGrayMedium),
+                  Text(client.name, style: TextStyles.font12mediumGrayMedium),
                   SizedBox(height: 4.h),
                   Row(
                     textDirection: TextDirection.rtl,
                     children: [
-                      Text("عدد الطلبات: ${customer.orderCount}", style: TextStyles.font10slateGrayRegular),
+                      Text("عدد الطلبات: ${client.ordersCount}", style: TextStyles.font10slateGrayRegular),
                       SizedBox(width: 12.w),
-                      Text("إجمالي الإنفاق: ${customer.totalSpending.toInt()} ج.م", style: TextStyles.font10slateGrayRegular),
+                      Text("إجمالي الإنفاق: ${client.totalSpent.toInt()} ج.م", style: TextStyles.font10slateGrayRegular),
                     ],
                   ),
                 ],
@@ -56,11 +56,11 @@ class CustomerCard extends StatelessWidget {
                   border: Border.all(color: const Color(0xFFDBEAFE)),
                 ),
                 alignment: Alignment.center,
-                child: customer.logoUrl != null
+                child: client.logoUrl != null
                     ? ClipRRect(
                   borderRadius: BorderRadius.circular(12.r),
                   child: Image.network(
-                    customer.logoUrl!,
+                    client.logoUrl!,
                     width: 44.w,
                     height: 44.w,
                     fit: BoxFit.cover,

@@ -32,12 +32,7 @@ class CustomerDetailsKpi extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.fromLTRB(
-        16.w,
-        12.h,
-        16.w,
-        14.h,
-      ),
+      padding: EdgeInsets.fromLTRB(16.w, 12.h, 16.w, 14.h),
       child: Row(
         children: [
           Expanded(
@@ -71,16 +66,11 @@ class CustomerDetailsKpi extends StatelessWidget {
   }) {
     return Container(
       height: 68.h,
-      padding: EdgeInsets.symmetric(
-        horizontal: 8.w,
-        vertical: 8.h,
-      ),
+      padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 8.h),
       decoration: BoxDecoration(
         color: AppColors.authBgColor,
         borderRadius: BorderRadius.circular(6.r),
-        border: Border.all(
-          color: const Color(0xFFE5E7EB),
-        ),
+        border: Border.all(color: const Color(0xFFE5E7EB)),
       ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,

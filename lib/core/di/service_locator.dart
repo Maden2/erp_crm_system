@@ -3,6 +3,7 @@ import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 // ================== SPLASH ==================
+import '../../features/customers/domain/repositories/client_repository.dart';
 import '../../features/splash/domain/usecases/check_auth_usecase.dart';
 import '../../features/splash/presentation/manager/splash_cubit.dart';
 
@@ -100,8 +101,16 @@ import '../../features/invoices/presentation/manager/full_invoices_cubit.dart';
 // ================== PROFITS ==================
 import '../../features/profits/presentation/manager/profits_cubit.dart';
 
-// ================== CUSTOMERS ==================
+// ================== CUSTOMERS (OLD / MOCK COEXISTING) ==================
 import '../../features/customers/presentation/manager/customer_cubit.dart';
+
+// ================== NEW CLIENTS REAL API (COEXISTING IN SAME FOLDER) ==================
+import '../../features/customers/data/datasources/client_remote_data_source.dart';
+import '../../features/customers/data/repositories/client_repository_impl.dart';
+import '../../features/customers/domain/usecases/get_client_details_usecase.dart';
+import '../../features/customers/domain/usecases/get_client_stats_usecase.dart';
+import '../../features/customers/domain/usecases/get_clients_list_usecase.dart';
+import '../../features/customers/presentation/manager/client_cubit.dart';
 
 // ================== COMPLAINTS (NEW MODULE) ==================
 import '../../features/complaints/presentation/manager/complaints_cubit.dart';
@@ -304,6 +313,26 @@ Future<void> setupServiceLocator() async {
 
   //  ================== CUSTOMERS MODULE ==================
   getIt.registerFactory(() => CustomerCubit());
+
+  //  ================== NEW CLIENTS REAL API (COEXISTING IN SAME FOLDER) ==================
+  getIt.registerLazySingleton<ClientRemoteDataSource>(
+        () => ClientRemoteDataSourceImpl(getIt<ApiConsumer>()),
+  );
+  getIt.registerLazySingleton<ClientRepository>(
+        () => ClientRepositoryImpl(getIt<ClientRemoteDataSource>()),
+  );
+
+  // Use Cases
+  getIt.registerLazySingleton(() => GetClientStatsUseCase(getIt<ClientRepository>()));
+  getIt.registerLazySingleton(() => GetClientsListUseCase(getIt<ClientRepository>()));
+  getIt.registerLazySingleton(() => GetClientDetailsUseCase(getIt<ClientRepository>()));
+
+  // Cubit
+  getIt.registerFactory(() => ClientCubit(
+    getClientStatsUseCase: getIt<GetClientStatsUseCase>(),
+    getClientsListUseCase: getIt<GetClientsListUseCase>(),
+    getClientDetailsUseCase: getIt<GetClientDetailsUseCase>(),
+  ));
 
   //  ================== COMPLAINTS MODULE (MOCK REGISTER) ==================
   getIt.registerFactory(() => ComplaintsCubit());

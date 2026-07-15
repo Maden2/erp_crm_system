@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pivot/core/utils/app_colors.dart';
 import 'package:pivot/core/utils/app_styles.dart';
-import '../../../domain/entities/customer_entities.dart';
+import '../../../domain/entities/client_entities.dart'; // 🟢 الاستيراد من الكيان الجديد المعزول
 
 class CustomerOrderItem extends StatelessWidget {
-  final CustomerOrderEntity order;
+  final ClientOrderHistoryEntity order; // 🟢 استخدام الـ Entity الجديد لطلب السيرفر
 
   const CustomerOrderItem({super.key, required this.order});
 
@@ -22,12 +22,11 @@ class CustomerOrderItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bool isCompleted = order.statusLabel == "تم التوصيل";
+    final bool isCompleted = order.statusLabel == "تم التوصيل" || order.statusLabel == "تم";
 
     return Padding(
       padding: EdgeInsets.only(bottom: 10.h),
       child: Row(
-        // 🟢 النقطة برة الكارت على اليمين، وفوق (مش في النص)
         textDirection: TextDirection.rtl,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -39,9 +38,7 @@ class CustomerOrderItem extends StatelessWidget {
               shape: BoxShape.circle,
             ),
           ),
-
           SizedBox(width: 8.w),
-
           Expanded(
             child: Container(
               padding: EdgeInsets.all(14.r),
@@ -52,11 +49,10 @@ class CustomerOrderItem extends StatelessWidget {
               ),
               child: Row(
                 children: [
-                  // 🟢 يمين: رقم الطلب + حالة الطلب
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(order.orderNumber, style: TextStyles.font8slateGrayRegular),
+                      Text(order.orderId, style: TextStyles.font8slateGrayRegular), // 🟢 ربط الـ orderId الجديد
                       SizedBox(height: 6.h),
                       Container(
                         padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 2.h),
@@ -77,7 +73,6 @@ class CustomerOrderItem extends StatelessWidget {
                     ],
                   ),
                   const Spacer(),
-                  // 🟢 شمال: التاريخ + السعر
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -85,7 +80,8 @@ class CustomerOrderItem extends StatelessWidget {
                       SizedBox(height: 4.h),
                       Text(
                         "${_formatNumber(order.amount)} ج.م",
-                        style: TextStyles.font10darkTextRegular),
+                        style: TextStyles.font10darkTextRegular,
+                      ),
                     ],
                   ),
                 ],

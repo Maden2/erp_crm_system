@@ -52,23 +52,23 @@ class MorePage extends StatelessWidget {
                     Navigator.pushNamed(context, Routes.invoicesPage);
                   },
                 ),
-                MenuTile(
+              /*  MenuTile(
                   title: "الأرباح",
                   subtitle: "تحليل الأرباح وصافي الدخل",
                   icon: AppAssets.profitsMoreIcon,
                   onTap: () {
                     Navigator.pushNamed(context, Routes.profitsPage);
                   },
-                ),
+                ),*/
 
                 SizedBox(height: 16.h),
                 _buildSectionTitle("العمليات"),
-                MenuTile(
+               /* MenuTile(
                   title: "المخزون",
                   subtitle: "متابعة الكميات والتنببهات",
                   icon: AppAssets.inventoryIcon,
                   onTap: () {},
-                ),
+                ), */
                 MenuTile(
                   title: "العملاء",
                   subtitle: "بيانات وسجل العملاء",
@@ -103,12 +103,12 @@ class MorePage extends StatelessWidget {
 
                 SizedBox(height: 16.h),
                 _buildSectionTitle("الإعدادات"),
-                MenuTile(
+              /*  MenuTile(
                   title: "الاعدادات",
                   subtitle: "الحساب، اللغة، الدفع",
                   icon: AppAssets.settingsIcon,
                   onTap: () {},
-                ),
+                ),*/
 
                 _buildLogoutButton(),
 

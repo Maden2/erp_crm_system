@@ -128,10 +128,10 @@ class AnalyticsProfitModel extends AnalyticsProfitEntity {
   factory AnalyticsProfitModel.fromJson(Map<String, dynamic> json) {
     return AnalyticsProfitModel(
       period: json['period'] ?? 'monthly',
-      revenue: (json['revenue'] ?? 0.0 as num).toDouble(),
-      cogs: (json['cogs'] ?? 0.0 as num).toDouble(),
-      grossProfit: (json['grossProfit'] ?? 0.0 as num).toDouble(),
-      profitMarginPct: (json['profitMarginPct'] ?? 0.0 as num).toDouble(),
+      revenue: (json['revenue'] as num?)?.toDouble() ?? 0.0,
+      cogs: (json['cogs'] as num?)?.toDouble() ?? 0.0,
+      grossProfit: (json['grossProfit'] as num?)?.toDouble() ?? 0.0,
+      profitMarginPct: (json['profitMarginPct'] as num?)?.toDouble() ?? 0.0,
     );
   }
 }
@@ -170,10 +170,10 @@ class AnalyticsChartPointModel extends AnalyticsChartPointEntity {
 
   factory AnalyticsChartPointModel.fromJson(Map<String, dynamic> json) {
     return AnalyticsChartPointModel(
-      date: json['date'] ?? '',
+      date: json['date'] ?? json['day'] ?? '',
       ordersCount: json['ordersCount'] ?? 0,
-      revenue: (json['revenue'] ?? 0.0 as num).toDouble(),
-      aov: (json['aov'] ?? 0.0 as num).toDouble(),
+      revenue: (json['revenue'] as num?)?.toDouble() ?? 0.0,
+      aov: (json['aov'] as num?)?.toDouble() ?? 0.0,
       isFallback: json['isFallback'] ?? false,
     );
   }
@@ -199,8 +199,8 @@ class AnalyticsProductModel extends AnalyticsProductEntity {
       productName: json['productName'] ?? '',
       sku: json['sku'] ?? '',
       unitsSold: json['unitsSold'] ?? 0,
-      revenue: (json['revenue'] ?? 0.0 as num).toDouble(),
-      avgPrice: (json['avgPrice'] ?? 0.0 as num).toDouble(),
+      revenue: (json['revenue'] as num?)?.toDouble() ?? 0.0,
+      avgPrice: (json['avgPrice'] as num?)?.toDouble() ?? 0.0,
       image: json['image'] ?? '',
     );
   }
@@ -221,8 +221,8 @@ class AnalyticsCategoryModel extends AnalyticsCategoryEntity {
     return AnalyticsCategoryModel(
       category: json['category'] ?? 'غير مصنف',
       unitsSold: json['unitsSold'] ?? 0,
-      revenue: (json['revenue'] ?? 0.0 as num).toDouble(),
-      sharePct: (json['sharePct'] ?? 0.0 as num).toDouble(),
+      revenue: (json['revenue'] as num?)?.toDouble() ?? 0.0,
+      sharePct: (json['sharePct'] as num?)?.toDouble() ?? 0.0,
     );
   }
 }
@@ -247,7 +247,7 @@ class AnalyticsStatusBreakdownModel extends AnalyticsStatusBreakdownEntity {
       labelEn: json['labelEn'] ?? '',
       color: json['color'] ?? '#Grey',
       orderCount: json['orderCount'] ?? 0,
-      revenue: (json['revenue'] ?? 0.0 as num).toDouble(),
+      revenue: (json['revenue'] as num?)?.toDouble() ?? 0.0,
     );
   }
 }
@@ -264,11 +264,18 @@ class AnalyticsPaymentBreakdownModel extends AnalyticsPaymentBreakdownEntity {
   });
 
   factory AnalyticsPaymentBreakdownModel.fromJson(Map<String, dynamic> json) {
+    String methodLabel = "unknown";
+    if (json['methodName'] != null) {
+      methodLabel = json['methodName'].toString();
+    } else if (json['method'] != null) {
+      methodLabel = json['method'].toString() == "0" ? "كاش" : "بطاقة بنكية";
+    }
+
     return AnalyticsPaymentBreakdownModel(
-      method: json['method'] ?? 'unknown',
+      method: methodLabel,
       orderCount: json['orderCount'] ?? 0,
-      revenue: (json['revenue'] ?? 0.0 as num).toDouble(),
-      sharePct: (json['sharePct'] ?? 0.0 as num).toDouble(),
+      revenue: (json['revenue'] as num?)?.toDouble() ?? 0.0,
+      sharePct: (json['sharePct'] as num?)?.toDouble() ?? 0.0,
     );
   }
 }

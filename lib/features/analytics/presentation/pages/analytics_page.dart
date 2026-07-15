@@ -30,10 +30,10 @@ class AnalyticsPage extends StatelessWidget {
             if (state is FullAnalyticsSuccess) {
               final analytics = state.analytics;
 
-              // 🟢 التحقق الفوري لو الباكيند باعت الداتا صفر أو لست الفئات والمنتجات فاضية لعرض شاشة الترحيب والتهيئة
               bool isDataEmpty = analytics.topProducts.isEmpty && analytics.categories.isEmpty;
 
               return SingleChildScrollView(
+                physics: const BouncingScrollPhysics(),
                 child: Column(
                   children: [
                     const AnalyticsHeader(),
@@ -43,13 +43,17 @@ class AnalyticsPage extends StatelessWidget {
                         children: [
                           SizedBox(height: 16.h),
 
-                          // عنوان الترحيب بالشاشة الفاضية
                           if (isDataEmpty) ...[
                             Padding(
                               padding: EdgeInsets.symmetric(vertical: 8.h),
                               child: Text(
                                 "لا توجد بيانات تحليلية حتى الآن",
-                                style: TextStyle(fontFamily: 'Cairo', fontSize: 13.sp, fontWeight: FontWeight.bold, color: const Color(0xFF1E293B)),
+                                style: TextStyle(
+                                  fontFamily: 'Cairo',
+                                  fontSize: 13.sp,
+                                  fontWeight: FontWeight.bold,
+                                  color: const Color(0xFF1E293B),
+                                ),
                               ),
                             ),
                           ],
@@ -57,7 +61,6 @@ class AnalyticsPage extends StatelessWidget {
                           const SalesSummaryCard(),
                           SizedBox(height: 16.h),
 
-                          // 🟢 عرض الـ 3 خطوات لتهيئة الحساب والزرار الأزرق لما تكون الداتا صفر طبق الأصل من فيجما
                           if (isDataEmpty) ...[
                             SizedBox(height: 8.h),
                             _buildWelcomeStep("1", "أضف منتجاتك", "لبدء عمليات البيع."),
@@ -71,11 +74,18 @@ class AnalyticsPage extends StatelessWidget {
                                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.r)),
                               ),
                               onPressed: () {},
-                              child: Text("+ أضف أول منتج", style: TextStyle(fontFamily: 'Cairo', fontSize: 12.sp, color: Colors.white, fontWeight: FontWeight.bold)),
+                              child: Text(
+                                "+ أضف أول منتج",
+                                style: TextStyle(
+                                  fontFamily: 'Cairo',
+                                  fontSize: 12.sp,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
                             ),
                             SizedBox(height: 24.h),
                           ] else ...[
-                            // لو في داتا اعرض الشارت العادي
                             const SalesChartWidget(),
                             SizedBox(height: 16.h),
                           ],
@@ -86,12 +96,19 @@ class AnalyticsPage extends StatelessWidget {
                           if (!isDataEmpty) ...[
                             CategoryPerformanceCard(categories: analytics.categories),
                           ] else ...[
-                            // السلوت الفاضي الأخير لأداء الفئات بالشاشة الفاضية
                             Container(
                               width: double.infinity,
                               height: 60.h,
-                              decoration: BoxDecoration(color: AppColors.authBgColor, borderRadius: BorderRadius.circular(12.r)),
-                              child: Center(child: Text("لا توجد بيانات بعد", style: TextStyle(fontFamily: 'Cairo', fontSize: 10.sp, color: Colors.grey))),
+                              decoration: BoxDecoration(
+                                color: AppColors.authBgColor,
+                                borderRadius: BorderRadius.circular(12.r),
+                              ),
+                              child: Center(
+                                child: Text(
+                                  "لا توجد بيانات بعد",
+                                  style: TextStyle(fontFamily: 'Cairo', fontSize: 10.sp, color: Colors.grey),
+                                ),
+                              ),
                             )
                           ],
                           SizedBox(height: 24.h),
@@ -102,6 +119,21 @@ class AnalyticsPage extends StatelessWidget {
                 ),
               );
             }
+
+            // 🟢 تم التعديل هنا لـ FullAnalyticsFailure أو استخدم الاسم المكتوب في ملف الـ state عندك
+            if (state is FullAnalyticsFailure) {
+              return Center(
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 24.w),
+                  child: Text(
+                    "حدث خطأ أثناء تحميل التحليلات: ${state.message}",
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(fontFamily: 'Cairo', color: Colors.red, fontWeight: FontWeight.bold),
+                  ),
+                ),
+              );
+            }
+
             return const SizedBox();
           },
         ),
@@ -109,13 +141,15 @@ class AnalyticsPage extends StatelessWidget {
     );
   }
 
-  // ويدجيت الخطوة الفرعية للتهيئة والترحيب
   Widget _buildWelcomeStep(String number, String title, String subtitle) {
     return Container(
       width: double.infinity,
       margin: EdgeInsets.symmetric(vertical: 4.h),
       padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
-      decoration: BoxDecoration(color: AppColors.authBgColor, borderRadius: BorderRadius.circular(12.r)),
+      decoration: BoxDecoration(
+        color: AppColors.authBgColor,
+        borderRadius: BorderRadius.circular(12.r),
+      ),
       child: Row(
         textDirection: TextDirection.rtl,
         children: [
@@ -123,7 +157,12 @@ class AnalyticsPage extends StatelessWidget {
             width: 24.w,
             height: 24.w,
             decoration: const BoxDecoration(color: Color(0xFFEFF2FE), shape: BoxShape.circle),
-            child: Center(child: Text(number, style: const TextStyle(fontWeight: FontWeight.bold, color: Color(0xFF0D1B5E)))),
+            child: Center(
+              child: Text(
+                number,
+                style: const TextStyle(fontWeight: FontWeight.bold, color: Color(0xFF0D1B5E)),
+              ),
+            ),
           ),
           SizedBox(width: 12.w),
           Expanded(
@@ -131,8 +170,14 @@ class AnalyticsPage extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               textDirection: TextDirection.rtl,
               children: [
-                Text(title, style: TextStyle(fontFamily: 'Cairo', fontSize: 11.sp, fontWeight: FontWeight.bold, color: const Color(0xFF1E293B))),
-                Text(subtitle, style: TextStyle(fontFamily: 'Cairo', fontSize: 9.sp, color: Colors.grey)),
+                Text(
+                  title,
+                  style: TextStyle(fontFamily: 'Cairo', fontSize: 11.sp, fontWeight: FontWeight.bold, color: const Color(0xFF1E293B)),
+                ),
+                Text(
+                  subtitle,
+                  style: TextStyle(fontFamily: 'Cairo', fontSize: 9.sp, color: Colors.grey),
+                ),
               ],
             ),
           ),

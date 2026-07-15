@@ -3,14 +3,15 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pivot/core/utils/app_colors.dart';
 import 'package:pivot/core/utils/app_styles.dart';
+import '../../../../core/di/service_locator.dart';
 import '../../../../core/widgets/custom_app_bar.dart';
-import '../manager/customer_cubit.dart';
-import '../manager/customer_state.dart';
+import '../manager/client_cubit.dart';
+import '../manager/client_state.dart';
 import '../widgets/customer_kpi_header.dart';
 import '../widgets/customer_card.dart';
 import '../widgets/empty_customers_widget.dart';
 import '../widgets/customer_filter_bottom_sheet.dart';
-import 'customer_details_page.dart'; // 🟢 استدعاء شاشة التفاصيل الجديدة
+import 'customer_details_page.dart';
 
 class CustomersPage extends StatelessWidget {
   const CustomersPage({super.key});
@@ -27,13 +28,12 @@ class CustomersPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => CustomerCubit()..fetchCustomers(isEmptyCase: false),
+      create: (_) => getIt<ClientCubit>()..fetchClients(),
       child: Builder(
           builder: (context) {
             return Scaffold(
               backgroundColor: AppColors.homeBg,
               appBar: CustomAppBar(
-                // 🟢 سهم الرجوع مكان أيقونة الفلتر
                 leading: IconButton(
                   icon: const Icon(Icons.arrow_back, color: Colors.white),
                   onPressed: () => Navigator.pop(context),
@@ -44,7 +44,7 @@ class CustomersPage extends StatelessWidget {
                 ),
                 actions: [
                   IconButton(
-                    icon:  Icon(Icons.tune, color: AppColors.homeBg),
+                    icon: Icon(Icons.tune, color: AppColors.homeBg),
                     onPressed: () => _openFilter(context),
                   ),
                   IconButton(
@@ -54,24 +54,28 @@ class CustomersPage extends StatelessWidget {
                   SizedBox(width: 8.w),
                 ],
               ),
-              body: BlocBuilder<CustomerCubit, CustomerState>(
+              body: BlocBuilder<ClientCubit, ClientState>(
                 builder: (context, state) {
-                  if (state is CustomerLoading) {
+                  if (state is ClientLoading) {
                     return const Center(child: CircularProgressIndicator(color: AppColors.primary));
                   }
 
-                  if (state is CustomerSuccess) {
-                    final list = state.customerList;
+                  if (state is ClientSuccess) {
+                    // 🟢 تأمين الـ Nullability صب خرسانة باستخدام الـ Null-coalescing
+                    final customersList = state.clients ?? [];
+                    final stats = state.stats;
 
-                    if (list.customers.isEmpty) {
+                    if (customersList.isEmpty) {
                       return const EmptyCustomersWidget();
                     }
 
                     return Column(
                       children: [
+                        // 🟢 نمرر الإحصائيات فقط لو مش null، ولو null بنديله قيم افتراضية آمنة
                         CustomerKpiHeader(
-                          totalCount: list.totalCount,
-                          activeCount: list.activeCount,
+                          totalCount: stats?.totalCustomers ?? 0,
+                          activeCount: stats?.activeCustomers ?? 0,
+                          activePercentage: stats?.activePercentage ?? "0%",
                         ),
 
                         Padding(
@@ -89,17 +93,16 @@ class CustomersPage extends StatelessWidget {
                           child: ListView.builder(
                             padding: EdgeInsets.symmetric(horizontal: 24.w),
                             physics: const BouncingScrollPhysics(),
-                            itemCount: list.customers.length,
+                            itemCount: customersList.length,
                             itemBuilder: (context, index) {
-                              final customer = list.customers[index];
+                              final client = customersList[index];
                               return CustomerCard(
-                                customer: customer,
-                                // 🟢 تعديل ميثود الـ onTap للانتقال السلس لشاشة تفاصيل العميل مع الـ ID
+                                client: client,
                                 onTap: () {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (_) => CustomerDetailsPage(customerId: customer.id),
+                                      builder: (_) => CustomerDetailsPage(customerId: client.id),
                                     ),
                                   );
                                 },
@@ -110,6 +113,16 @@ class CustomersPage extends StatelessWidget {
                       ],
                     );
                   }
+
+                  if (state is ClientError) {
+                    return Center(
+                      child: Text(
+                        state.message,
+                        style: const TextStyle(fontFamily: 'Cairo', color: Colors.red),
+                      ),
+                    );
+                  }
+
                   return const SizedBox();
                 },
               ),

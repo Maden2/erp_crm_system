@@ -4,10 +4,11 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:pivot/core/utils/app_colors.dart';
 import 'package:pivot/core/utils/app_styles.dart';
+import '../../../../core/di/service_locator.dart';
 import '../../../../core/utils/app_assets.dart';
 import '../../../../core/widgets/custom_app_bar.dart';
-import '../manager/customer_cubit.dart';
-import '../manager/customer_state.dart';
+import '../manager/client_cubit.dart'; // 🟢 تم التوجيه للكيوبيت الجديد المعزول
+import '../manager/client_state.dart'; // 🟢 تم التوجيه للـ State الجديد المعزول
 import '../widgets/details/customer_details_kpi.dart';
 import '../widgets/details/customer_info_section.dart';
 import '../widgets/details/customer_order_item.dart';
@@ -20,22 +21,19 @@ class CustomerDetailsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => CustomerCubit()..fetchCustomerDetails(customerId),
+      create: (_) => getIt<ClientCubit>()..fetchClientDetails(customerId), // 🟢 سحب الكيوبيت الجديد المربوط بالـ Use Cases
       child: Scaffold(
         backgroundColor: AppColors.homeBg,
         appBar: CustomAppBar(
-          // 1️⃣ زر الرجوع لوحده في الـ leading (يسار الشاشة)
           leading: IconButton(
             icon: const Icon(Icons.arrow_back, color: Colors.white),
             onPressed: () => Navigator.pop(context),
           ),
-
-          // 2️⃣ الـ Title في المنتصف: الاسم والـ Badge الملون جمب بعض ومأمنين تماماً ضد الـ Overflow
-          title: BlocBuilder<CustomerCubit, CustomerState>(
+          title: BlocBuilder<ClientCubit, ClientState>( // 🟢 استخدام الـ ClientCubit والـ ClientState
             builder: (context, state) {
-              if (state is CustomerSuccess && state.selectedCustomerDetail != null) {
-                final d = state.selectedCustomerDetail!;
-                final bool isActive = d.id == "4" || d.id == "1";
+              if (state is ClientSuccess && state.selectedClient != null) {
+                final d = state.selectedClient!;
+                final bool isActive = d.isActive; // 🟢 قراءة الحالة النشطة لايف من السيرفر
 
                 return FittedBox(
                   fit: BoxFit.scaleDown,
@@ -43,12 +41,10 @@ class CustomerDetailsPage extends StatelessWidget {
                     mainAxisSize: MainAxisSize.min,
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      // الـ Badge الملون (نشط / غير نشط)
                       Text(
                         d.name,
                         style: TextStyles.font16WhiteBold,
                       ),
-                  
                       SizedBox(width: 8.w),
                       Container(
                         padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 3.h),
@@ -80,8 +76,6 @@ class CustomerDetailsPage extends StatelessWidget {
                           ],
                         ),
                       ),
-                  
-                      // اسم العميل
                     ],
                   ),
                 );
@@ -89,8 +83,6 @@ class CustomerDetailsPage extends StatelessWidget {
               return Text("تفاصيل العميل", style: TextStyles.font18WhiteBold.copyWith(fontFamily: 'Cairo'));
             },
           ),
-
-          // 3️⃣ الـ Actions (يمين الشاشة): أيقونات البريد والاتصال مسطرة ومطابقة للتصميم بالملي
           actions: [
             IconButton(
               onPressed: () {},
@@ -117,15 +109,16 @@ class CustomerDetailsPage extends StatelessWidget {
               ),
             ),
             SizedBox(width: 4.w),
-          ],        ),
-        body: BlocBuilder<CustomerCubit, CustomerState>(
+          ],
+        ),
+        body: BlocBuilder<ClientCubit, ClientState>( // 🟢 استخدام الـ ClientCubit والـ ClientState
           builder: (context, state) {
-            if (state is CustomerLoading) {
+            if (state is ClientDetailsLoading || state is ClientLoading) { // 🟢 الـ States الجديدة للتحميل
               return const Center(child: CircularProgressIndicator(color: AppColors.primary));
             }
 
-            if (state is CustomerSuccess && state.selectedCustomerDetail != null) {
-              final d = state.selectedCustomerDetail!;
+            if (state is ClientSuccess && state.selectedClient != null) {
+              final d = state.selectedClient!;
 
               return SingleChildScrollView(
                 physics: const BouncingScrollPhysics(),
@@ -134,15 +127,15 @@ class CustomerDetailsPage extends StatelessWidget {
                     SizedBox(height: 8.h),
                     CustomerDetailsKpi(
                       totalOrders: d.totalOrders,
-                      totalPurchases: d.totalPurchases,
+                      totalPurchases: d.totalSpending, // 🟢 ربط مع الـ Entity الجديد
                       averageOrderValue: d.averageOrderValue,
                     ),
                     CustomerInfoSection(
                       phone: d.phone,
                       email: d.email,
                       regDate: d.registrationDate,
-                      deliveryNotes: d.deliveryNotes,
-                      rating: 4.3,
+                      deliveryNotes: d.note ?? '', // 🟢 التعامل مع النوت لو null
+                      rating: d.rating, // 🟢 جلب التقييم الحقيقي من السيرفر
                     ),
                     Padding(
                       padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
@@ -158,9 +151,9 @@ class CustomerDetailsPage extends StatelessWidget {
                       shrinkWrap: true,
                       physics: const NeverScrollableScrollPhysics(),
                       padding: EdgeInsets.symmetric(horizontal: 16.w),
-                      itemCount: d.orderHistory.length,
+                      itemCount: d.orders.length, // 🟢 ربط مع الـ Entity الجديد لطلبات السيرفر
                       itemBuilder: (context, index) {
-                        return CustomerOrderItem(order: d.orderHistory[index]);
+                        return CustomerOrderItem(order: d.orders[index]); // 🟢 تمرير الطلب المعدل
                       },
                     ),
                     SizedBox(height: 40.h),
@@ -168,6 +161,16 @@ class CustomerDetailsPage extends StatelessWidget {
                 ),
               );
             }
+
+            if (state is ClientError) {
+              return Center(
+                child: Text(
+                  state.message,
+                  style: const TextStyle(fontFamily: 'Cairo', color: Colors.red),
+                ),
+              );
+            }
+
             return const SizedBox();
           },
         ),

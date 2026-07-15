@@ -29,9 +29,7 @@ class CustomerInfoSection extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.authBgColor,
         borderRadius: BorderRadius.circular(12.r),
-        border: Border.all(
-          color: const Color(0xFFF1F5F9),
-        ),
+        border: Border.all(color: const Color(0xFFF1F5F9)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -40,51 +38,39 @@ class CustomerInfoSection extends StatelessWidget {
             children: [
               Text(
                 "معلومات العميل",
-                style: TextStyles.font16graphiteGreyMedium.copyWith(
-                  fontWeight: FontWeight.w700,
-                ),
+                style: TextStyles.font16graphiteGreyMedium.copyWith(fontWeight: FontWeight.w700),
               ),
-              Spacer(),
-
+              const Spacer(),
               if (rating != null) _buildRating(),
-
-
             ],
           ),
-
           SizedBox(height: 18.h),
-
           _buildInfoRow(
             iconAsset: AppAssets.phoneIcon,
             title: "رقم الهاتف",
             value: phone,
           ),
-
           _buildDivider(),
-
           _buildInfoRow(
             iconAsset: AppAssets.mailIcon,
             title: "البريد الإلكتروني",
             value: email,
           ),
-
           _buildDivider(),
-
           _buildInfoRow(
             iconAsset: AppAssets.dateIcon,
             title: "تاريخ التسجيل",
             value: regDate,
           ),
-
-          SizedBox(height: 18.h),
-
-          _buildNoteBox(deliveryNotes),
+          if (deliveryNotes.isNotEmpty) ...[
+            SizedBox(height: 18.h),
+            _buildNoteBox(deliveryNotes),
+          ],
         ],
       ),
     );
   }
 
-  // 🟢 أيقونة SVG بدل Icon العادية، بنفس منطق colorFilter المستخدم في صندوق الملاحظة
   Widget _buildSvgIcon(String assetPath, {double? size, Color? color}) {
     return SvgPicture.asset(
       assetPath,
@@ -108,9 +94,7 @@ class CustomerInfoSection extends StatelessWidget {
       textDirection: TextDirection.rtl,
       children: [
         _buildSvgIcon(iconAsset),
-
         SizedBox(width: 8.w),
-
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -118,15 +102,11 @@ class CustomerInfoSection extends StatelessWidget {
               title,
               style: TextStyles.font10lightGrayTextRegular,
             ),
-
             SizedBox(height: 3.h),
-
             Text(
               value,
               textAlign: TextAlign.right,
-              style: TextStyles.font12BlackRegular.copyWith(
-                fontWeight: FontWeight.w600,
-              ),
+              style: TextStyles.font12BlackRegular.copyWith(fontWeight: FontWeight.w600),
             ),
           ],
         ),
@@ -137,15 +117,13 @@ class CustomerInfoSection extends StatelessWidget {
   Widget _buildDivider() {
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 14.h),
-      child: Divider(
-        color: const Color(0xFFF1F5F9),
+      child: const Divider(
+        color: Color(0xFFF1F5F9),
         height: 1,
       ),
     );
   }
 
-  // 🟢 رجعت النجوم لـ Icon العادية (Material) بدل الـ SVG أسامي alarmIcon/walletIcon
-  // اللي كانت غلط أصلاً ومكنتش بتدي شكل نجوم حقيقي. التكست "4.3 تقييم العميل" فوقها زي ما هو.
   Widget _buildRating() {
     final filledStars = rating!.floor();
 
@@ -153,7 +131,7 @@ class CustomerInfoSection extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          "   تقييم العميل${rating!.toStringAsFixed(1)}",
+          "   تقييم العميل ${rating!.toStringAsFixed(1)}",
           style: TextStyle(
             fontFamily: 'Cairo',
             fontSize: 10.sp,
@@ -161,9 +139,7 @@ class CustomerInfoSection extends StatelessWidget {
             color: AppColors.lightGrayText,
           ),
         ),
-
         SizedBox(height: 4.h),
-
         Row(
           children: List.generate(
             5,
@@ -187,9 +163,7 @@ class CustomerInfoSection extends StatelessWidget {
       decoration: BoxDecoration(
         color: const Color(0xFFFFFBEB),
         borderRadius: BorderRadius.circular(8.r),
-        border: Border.all(
-          color: const Color(0xFFFEF3C7),
-        ),
+        border: Border.all(color: const Color(0xFFFEF3C7)),
       ),
       child: IntrinsicHeight(
         child: Row(
@@ -205,7 +179,6 @@ class CustomerInfoSection extends StatelessWidget {
                 ),
               ),
             ),
-
             Expanded(
               child: Padding(
                 padding: EdgeInsets.all(12.w),
@@ -224,9 +197,7 @@ class CustomerInfoSection extends StatelessWidget {
                             BlendMode.srcIn,
                           ),
                         ),
-
                         SizedBox(width: 6.w),
-
                         Text(
                           "ملاحظة العميل",
                           style: TextStyle(
@@ -238,9 +209,7 @@ class CustomerInfoSection extends StatelessWidget {
                         ),
                       ],
                     ),
-
                     SizedBox(height: 6.h),
-
                     Text(
                       note,
                       textAlign: TextAlign.right,

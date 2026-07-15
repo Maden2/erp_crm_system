@@ -1,13 +1,10 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pivot/core/utils/app_colors.dart';
 import 'package:pivot/core/utils/app_styles.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
-/// نموذج بسيط لبيانات كل كارت KPI
-/// (ممكن تضيفي أي عدد من الكروت مستقبلاً عن طريق [extraCards])
 class KpiCardData {
   final String title;
   final String value;
@@ -29,18 +26,17 @@ class KpiCardData {
 class CustomerKpiHeader extends StatefulWidget {
   final int totalCount;
   final int activeCount;
+  final String activePercentage; // 🟢 استقبال النسبة المئوية مباشرة من السيرفر
 
-  /// بيانات كارت "أعلى عميل إنفاقاً" (اختياري لحد ما تجيبيها من الـ API)
   final String? topSpenderName;
   final num? topSpenderAmount;
-
-  /// أي كروت KPI إضافية عايزة تضيفيها في السلايدر (اختياري)
   final List<KpiCardData> extraCards;
 
   const CustomerKpiHeader({
     super.key,
     required this.totalCount,
     required this.activeCount,
+    required this.activePercentage, // 🟢 تم تفعيلها هنا
     this.topSpenderName,
     this.topSpenderAmount,
     this.extraCards = const [],
@@ -87,15 +83,11 @@ class _CustomerKpiHeaderState extends State<CustomerKpiHeader> {
   }
 
   List<KpiCardData> get _allCards {
-    final int activePercent = widget.totalCount > 0
-        ? ((widget.activeCount / widget.totalCount) * 100).toInt()
-        : 0;
-
     return [
       KpiCardData(
         title: "عملاء نشطون",
         value: "${widget.activeCount}",
-        subTitle: "$activePercent%",
+        subTitle: widget.activePercentage, // 🟢 النسبة الحقيقية اللايف من السيرفر
         textColor: const Color(0xFF10B981),
         bgColor: const Color(0xFFECFDF5),
         isPositiveTrend: true,
@@ -122,7 +114,6 @@ class _CustomerKpiHeaderState extends State<CustomerKpiHeader> {
     ];
   }
 
-  // بنقسم الكروت لصفحات، كل صفحة فيها كارتين (زي التصميم الحالي بالظبط)
   List<List<KpiCardData>> get _pages {
     final cards = _allCards;
     final pages = <List<KpiCardData>>[];
@@ -156,7 +147,6 @@ class _CustomerKpiHeaderState extends State<CustomerKpiHeader> {
                       if (i != 0) SizedBox(width: 10.w),
                       Expanded(child: _buildKpiCard(pageCards[i])),
                     ],
-                    // لو الصفحة فيها كارت واحد بس، بنضيف مساحة فاضية بدل الكارت التاني
                     if (pageCards.length == 1) const Spacer(),
                   ],
                 );
@@ -206,7 +196,6 @@ class _CustomerKpiHeaderState extends State<CustomerKpiHeader> {
         mainAxisAlignment: MainAxisAlignment.center,
         mainAxisSize: MainAxisSize.min,
         children: [
-          // العنوان
           Text(
             data.title,
             textAlign: TextAlign.right,
@@ -218,7 +207,6 @@ class _CustomerKpiHeaderState extends State<CustomerKpiHeader> {
             ),
           ),
           SizedBox(height: 6.h),
-          // الرقم
           Text(
             data.value,
             textAlign: TextAlign.right,
@@ -232,7 +220,6 @@ class _CustomerKpiHeaderState extends State<CustomerKpiHeader> {
             ),
           ),
           SizedBox(height: 4.h),
-          // النسبة/الوصف — لون موحد لكل الكروت
           Text(
             data.subTitle,
             textAlign: TextAlign.right,

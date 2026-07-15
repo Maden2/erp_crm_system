@@ -44,4 +44,10 @@ class ApiConstants {
   static String updateWebsiteProduct(String id) => "/api/website-products/$id";
   static String deleteWebsiteProduct(String id) => "/api/website-products/$id";
   static String toggleWebsiteProductPublish(String id) => "/api/website-products/$id/publish";
+
+  // ================== CUSTOMERS ENDPOINTS (NEW) ==================
+  static const String customerStats = "/api/customers/stats";
+  static const String customersList = "/api/customers";
+  static const String topCustomers = "/api/customers/top";
+  static String customerDetails(String id) => "/api/customers/$id";
 }

@@ -20,4 +20,9 @@ class Routes {
   static const String orderDetails = '/order-details';
   static const String invoicesPage = '/invoicesPage';
   static const String profitsPage = '/profitsPage';
+  static const String customersPage = '/customersPage';
+  static const String customerDetails = '/customerDetails';
+  static const String complaintsPage = '/complaintsPage';
+  static const String complaintDetails = '/complaintDetails';
+  static const String notificationsPage = '/notificationsPage';
 }

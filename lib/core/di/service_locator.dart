@@ -99,6 +99,16 @@ import '../../features/invoices/presentation/manager/full_invoices_cubit.dart';
 
 // ================== PROFITS ==================
 import '../../features/profits/presentation/manager/profits_cubit.dart';
+
+// ================== CUSTOMERS ==================
+import '../../features/customers/presentation/manager/customer_cubit.dart';
+
+// ================== COMPLAINTS (NEW MODULE) ==================
+import '../../features/complaints/presentation/manager/complaints_cubit.dart';
+
+// ================== NOTIFICATIONS (NEW MODULE) ==================
+import '../../features/notifications/presentation/manager/notifications_cubit.dart';
+
 import '../api/api_constants.dart';
 import '../api/api_consumer.dart';
 import '../api/dio_consumer.dart';
@@ -291,4 +301,13 @@ Future<void> setupServiceLocator() async {
     getFullInvoiceStatusesUseCase: getIt<GetFullInvoiceStatusesUseCase>(),
     getFullInvoiceDetailsUseCase: getIt<GetFullInvoiceDetailsUseCase>(),
   ));
+
+  //  ================== CUSTOMERS MODULE ==================
+  getIt.registerFactory(() => CustomerCubit());
+
+  //  ================== COMPLAINTS MODULE (MOCK REGISTER) ==================
+  getIt.registerFactory(() => ComplaintsCubit());
+
+  //  ================== NOTIFICATIONS MODULE (MOCK REGISTER) ==================
+  getIt.registerFactory(() => NotificationsCubit());
 }

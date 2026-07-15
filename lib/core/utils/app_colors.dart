@@ -46,6 +46,7 @@ class AppColors {
   static const darkOliveGrey = Color(0xFF60655C);
   static const lightGrayText = Color(0xFF848688);
   static const mediumGray = Color(0xFF313131);
+  static const slateGray = Color(0xFF6B7280);
 
   static const graphiteGrey = Color(0xFF404040);
 

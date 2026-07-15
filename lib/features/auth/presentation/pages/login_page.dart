@@ -35,7 +35,7 @@ class _LoginPageState extends State<LoginPage> {
     super.initState();
     emailController.addListener(_validateInputs);
     passwordController.addListener(_validateInputs);
-    _validateInputs(); // ✅ استدعيها من الأول عشان الزرار يكون active
+    _validateInputs();
   }
 
   void _validateInputs() {
@@ -208,7 +208,7 @@ class _LoginPageState extends State<LoginPage> {
 
                   SizedBox(height: 20.h),
 
-                  Row(
+                 /* Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       const Text("ليس لديك حساب؟ "),
@@ -228,7 +228,7 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                       ),
                     ],
-                  ),
+                  ), */
 
                   SizedBox(height: 20.h),
                 ],

@@ -46,6 +46,12 @@ class TextStyles {
     color: AppColors.primary,
     fontFamily: fontFamily,
   );
+  static TextStyle font14lightBlueBold = TextStyle(
+    fontSize: 14.sp,
+    fontWeight: FontWeight.w700,
+    color: AppColors.lightBlue,
+    fontFamily: fontFamily,
+  );
   static TextStyle font12PrimaryRegular = TextStyle(
     fontSize: 12.sp,
     fontWeight: FontWeight.w400,
@@ -88,6 +94,13 @@ class TextStyles {
     fontSize: 12.sp,
     fontWeight: FontWeight.w400,
     color: AppColors.blackColor,
+    fontFamily: fontFamily,
+  );
+
+  static TextStyle font12mediumGrayMedium = TextStyle(
+    fontSize: 12.sp,
+    fontWeight: FontWeight.w500,
+    color: AppColors.mediumGray,
     fontFamily: fontFamily,
   );
 
@@ -295,6 +308,27 @@ class TextStyles {
     fontSize: 10.sp,
     fontWeight: FontWeight.w400,
     color: AppColors.charcoalGray,
+    fontFamily: fontFamily,
+  );
+
+  static TextStyle font10darkTextRegular = TextStyle(
+    fontSize: 10.sp,
+    fontWeight: FontWeight.w400,
+    color: AppColors.darkText,
+    fontFamily: fontFamily,
+  );
+
+  static TextStyle font10slateGrayRegular = TextStyle(
+    fontSize: 10.sp,
+    fontWeight: FontWeight.w400,
+    color: AppColors.slateGray,
+    fontFamily: fontFamily,
+  );
+
+  static TextStyle font8slateGrayRegular = TextStyle(
+    fontSize: 8.sp,
+    fontWeight: FontWeight.w400,
+    color: AppColors.slateGray,
     fontFamily: fontFamily,
   );
 

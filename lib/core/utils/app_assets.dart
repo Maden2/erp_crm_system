@@ -7,6 +7,7 @@ class AppAssets {
   static const String _iconsPath = "assets/images/icons/";
   static const String _ordersIconsPath = "assets/images/icons/orders/";
   static const String _moreIconsPath = "assets/images/icons/more/";
+  static const String _notificationsIconsPath = "assets/images/icons/notifications/";
 
   // --- Navigation Icons (Bottom NavBar) ---
   static const String homeSelected = "${_navIconsPath}home_selected.png";
@@ -99,6 +100,15 @@ class AppAssets {
   static const String cashPaymentIcon = '${_iconsPath}cash_payment_icon.svg';
   static const String downloadPdfIcon = '${_iconsPath}download_pdf_icon.svg';
   static const String shareInvoiceIcon = '${_iconsPath}share_invoice_icon.svg';
+  static const String complaintsMessageIcon = '${_iconsPath}complaints_message_icon.svg';
   static const String logoWhite = '${_iconsPath}logo_white.png';
   static const String logoColored = '${_iconsPath}logo_colored.png';
+
+  // ================== Notifications Icons (SVG) ==================
+  static const String notificationReadAll = "${_notificationsIconsPath}read_all_icon.svg";
+  static const String notificationNewOrder = "${_notificationsIconsPath}new_order_icon.svg";
+  static const String notificationLowStock = "${_notificationsIconsPath}low_stock_icon.svg";
+  static const String notificationSupport = "${_notificationsIconsPath}support_icon.svg";
+  static const String notificationSalesUp = "${_notificationsIconsPath}sales_up_icon.svg";
+  static const String notificationSystemUpdate = "${_notificationsIconsPath}system_update_icon.svg";
 }

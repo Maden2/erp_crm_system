@@ -65,7 +65,7 @@ class MorePage extends StatelessWidget {
                 _buildSectionTitle("العمليات"),
                 MenuTile(
                   title: "المخزون",
-                  subtitle: "متابعة الكميات والتنبيهات",
+                  subtitle: "متابعة الكميات والتنببهات",
                   icon: AppAssets.inventoryIcon,
                   onTap: () {},
                 ),
@@ -73,37 +73,32 @@ class MorePage extends StatelessWidget {
                   title: "العملاء",
                   subtitle: "بيانات وسجل العملاء",
                   icon: AppAssets.customersIcon,
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.pushNamed(context, Routes.customersPage);
+                  },
                 ),
 
                 SizedBox(height: 16.h),
                 _buildSectionTitle("الدعم والجودة"),
                 MenuTile(
-                  title: "الدعم الفني",
-                  subtitle: "تذاكر الدعم",
-                  icon: AppAssets.supportIcon,
-                  onTap: () {},
-                ),
-                MenuTile(
                   title: "الشكاوي",
                   subtitle: "إدارة الشكاوي الواردة",
                   icon: AppAssets.complaintsIcon,
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.pushNamed(context, Routes.complaintsPage);
+                  },
                 ),
 
                 SizedBox(height: 16.h),
                 _buildSectionTitle("التخصيص والنظام"),
                 MenuTile(
-                  title: "تخصيص المتجر",
-                  subtitle: "ألوان، خطوط، تصميم",
-                  icon: AppAssets.customizationIcon,
-                  onTap: () {},
-                ),
-                MenuTile(
                   title: "الأشعارات",
                   subtitle: "تنبيهات النظام",
                   icon: AppAssets.notificationsIcon,
-                  onTap: () {},
+                  // 🟢 ربط موديول الإشعارات بمسار الـ Routes الجديد بالملي
+                  onTap: () {
+                    Navigator.pushNamed(context, Routes.notificationsPage);
+                  },
                 ),
 
                 SizedBox(height: 16.h),

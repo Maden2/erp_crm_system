@@ -25,16 +25,16 @@ import '../features/navigation/presentation/pages/navigation_page.dart';
 // Products Imports
 import '../features/orders/Presentation/pages/order_details_page.dart';
 import '../features/orders/Presentation/pages/orders_page.dart';
-import '../features/products/domain/entities/website_product_entities.dart'; // 🟢 استدعاء كيانات الويب المطورة
-import '../features/products/presentation/manager/website_copy_product_cubit.dart'; // 🟢 حقن الكيوبيت الجديد للنسخ
-import '../features/products/presentation/manager/website_product_details_cubit.dart'; // 🟢 حقن الكيوبيت الجديد للتفاصيل
+import '../features/products/domain/entities/website_product_entities.dart';
+import '../features/products/presentation/manager/website_copy_product_cubit.dart';
+import '../features/products/presentation/manager/website_product_details_cubit.dart';
 import '../features/products/presentation/pages/add_warehouse_page.dart';
 import '../features/products/presentation/pages/copy_product_page.dart';
 import '../features/products/presentation/pages/product_details_page.dart';
 import '../features/products/presentation/pages/warehouse_history_page.dart';
 import '../features/products/presentation/pages/warehouses_management_page.dart';
 
-// 🟢 LIVE ORDERS IMPORTS
+//  LIVE ORDERS IMPORTS
 import '../features/orders/domain/entities/live_order_entity.dart';
 import '../features/orders/presentation/manager/live_orders_cubit.dart';
 
@@ -45,6 +45,17 @@ import '../features/invoices/presentation/pages/invoices_screen.dart';
 // ================== PROFITS ==================
 import '../features/profits/presentation/manager/profits_cubit.dart';
 import '../features/profits/presentation/pages/profits_screen.dart';
+
+// ================== CUSTOMERS ==================
+import '../features/customers/presentation/pages/customers_page.dart';
+import '../features/customers/presentation/pages/customer_details_page.dart';
+
+// ================== COMPLAINTS (NEW MODULE) ==================
+import '../features/complaints/presentation/pages/complaints_page.dart';
+import '../features/complaints/presentation/pages/complaint_details_page.dart';
+
+// ================== NOTIFICATIONS (NEW MODULE) ==================
+import '../features/notifications/presentation/pages/notifications_page.dart';
 
 import 'app_routes.dart';
 
@@ -99,6 +110,20 @@ class AppRouter {
     // ================== PROFITS ==================
       case Routes.profitsPage:
         return _profitsRoutes(settings);
+
+    // ================== CUSTOMERS ==================
+      case Routes.customersPage:
+      case Routes.customerDetails:
+        return _customerRoutes(settings, arguments);
+
+    // ================== COMPLAINTS ==================
+      case Routes.complaintsPage:
+      case Routes.complaintDetails:
+        return _complaintRoutes(settings, arguments);
+
+    // ================== NOTIFICATIONS ==================
+      case Routes.notificationsPage:
+        return _notificationRoutes(settings);
 
     // ================== DEFAULT ==================
       default:
@@ -167,17 +192,14 @@ class AppRouter {
         final productId = arguments as String;
         return MaterialPageRoute(
           builder: (_) => BlocProvider(
-            // 🟢 التحديث لحقن الـ WebsiteProductDetailsCubit الجديد والمطور للشاشة
             create: (_) => getIt<WebsiteProductDetailsCubit>()..fetchProductDetails(productId),
             child: ProductDetailsPage(productId: productId),
           ),
         );
       case Routes.copyProductPage:
-      // 🟢 حل الـ Exception الفوري: تحويل الـ Cast لـ WebsiteProductDetailEntity
         final product = arguments as WebsiteProductDetailEntity;
         return MaterialPageRoute(
           builder: (_) => BlocProvider(
-            // 🟢 التحديث لحقن الـ WebsiteCopyProductCubit الجديد لصفحة النسخ
             create: (_) => getIt<WebsiteCopyProductCubit>(),
             child: CopyProductPage(product: product),
           ),
@@ -252,6 +274,47 @@ class AppRouter {
       default:
         return _errorRoute(settings);
     }
+  }
+
+  // ------------------ 8. Customers Module ------------------
+  static Route<dynamic> _customerRoutes(RouteSettings settings, dynamic arguments) {
+    switch (settings.name) {
+      case Routes.customersPage:
+        return MaterialPageRoute(
+          builder: (_) => const CustomersPage(),
+        );
+      case Routes.customerDetails:
+        final customerId = arguments as String;
+        return MaterialPageRoute(
+          builder: (_) => CustomerDetailsPage(customerId: customerId),
+        );
+      default:
+        return _errorRoute(settings);
+    }
+  }
+
+  // ------------------ 9. Complaints Module ------------------
+  static Route<dynamic> _complaintRoutes(RouteSettings settings, dynamic arguments) {
+    switch (settings.name) {
+      case Routes.complaintsPage:
+        return MaterialPageRoute(
+          builder: (_) => const ComplaintsPage(),
+        );
+      case Routes.complaintDetails:
+        final complaintId = arguments as String;
+        return MaterialPageRoute(
+          builder: (_) => ComplaintDetailsPage(complaintId: complaintId),
+        );
+      default:
+        return _errorRoute(settings);
+    }
+  }
+
+  // ------------------ 10. Notifications Module ------------------
+  static Route<dynamic> _notificationRoutes(RouteSettings settings) {
+    return MaterialPageRoute(
+      builder: (_) => const NotificationsPage(),
+    );
   }
 
   // ------------------ Error Page ------------------

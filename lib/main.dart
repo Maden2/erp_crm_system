@@ -6,8 +6,6 @@ import 'core/di/service_locator.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  print(DateTime.now());
-
   await setupServiceLocator();
 
   runApp(const CRMApp());

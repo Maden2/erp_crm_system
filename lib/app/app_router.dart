@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:pivot/features/settings/presentation/pages/settings_page.dart'; // 🟢 استيراد شاشة الإعدادات الجديدة
+import 'package:pivot/features/settings/presentation/pages/settings_page.dart';
 import '../core/di/service_locator.dart';
 
 // Splash Import
 import '../features/invoices/presentation/manager/full_invoices_cubit.dart';
+import '../features/onboarding/presentation/manager/onboarding_cubit.dart';
+import '../features/onboarding/presentation/pages/onboarding_page.dart';
 import '../features/products/presentation/manager/website_warehouse_cubit.dart';
 import '../features/splash/presentation/manager/splash_cubit.dart';
 import '../features/splash/presentation/pages/splash_page.dart';
@@ -71,6 +73,13 @@ class AppRouter {
           builder: (_) => BlocProvider(
             create: (_) => getIt<SplashCubit>(),
             child: const SplashPage(),
+          ),
+        );
+      case Routes.onBoarding:
+        return MaterialPageRoute(
+          builder: (_) => BlocProvider(
+            create: (_) => getIt<OnboardingCubit>(),
+            child: const OnboardingPage(),
           ),
         );
       case Routes.login:
@@ -328,6 +337,8 @@ class AppRouter {
       builder: (_) => const SettingsPage(), // 🟢 فتح صفحة الإعدادات الموك الجديدة مباشرة بنجاح
     );
   }
+
+
 
   // ------------------ Error Page ------------------
   static Route<dynamic> _errorRoute(RouteSettings settings) {

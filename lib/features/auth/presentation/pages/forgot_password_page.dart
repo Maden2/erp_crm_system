@@ -17,21 +17,20 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
   bool isOtpSent = false;
   bool isButtonEnabled = false;
 
-  final TextEditingController phoneController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
   final TextEditingController otpController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-
-    phoneController.addListener(_validateInputs);
+    emailController.addListener(_validateInputs);
     otpController.addListener(_validateInputs);
   }
 
   void _validateInputs() {
     setState(() {
       if (!isOtpSent) {
-        isButtonEnabled = phoneController.text.isNotEmpty;
+        isButtonEnabled = emailController.text.isNotEmpty;
       } else {
         isButtonEnabled = otpController.text.isNotEmpty;
       }
@@ -40,7 +39,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
 
   @override
   void dispose() {
-    phoneController.dispose();
+    emailController.dispose();
     otpController.dispose();
     super.dispose();
   }
@@ -84,7 +83,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                     duration: const Duration(milliseconds: 300),
                     child: isOtpSent
                         ? _buildOtpSection()
-                        : _buildPhoneSection(),
+                        : _buildEmailSection(),
                   ),
                 ),
 
@@ -99,7 +98,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                         });
                       },
                       child: Text(
-                        "قم بتغيير رقم هاتفك",
+                        "قم بتغيير البريد الإلكتروني",
                         style: TextStyles.font12redRegular.copyWith(
                           color: Colors.blue,
                           fontWeight: FontWeight.bold,
@@ -117,38 +116,37 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
     );
   }
 
-  Widget _buildPhoneSection() {
+  Widget _buildEmailSection() {
     return Column(
       key: const ValueKey(1),
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: [
-        Text("اكتب رقم هاتفك", style: TextStyles.font12LightGreyRegular),
+        Text("اكتب بريدك الإلكتروني", style: TextStyles.font12LightGreyRegular),
         SizedBox(height: 16.h),
         AppTextField(
-          controller: phoneController,
-          label: "رقم الهاتف",
-          hintText: "(+84)",
+          controller: emailController,
+          label: "البريد الإلكتروني",
+          hintText: "example@mail.com",
         ),
         SizedBox(height: 12.h),
         Align(
           alignment: Alignment.centerRight,
           child: Text(
-            "لقد أرسلنا لك رمزاً للتحقق من رقم هاتفك",
+            "لقد أرسلنا لك رمزاً للتحقق من بريدك الإلكتروني",
             style: TextStyles.font14DarkGreyRegular,
           ),
         ),
         SizedBox(height: 32.h),
         AppTextButton(
           buttonText: "ارسال",
-
           onPressed: isButtonEnabled
               ? () {
-                  setState(() {
-                    isOtpSent = true;
-                    isButtonEnabled = false;
-                  });
-                }
+            setState(() {
+              isOtpSent = true;
+              isButtonEnabled = false;
+            });
+          }
               : null,
         ),
       ],
@@ -197,7 +195,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
         Align(
           alignment: Alignment.centerRight,
           child: Text(
-            "لقد أرسلنا لك رمزاً للتحقق من رقم هاتفك (+84) 0398829xxx .\nسينتهي هذا الرمز بعد 10 دقائق من هذه الرسالة. إذا لم تتلقَ رسالة.",
+            "لقد أرسلنا لك رمزاً للتحقق من بريدك الإلكتروني.\nسينتهي هذا الرمز بعد 10 دقائق من هذه الرسالة. إذا لم تتلقَ رسالة.",
             textAlign: TextAlign.right,
             style: TextStyles.font14DarkGreyRegular,
           ),
@@ -207,8 +205,8 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
           buttonText: "تغيير كلمة المرور",
           onPressed: isButtonEnabled
               ? () {
-                  Navigator.pushNamed(context, Routes.resetPassword);
-                }
+            Navigator.pushNamed(context, Routes.resetPassword);
+          }
               : null,
         ),
       ],

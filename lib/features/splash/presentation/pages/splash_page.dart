@@ -112,7 +112,11 @@ class _SplashPageState extends State<SplashPage>
           if (state is NavigateToHome) {
             Navigator.pushReplacementNamed(context, Routes.navigationPage);
           }
-          if (state is NavigateToLogin || state is NavigateToOnBoarding) {
+          // 🟢 تم فصل التوجيه بالملي هنا لتوجيه الأون بوردينج بشكل مستقل
+          if (state is NavigateToOnBoarding) {
+            Navigator.pushReplacementNamed(context, Routes.onBoarding);
+          }
+          if (state is NavigateToLogin) {
             Navigator.pushReplacementNamed(context, Routes.login);
           }
         },
@@ -194,9 +198,6 @@ class _SplashPageState extends State<SplashPage>
                         ),
                       ),
                       SizedBox(height: 20.h,)
-
-
-                      // الـ Loader بيظهر بنعومة في المرحلة البيضاء الأخيرة قبل النقلة
                     ],
                   ),
                 ),

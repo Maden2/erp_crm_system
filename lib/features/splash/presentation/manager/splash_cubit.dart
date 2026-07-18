@@ -16,7 +16,7 @@ class SplashCubit extends Cubit<SplashState> {
     if (destination == 'onboarding') {
       emit(NavigateToOnBoarding());
     } else if (destination == 'home') {
-      emit(NavigateToHome()); // 💡 ملحوظة: هنا ممكن بعدين ننادي getProfile للتأكد من صلاحية التوكن
+      emit(NavigateToHome());
     } else {
       emit(NavigateToLogin());
     }

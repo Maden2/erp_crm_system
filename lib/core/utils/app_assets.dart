@@ -47,12 +47,14 @@ class AppAssets {
   static const String analyticsHeaderBg =
       "${_imagesPath}analytics_header_bg.png";
 
+
   // --- Products & Categories Icons ---
   static const String categoryIcon = "${_iconsPath}category_icon.png";
   static const String emptyOrdersIcon = "${_iconsPath}empty_orders_icon.png";
   static const String supportTicketIcon =
       "${_imagesPath}support_ticket_icon.png";
   static const String emptyProductsIcon = "${_iconsPath}empty_products_icon.svg";
+  static const String onboardingImg = "${_iconsPath}onboarding_img.svg";
 
 
   // --- Order Details Icons (SVG) ---

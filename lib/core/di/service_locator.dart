@@ -7,6 +7,10 @@ import '../../features/customers/domain/repositories/client_repository.dart';
 import '../../features/splash/domain/usecases/check_auth_usecase.dart';
 import '../../features/splash/presentation/manager/splash_cubit.dart';
 
+// ================== ONBOARDING ==================
+import '../../features/onboarding/domain/usecases/cache_onboarding_usecase.dart';
+import '../../features/onboarding/presentation/manager/onboarding_cubit.dart';
+
 // ================== AUTH ==================
 import '../../features/auth/data/datasources/auth_local_data_source.dart';
 import '../../features/auth/data/datasources/auth_remote_data_source.dart';
@@ -159,6 +163,10 @@ Future<void> setupServiceLocator() async {
   // ================== SPLASH FEATURE ==================
   getIt.registerLazySingleton(() => CheckAuthUseCase(getIt<SharedPreferences>()));
   getIt.registerFactory(() => SplashCubit(getIt<CheckAuthUseCase>()));
+
+  // ================== ONBOARDING FEATURE ==================
+  getIt.registerLazySingleton(() => CacheOnboardingUseCase(getIt<SharedPreferences>()));
+  getIt.registerFactory(() => OnboardingCubit(getIt<CacheOnboardingUseCase>()));
 
   // ================== AUTH ==================
   getIt.registerLazySingleton<AuthRemoteDataSource>(

@@ -20,6 +20,9 @@ import '../../features/auth/domain/usecases/login_use_case.dart';
 import '../../features/auth/domain/usecases/get_current_user_use_case.dart';
 import '../../features/auth/presentation/manager/auth_cubit.dart';
 import '../../features/auth/domain/usecases/logout_use_case.dart';
+import '../../features/auth/domain/usecases/request_otp_use_case.dart';
+import '../../features/auth/domain/usecases/verify_otp_use_case.dart';
+import '../../features/auth/domain/usecases/reset_password_use_case.dart'; // 🟢 تم إضافة الـ Import هنا
 
 // ================== HOME ==================
 import '../../features/home/data/datasources/home_remote_data_source.dart';
@@ -187,12 +190,18 @@ Future<void> setupServiceLocator() async {
   getIt.registerLazySingleton(() => LoginUseCase(getIt<AuthRepository>()));
   getIt.registerLazySingleton(() => GetCurrentUserUseCase(getIt<AuthRepository>()));
   getIt.registerLazySingleton(() => LogoutUseCase(getIt<AuthRepository>()));
+  getIt.registerLazySingleton(() => RequestOtpUseCase(getIt<AuthRepository>()));
+  getIt.registerLazySingleton(() => VerifyOtpUseCase(getIt<AuthRepository>()));
+  getIt.registerLazySingleton(() => ResetPasswordUseCase(getIt<AuthRepository>())); // 🟢 تسجيل الـ UseCase الجديدة هنا
 
   getIt.registerFactory(
         () => AuthCubit(
       getIt<LoginUseCase>(),
       getIt<GetCurrentUserUseCase>(),
       getIt<LogoutUseCase>(),
+      getIt<RequestOtpUseCase>(),
+      getIt<VerifyOtpUseCase>(),
+      getIt<ResetPasswordUseCase>(), // 🟢 تمرير الـ UseCase رقم 6 بالملي
     ),
   );
 
@@ -236,24 +245,20 @@ Future<void> setupServiceLocator() async {
 
 
   //  ================== WEBSITE PRODUCTS (SERVER REAL LINK) ==================
-  // 1. Data Source
   getIt.registerLazySingleton<WebsiteProductRemoteDataSource>(
         () => WebsiteProductRemoteDataSourceImpl(getIt<ApiConsumer>()),
   );
 
-  // 2. Repository
   getIt.registerLazySingleton<WebsiteProductRepository>(
         () => WebsiteProductRepositoryImpl(getIt<WebsiteProductRemoteDataSource>()),
   );
 
-  // 3. Use Cases
   getIt.registerLazySingleton(() => GetWebsiteProductsUseCase(getIt<WebsiteProductRepository>()));
   getIt.registerLazySingleton(() => GetWebsiteCategoriesUseCase(getIt<WebsiteProductRepository>()));
   getIt.registerLazySingleton(() => GetWebsiteProductDetailsUseCase(getIt<WebsiteProductRepository>()));
   getIt.registerLazySingleton(() => TogglePublishStateUseCase(getIt<WebsiteProductRepository>()));
   getIt.registerLazySingleton(() => DeleteWebsiteProductUseCase(getIt<WebsiteProductRepository>()));
 
-  // 4. Cubits
   getIt.registerFactory(() => WebsiteProductsCubit(
     getWebsiteProductsUseCase: getIt<GetWebsiteProductsUseCase>(),
     togglePublishStateUseCase: getIt<TogglePublishStateUseCase>(),
@@ -348,12 +353,10 @@ Future<void> setupServiceLocator() async {
         () => ClientRepositoryImpl(getIt<ClientRemoteDataSource>()),
   );
 
-  // Use Cases
   getIt.registerLazySingleton(() => GetClientStatsUseCase(getIt<ClientRepository>()));
   getIt.registerLazySingleton(() => GetClientsListUseCase(getIt<ClientRepository>()));
   getIt.registerLazySingleton(() => GetClientDetailsUseCase(getIt<ClientRepository>()));
 
-  // Cubit
   getIt.registerFactory(() => ClientCubit(
     getClientStatsUseCase: getIt<GetClientStatsUseCase>(),
     getClientsListUseCase: getIt<GetClientsListUseCase>(),
@@ -412,13 +415,13 @@ Future<void> setupServiceLocator() async {
   getIt.registerLazySingleton(() => GenerateFreshInsightsUseCase(getIt<AiAssistantRepository>()));
   getIt.registerLazySingleton(() => MarkInsightAsSeenUseCase(getIt<AiAssistantRepository>()));
   getIt.registerLazySingleton(() => SubmitAiFeedbackUseCase(getIt<AiAssistantRepository>()));
-  getIt.registerLazySingleton(() => GetAdminFeedbackUseCase(getIt<AiAssistantRepository>())); // 🟢 حقن الـ Use Case الخامسة والأخيرة بالملي
+  getIt.registerLazySingleton(() => GetAdminFeedbackUseCase(getIt<AiAssistantRepository>()));
 
   getIt.registerFactory(() => AiAssistantCubit(
     getAiInsightsUseCase: getIt<GetAiInsightsUseCase>(),
     generateFreshInsightsUseCase: getIt<GenerateFreshInsightsUseCase>(),
     markInsightAsSeenUseCase: getIt<MarkInsightAsSeenUseCase>(),
     submitAiFeedbackUseCase: getIt<SubmitAiFeedbackUseCase>(),
-    getAdminFeedbackUseCase: getIt<GetAdminFeedbackUseCase>(), // 🟢 تمرير الـ Use Case المضافة حديثاً للـ Cubit
+    getAdminFeedbackUseCase: getIt<GetAdminFeedbackUseCase>(),
   ));
 }

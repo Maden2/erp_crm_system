@@ -9,7 +9,7 @@ abstract class AuthRepository {
     required bool rememberMe,
   });
 
-  Future<Either<Failure, UserEntity>> getCurrentUser(); // 💡 الدالة الجديدة
+  Future<Either<Failure, UserEntity>> getCurrentUser();
 
   Future<Either<Failure, Unit>> logout();
 
@@ -17,5 +17,16 @@ abstract class AuthRepository {
     required String name,
     required String email,
     required String password,
+  });
+
+  // 💡 Forgot Password Interfaces
+  Future<Either<Failure, String>> requestOtp({required String email});
+  Future<Either<Failure, String>> verifyOtp({required String email, required String otp});
+
+  // 🟢 الخطوة الثالثة والأخيرة لتغيير كلمة المرور
+  Future<Either<Failure, void>> resetPassword({
+    required String resetToken,
+    required String newPassword,
+    required String confirmPassword,
   });
 }

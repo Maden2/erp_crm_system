@@ -67,7 +67,6 @@ class AppRouter {
     final arguments = settings.arguments;
 
     switch (settings.name) {
-    // ================== SPLASH & AUTH ==================
       case Routes.splash:
         return MaterialPageRoute(
           builder: (_) => BlocProvider(
@@ -89,64 +88,52 @@ class AppRouter {
       case Routes.signup:
       case Routes.phoneNumber:
       case Routes.signupSuccess:
-        return _authRoutes(settings);
+        return _authRoutes(settings, arguments); // 🟢 قمنا بتمرير الـ arguments هنا
 
-    // ================== MAIN APP & HOME ==================
       case Routes.navigationPage:
       case Routes.dashboard:
         return _homeRoutes(settings);
 
-    // ================== PRODUCTS ==================
       case Routes.productsPage:
       case Routes.productDetails:
       case Routes.copyProductPage:
         return _productRoutes(settings, arguments);
 
-    // ================== WAREHOUSES ==================
       case Routes.warehousesManagement:
       case Routes.addWarehouse:
       case Routes.warehouseHistory:
         return _warehouseRoutes(settings);
 
-    // ================== ORDERS ==================
       case Routes.ordersPage:
       case Routes.orderDetails:
         return _orderRoutes(settings, arguments);
 
-    // ================== INVOICES ==================
       case Routes.invoicesPage:
         return _invoiceRoutes(settings);
 
-    // ================== PROFITS ==================
       case Routes.profitsPage:
         return _profitsRoutes(settings);
 
-    // ================== CUSTOMERS ==================
       case Routes.customersPage:
       case Routes.customerDetails:
         return _customerRoutes(settings, arguments);
 
-    // ================== COMPLAINTS ==================
       case Routes.complaintsPage:
       case Routes.complaintDetails:
         return _complaintRoutes(settings, arguments);
 
-    // ================== NOTIFICATIONS ==================
       case Routes.notificationsPage:
         return _notificationRoutes(settings);
 
-    // ================== SETTINGS MODULE (NEW) ==================
-      case Routes.settingsPage: // 🟢 كيس التوجيه لصفحة الإعدادات الموك الجديدة
+      case Routes.settingsPage:
         return _settingsRoutes(settings);
 
-    // ================== DEFAULT ==================
       default:
         return _errorRoute(settings);
     }
   }
 
-  // ------------------ 1. Auth Module ------------------
-  static Route<dynamic> _authRoutes(RouteSettings settings) {
+  static Route<dynamic> _authRoutes(RouteSettings settings, dynamic arguments) {
     switch (settings.name) {
       case Routes.login:
         return MaterialPageRoute(
@@ -156,9 +143,20 @@ class AppRouter {
           ),
         );
       case Routes.forgotPassword:
-        return MaterialPageRoute(builder: (_) => const ForgotPasswordPage());
+        return MaterialPageRoute(
+          builder: (_) => BlocProvider.value(
+            value: getIt<AuthCubit>(),
+            child: const ForgotPasswordPage(),
+          ),
+        );
       case Routes.resetPassword:
-        return MaterialPageRoute(builder: (_) => const ResetPasswordPage());
+        return MaterialPageRoute(
+          settings: settings,
+          builder: (_) => BlocProvider.value(
+            value: getIt<AuthCubit>(),
+            child: ResetPasswordPage(token: arguments as String?), // 🟢 تمرير التوكن مباشرة للـ Constructor
+          ),
+        );
       case Routes.success:
         return MaterialPageRoute(builder: (_) => const SuccessPage());
       case Routes.signup:
@@ -172,7 +170,6 @@ class AppRouter {
     }
   }
 
-  // ------------------ 2. Home Module ------------------
   static Route<dynamic> _homeRoutes(RouteSettings settings) {
     switch (settings.name) {
       case Routes.navigationPage:
@@ -195,7 +192,6 @@ class AppRouter {
     }
   }
 
-  // ------------------ 3. Product Module ------------------
   static Route<dynamic> _productRoutes(RouteSettings settings, dynamic arguments) {
     switch (settings.name) {
       case Routes.productsPage:
@@ -223,7 +219,6 @@ class AppRouter {
     }
   }
 
-  // ------------------ 4. Warehouse Module ------------------
   static Route<dynamic> _warehouseRoutes(RouteSettings settings) {
     switch (settings.name) {
       case Routes.warehousesManagement:
@@ -242,7 +237,6 @@ class AppRouter {
     }
   }
 
-  // ------------------ 5. Order Module ------------------
   static Route<dynamic> _orderRoutes(RouteSettings settings, dynamic arguments) {
     switch (settings.name) {
       case Routes.ordersPage:
@@ -260,7 +254,6 @@ class AppRouter {
     }
   }
 
-  // ------------------ 6. Invoice Module ------------------
   static Route<dynamic> _invoiceRoutes(RouteSettings settings) {
     switch (settings.name) {
       case Routes.invoicesPage:
@@ -275,7 +268,6 @@ class AppRouter {
     }
   }
 
-  // ------------------ 7. Profits Module ------------------
   static Route<dynamic> _profitsRoutes(RouteSettings settings) {
     switch (settings.name) {
       case Routes.profitsPage:
@@ -290,7 +282,6 @@ class AppRouter {
     }
   }
 
-  // ------------------ 8. Customers Module ------------------
   static Route<dynamic> _customerRoutes(RouteSettings settings, dynamic arguments) {
     switch (settings.name) {
       case Routes.customersPage:
@@ -307,7 +298,6 @@ class AppRouter {
     }
   }
 
-  // ------------------ 9. Complaints Module ------------------
   static Route<dynamic> _complaintRoutes(RouteSettings settings, dynamic arguments) {
     switch (settings.name) {
       case Routes.complaintsPage:
@@ -324,23 +314,18 @@ class AppRouter {
     }
   }
 
-  // ------------------ 10. Notifications Module ------------------
   static Route<dynamic> _notificationRoutes(RouteSettings settings) {
     return MaterialPageRoute(
       builder: (_) => const NotificationsPage(),
     );
   }
 
-  // ------------------ 11. Settings Module ------------------
   static Route<dynamic> _settingsRoutes(RouteSettings settings) {
     return MaterialPageRoute(
-      builder: (_) => const SettingsPage(), // 🟢 فتح صفحة الإعدادات الموك الجديدة مباشرة بنجاح
+      builder: (_) => const SettingsPage(),
     );
   }
 
-
-
-  // ------------------ Error Page ------------------
   static Route<dynamic> _errorRoute(RouteSettings settings) {
     return MaterialPageRoute(
       builder: (_) => Scaffold(

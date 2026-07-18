@@ -1,0 +1,21 @@
+import 'package:dartz/dartz.dart';
+import '../../../../core/error/failures.dart';
+import '../repositories/auth_repository.dart';
+
+class ResetPasswordUseCase {
+  final AuthRepository repository;
+
+  ResetPasswordUseCase(this.repository);
+
+  Future<Either<Failure, void>> call({
+    required String resetToken,
+    required String newPassword,
+    required String confirmPassword,
+  }) {
+    return repository.resetPassword(
+      resetToken: resetToken,
+      newPassword: newPassword,
+      confirmPassword: confirmPassword,
+    );
+  }
+}

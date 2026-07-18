@@ -1,5 +1,5 @@
 class ApiConstants {
-  static const String baseUrl = "https://backend-crm-pivot.vercel.app";
+  static const String baseUrl = "https://backend-crm-pivot-zdth.vercel.app";
 
   // ================== AUTH ENDPOINTS ==================
   static const String login = "/api/auth/login";

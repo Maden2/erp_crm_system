@@ -9,9 +9,20 @@ abstract class AuthRemoteDataSource {
     bool rememberMe = true,
   });
 
-  Future<UserModel> getCurrentUser(); // 💡 الدالة الجديدة
+  Future<UserModel> getCurrentUser();
 
   Future<void> logout();
+
+  // 💡 Forgot Password Methods
+  Future<String> requestOtp({required String email});
+  Future<String> verifyOtp({required String email, required String otp});
+
+  // 🟢 الخطوة الثالثة لتغيير كلمة المرور بالـ Token
+  Future<Map<String, dynamic>> resetPassword({
+    required String resetToken,
+    required String newPassword,
+    required String confirmPassword,
+  });
 }
 
 class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
@@ -34,12 +45,11 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       },
     );
 
-    return UserModel.fromJson(response); // Clean! مفيش كاش هنا خلاص
+    return UserModel.fromJson(response);
   }
 
   @override
   Future<UserModel> getCurrentUser() async {
-    // 📥 نداء الـ GET ريكويست، والـ Interceptor هيحط التوكن أوتوماتيك في الهيدر
     final response = await api.get(
       ApiConstants.getCurrentUser,
     );
@@ -50,5 +60,42 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   @override
   Future<void> logout() async {
     await api.post(ApiConstants.logout);
+  }
+
+  // 💡 Forgot Password Implementation
+  @override
+  Future<String> requestOtp({required String email}) async {
+    final response = await api.post(
+      ApiConstants.forgotPasswordRequest,
+      data: {"email": email},
+    );
+    return response['data']['message'];
+  }
+
+  @override
+  Future<String> verifyOtp({required String email, required String otp}) async {
+    final response = await api.post(
+      ApiConstants.forgotPasswordVerify,
+      data: {"email": email, "otp": otp},
+    );
+    return response['data']['resetToken'];
+  }
+
+  // 🟢 تنفيذ ميثود تغيير كلمة المرور النهائية بالملي
+  @override
+  Future<Map<String, dynamic>> resetPassword({
+    required String resetToken,
+    required String newPassword,
+    required String confirmPassword,
+  }) async {
+    final response = await api.post(
+      ApiConstants.forgotPasswordReset,
+      data: {
+        "resetToken": resetToken,
+        "newPassword": newPassword,
+        "confirmPassword": confirmPassword,
+      },
+    );
+    return response;
   }
 }

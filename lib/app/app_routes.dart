@@ -25,4 +25,5 @@ class Routes {
   static const String complaintsPage = '/complaintsPage';
   static const String complaintDetails = '/complaintDetails';
   static const String notificationsPage = '/notificationsPage';
+  static const String settingsPage = '/settingsPage';
 }

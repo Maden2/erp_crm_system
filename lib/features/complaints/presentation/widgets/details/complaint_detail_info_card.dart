@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pivot/core/utils/app_colors.dart';
-import 'package:pivot/core/utils/app_styles.dart';
-import '../../../domain/entities/complaint_entities.dart';
+import '../../../domain/entities/ticket_entities.dart';
 
 class ComplaintDetailInfoCard extends StatelessWidget {
-  final ComplaintItemEntity complaint;
+  final TicketDetailEntity complaint;
 
   const ComplaintDetailInfoCard({super.key, required this.complaint});
 
   @override
   Widget build(BuildContext context) {
-    final bool isOpen = complaint.statusLabel == "مفتوحة";
+    final bool isOpen = complaint.status == "open" || complaint.status == "مفتوحة";
+    final String statusDisplay = isOpen ? "مفتوحة" : "مغلقة";
 
     return Container(
       width: double.infinity,
@@ -21,8 +21,6 @@ class ComplaintDetailInfoCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(8.r),
         border: Border.all(color: const Color(0xFFF1F5F9)),
       ),
-      // 🟢 نفس البنية اللي ظبطناها في ComplaintCard (Row بـ textDirection.ltr يضمن نفس المحاذاة)
-      // بس من غير الأيقونة والـ SizedBox بتاعتها خالص
       child: Row(
         textDirection: TextDirection.ltr,
         children: [
@@ -30,7 +28,6 @@ class ComplaintDetailInfoCard extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // 🟢 الاسم والتاريخ في نفس السطر
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -38,16 +35,16 @@ class ComplaintDetailInfoCard extends StatelessWidget {
                       complaint.customerName,
                       style: TextStyle(
                         fontFamily: 'Cairo',
-                        fontSize: 8.sp,
+                        fontSize: 10.sp,
                         fontWeight: FontWeight.w400,
                         color: const Color(0xFF6B7280),
                       ),
                     ),
                     Text(
-                      complaint.date,
+                      complaint.date.length > 10 ? complaint.date.substring(0, 10) : complaint.date,
                       style: TextStyle(
                         fontFamily: 'Cairo',
-                        fontSize: 8.sp,
+                        fontSize: 10.sp,
                         fontWeight: FontWeight.w400,
                         color: const Color(0xFF6B7280),
                       ),
@@ -60,9 +57,9 @@ class ComplaintDetailInfoCard extends StatelessWidget {
                   textAlign: TextAlign.right,
                   style: TextStyle(
                     fontFamily: 'Cairo',
-                    fontSize: 11.sp,
-                    fontWeight: FontWeight.w400,
-                    color: const Color(0xFF6B7280),
+                    fontSize: 13.sp,
+                    fontWeight: FontWeight.bold,
+                    color: const Color(0xFF1E293B),
                   ),
                 ),
                 SizedBox(height: 8.h),
@@ -78,7 +75,7 @@ class ComplaintDetailInfoCard extends StatelessWidget {
                     borderRadius: BorderRadius.circular(6.r),
                   ),
                   child: Text(
-                    complaint.statusLabel,
+                    statusDisplay,
                     style: TextStyle(
                       fontFamily: 'Cairo',
                       fontSize: 10.sp,

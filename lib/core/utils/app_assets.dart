@@ -111,4 +111,11 @@ class AppAssets {
   static const String notificationSupport = "${_notificationsIconsPath}support_icon.svg";
   static const String notificationSalesUp = "${_notificationsIconsPath}sales_up_icon.svg";
   static const String notificationSystemUpdate = "${_notificationsIconsPath}system_update_icon.svg";
+
+  // ================== Settings Icons (SVG) (NEW) ==================
+  static const String settingsAccountIcon = "${_iconsPath}settings_account_icon.svg";
+  static const String settingsLanguageIcon = "${_iconsPath}settings_language_icon.svg";
+  static const String settingsConnectionIcon = "${_iconsPath}settings_connection_icon.svg";
+  static const String settingsNotificationIcon = "${_iconsPath}settings_notification_icon.svg";
+  static const String settingsEditIcon = "${_iconsPath}settings_edit_icon.svg";
 }

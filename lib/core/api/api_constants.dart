@@ -45,9 +45,28 @@ class ApiConstants {
   static String deleteWebsiteProduct(String id) => "/api/website-products/$id";
   static String toggleWebsiteProductPublish(String id) => "/api/website-products/$id/publish";
 
-  // ================== CUSTOMERS ENDPOINTS (NEW) ==================
+  // ================== CUSTOMERS ENDPOINTS ==================
   static const String customerStats = "/api/customers/stats";
   static const String customersList = "/api/customers";
   static const String topCustomers = "/api/customers/top";
   static String customerDetails(String id) => "/api/customers/$id";
+
+  // ================== COMPLAINTS (TICKETS) ENDPOINTS  ==================
+  static const String complaintsListAndStats = "/api/complaints";
+  static const String createTestimonial = "/api/complaints/testimonials";
+  static String complaintDetails(String id) => "/api/complaints/$id";
+  static String updateComplaintStatus(String id) => "/api/complaints/$id";
+
+  // ================== NOTIFICATIONS (NOTICES) ENDPOINTS  ==================
+  static const String notifications = "/api/notifications";
+  static const String markAllNotificationsRead = "/api/notifications/read-all";
+  static String markNotificationAsRead(String id) => "/api/notifications/$id/read";
+  static String deleteNotification(String id) => "/api/notifications/$id";
+
+  // ================== AI INSIGHTS ENDPOINTS (NEW MODULE) ==================
+  static const String aiInsights = "/api/ai/insights";
+  static const String generateAiInsights = "/api/ai/insights/generate";
+  static const String aiInsightsFeedback = "/api/ai/insights/feedback";
+  static String markAiInsightSeen(String id) => "/api/ai/insights/$id/seen";
+  static const String getAdminFeedback = "/api/ai/insights/admin/feedback";
 }

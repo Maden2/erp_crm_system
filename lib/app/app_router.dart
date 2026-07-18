@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:pivot/features/settings/presentation/pages/settings_page.dart'; // 🟢 استيراد شاشة الإعدادات الجديدة
 import '../core/di/service_locator.dart';
 
 // Splash Import
@@ -124,6 +125,10 @@ class AppRouter {
     // ================== NOTIFICATIONS ==================
       case Routes.notificationsPage:
         return _notificationRoutes(settings);
+
+    // ================== SETTINGS MODULE (NEW) ==================
+      case Routes.settingsPage: // 🟢 كيس التوجيه لصفحة الإعدادات الموك الجديدة
+        return _settingsRoutes(settings);
 
     // ================== DEFAULT ==================
       default:
@@ -314,6 +319,13 @@ class AppRouter {
   static Route<dynamic> _notificationRoutes(RouteSettings settings) {
     return MaterialPageRoute(
       builder: (_) => const NotificationsPage(),
+    );
+  }
+
+  // ------------------ 11. Settings Module ------------------
+  static Route<dynamic> _settingsRoutes(RouteSettings settings) {
+    return MaterialPageRoute(
+      builder: (_) => const SettingsPage(), // 🟢 فتح صفحة الإعدادات الموك الجديدة مباشرة بنجاح
     );
   }
 

@@ -16,6 +16,8 @@ class ComplaintDetailTicketSummary extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String formattedOrderDate = orderDate.length > 10 ? orderDate.substring(0, 10) : orderDate;
+
     return Container(
       width: double.infinity,
       padding: EdgeInsets.all(16.r),
@@ -37,17 +39,16 @@ class ComplaintDetailTicketSummary extends StatelessWidget {
             ),
           ),
           SizedBox(height: 16.h),
-          _buildDetailRow("رقم الطلب", orderNumber),
+          _buildDetailRow("رقم الطلب", orderNumber.isNotEmpty ? orderNumber : "غير محدد"),
           const Divider(color: Color(0xFFF1F5F9), height: 24),
-          _buildDetailRow("المنتج", productName),
+          _buildDetailRow("المنتج", productName.isNotEmpty ? productName : "لا يوجد منتج متاح"),
           const Divider(color: Color(0xFFF1F5F9), height: 24),
-          _buildDetailRow("تاريخ الطلب", orderDate),
+          _buildDetailRow("تاريخ الطلب", formattedOrderDate.isNotEmpty ? formattedOrderDate : "غير محدد"),
         ],
       ),
     );
   }
 
-  // 🟢 اللابل فوق، والقيمة تحته في سطر منفصل
   Widget _buildDetailRow(String label, String value) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -70,7 +71,7 @@ class ComplaintDetailTicketSummary extends StatelessWidget {
             fontFamily: 'Cairo',
             fontSize: 12.sp,
             fontWeight: FontWeight.bold,
-            color: Color(0xFF111827),
+            color: const Color(0xFF111827),
           ),
         ),
       ],

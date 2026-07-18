@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pivot/core/utils/app_colors.dart';
-import 'package:pivot/core/utils/app_styles.dart';
 
 class ComplaintsKpiHeader extends StatelessWidget {
   final int total;
   final int open;
   final int closed;
-  final int rate;
+  final String rate;
 
   const ComplaintsKpiHeader({
     super.key,
@@ -30,7 +29,7 @@ class ComplaintsKpiHeader extends StatelessWidget {
           SizedBox(width: 6.w),
           _buildKpiCard("مغلقة", "$closed"),
           SizedBox(width: 6.w),
-          _buildKpiCard("نسبة الإغلاق", "$rate%"),
+          _buildKpiCard("نسبة الإغلاق", rate.contains("%") ? rate : "$rate%"),
         ],
       ),
     );

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:pivot/core/utils/app_colors.dart';
-
 import '../../../../../core/utils/app_assets.dart';
 
 class ComplaintDetailTextCard extends StatelessWidget {
@@ -45,7 +44,6 @@ class ComplaintDetailTextCard extends StatelessWidget {
                   color: const Color(0xFF111827),
                 ),
               ),
-
             ],
           ),
           SizedBox(height: 12.h),
@@ -57,7 +55,7 @@ class ComplaintDetailTextCard extends StatelessWidget {
               borderRadius: BorderRadius.circular(8.r),
             ),
             child: Text(
-              description,
+              description.isNotEmpty ? description : "لا يوجد تفاصيل إضافية لنص الشكوى.",
               style: TextStyle(
                 fontFamily: 'Cairo',
                 fontSize: 12.sp,

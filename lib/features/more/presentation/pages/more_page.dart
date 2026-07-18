@@ -52,7 +52,7 @@ class MorePage extends StatelessWidget {
                     Navigator.pushNamed(context, Routes.invoicesPage);
                   },
                 ),
-              /*  MenuTile(
+                /*  MenuTile(
                   title: "الأرباح",
                   subtitle: "تحليل الأرباح وصافي الدخل",
                   icon: AppAssets.profitsMoreIcon,
@@ -63,7 +63,7 @@ class MorePage extends StatelessWidget {
 
                 SizedBox(height: 16.h),
                 _buildSectionTitle("العمليات"),
-               /* MenuTile(
+                /* MenuTile(
                   title: "المخزون",
                   subtitle: "متابعة الكميات والتنببهات",
                   icon: AppAssets.inventoryIcon,
@@ -95,7 +95,6 @@ class MorePage extends StatelessWidget {
                   title: "الأشعارات",
                   subtitle: "تنبيهات النظام",
                   icon: AppAssets.notificationsIcon,
-                  // 🟢 ربط موديول الإشعارات بمسار الـ Routes الجديد بالملي
                   onTap: () {
                     Navigator.pushNamed(context, Routes.notificationsPage);
                   },
@@ -107,8 +106,11 @@ class MorePage extends StatelessWidget {
                   title: "الاعدادات",
                   subtitle: "الحساب، اللغة، الدفع",
                   icon: AppAssets.settingsIcon,
-                  onTap: () {},
-                ),*/
+                  // 🟢 تم ربط شاشة الإعدادات الجديدة بمسار الـ Routes الحقيقي بالملي
+                  onTap: () {
+                    Navigator.pushNamed(context, Routes.settingsPage);
+                  },
+                ), */
 
                 _buildLogoutButton(),
 

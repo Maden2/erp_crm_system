@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pivot/core/utils/app_colors.dart';
 import '../../../../core/widgets/app_text_button.dart';
+import '../manager/ticket_cubit.dart';
 
 class ComplaintFilterSheet extends StatefulWidget {
-  const ComplaintFilterSheet({super.key});
+  final TicketCubit ticketCubit;
+  const ComplaintFilterSheet({super.key, required this.ticketCubit});
 
   @override
   State<ComplaintFilterSheet> createState() => _ComplaintFilterSheetState();
@@ -13,6 +15,20 @@ class ComplaintFilterSheet extends StatefulWidget {
 class _ComplaintFilterSheetState extends State<ComplaintFilterSheet> {
   String selectedStatus = "الكل";
   String selectedTime = "اليوم";
+
+  // تحويل النصوص العربية لقيم الـ API المقبولة لايف
+  String? _getMappedStatus() {
+    if (selectedStatus == "مفتوحة") return "open";
+    if (selectedStatus == "مغلقة") return "closed";
+    return "all";
+  }
+
+  String? _getMappedTime() {
+    if (selectedTime == "اليوم") return "today";
+    if (selectedTime == "هذا الأسبوع") return "this_week";
+    if (selectedTime == "هذا الشهر") return "this_month";
+    return null;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -59,11 +75,11 @@ class _ComplaintFilterSheetState extends State<ComplaintFilterSheet> {
             children: ["مغلقة", "مفتوحة", "الكل"]
                 .map(
                   (st) => _buildChip(
-                    st,
-                    selectedStatus == st,
+                st,
+                selectedStatus == st,
                     () => setState(() => selectedStatus = st),
-                  ),
-                )
+              ),
+            )
                 .toList(),
           ),
           SizedBox(height: 20.h),
@@ -82,11 +98,11 @@ class _ComplaintFilterSheetState extends State<ComplaintFilterSheet> {
             children: ["هذا الشهر", "هذا الأسبوع", "اليوم"]
                 .map(
                   (tm) => _buildChip(
-                   tm ,
-                    selectedTime == tm,
+                tm,
+                selectedTime == tm,
                     () => setState(() => selectedTime = tm),
-                  ),
-                )
+              ),
+            )
                 .toList(),
           ),
           SizedBox(height: 20.h),
@@ -131,7 +147,13 @@ class _ComplaintFilterSheetState extends State<ComplaintFilterSheet> {
               Expanded(
                 child: AppTextButton(
                   buttonText: "تطبيق الفلتر",
-                  onPressed: () => Navigator.pop(context),
+                  onPressed: () {
+                    widget.ticketCubit.fetchTickets(
+                      status: _getMappedStatus(),
+                      dateFilter: _getMappedTime(),
+                    );
+                    Navigator.pop(context);
+                  },
                 ),
               ),
               SizedBox(width: 12.w),
@@ -144,7 +166,10 @@ class _ComplaintFilterSheetState extends State<ComplaintFilterSheet> {
                       borderRadius: BorderRadius.circular(12.r),
                     ),
                   ),
-                  onPressed: () => Navigator.pop(context),
+                  onPressed: () {
+                    widget.ticketCubit.fetchTickets();
+                    Navigator.pop(context);
+                  },
                   child: const Text(
                     "إعادة تعيين",
                     style: TextStyle(
@@ -168,9 +193,7 @@ class _ComplaintFilterSheetState extends State<ComplaintFilterSheet> {
         margin: EdgeInsets.only(left: 8.w),
         padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
         decoration: BoxDecoration(
-          color: isSelected
-              ? AppColors.primary.withOpacity(0.05)
-              : Colors.white,
+          color: isSelected ? AppColors.primary.withOpacity(0.05) : Colors.white,
           borderRadius: BorderRadius.circular(20.r),
           border: Border.all(
             color: isSelected ? AppColors.primary : const Color(0xFFE2E8F0),

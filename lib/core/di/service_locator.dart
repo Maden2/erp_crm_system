@@ -112,11 +112,29 @@ import '../../features/customers/domain/usecases/get_client_stats_usecase.dart';
 import '../../features/customers/domain/usecases/get_clients_list_usecase.dart';
 import '../../features/customers/presentation/manager/client_cubit.dart';
 
-// ================== COMPLAINTS (NEW MODULE) ==================
+// ================== COMPLAINTS (OLD MODULE COEXISTING) ==================
 import '../../features/complaints/presentation/manager/complaints_cubit.dart';
 
-// ================== NOTIFICATIONS (NEW MODULE) ==================
-import '../../features/notifications/presentation/manager/notifications_cubit.dart';
+// ================== COMPLAINTS REAL API TICKETS (SERVER REAL LINK) ==================
+import '../../features/complaints/data/datasources/ticket_remote_data_source.dart';
+import '../../features/complaints/data/repositories/ticket_repository_impl.dart';
+import '../../features/complaints/domain/repositories/ticket_repository.dart';
+import '../../features/complaints/domain/usecases/ticket_usecases.dart';
+import '../../features/complaints/presentation/manager/ticket_cubit.dart';
+
+// ================== NOTIFICATIONS REAL API (NEW MODULE INJECTION) ==================
+import '../../features/notifications/data/datasources/notice_remote_data_source.dart';
+import '../../features/notifications/data/repositories/notice_repository_impl.dart';
+import '../../features/notifications/domain/repositories/notice_repository.dart';
+import '../../features/notifications/domain/usecases/notice_usecases.dart';
+import '../../features/notifications/presentation/manager/notice_cubit.dart';
+
+// ================== AI ASSISTANT REAL API (NEW INJECTION) ==================
+import '../../features/ai_assistant/data/datasources/ai_assistant_remote_data_source.dart';
+import '../../features/ai_assistant/data/repositories/ai_assistant_repository_impl.dart';
+import '../../features/ai_assistant/domain/repositories/ai_assistant_repository.dart';
+import '../../features/ai_assistant/domain/usecases/ai_assistant_usecases.dart';
+import '../../features/ai_assistant/presentation/manager/ai_assistant_cubit.dart';
 
 import '../api/api_constants.dart';
 import '../api/api_consumer.dart';
@@ -334,9 +352,65 @@ Future<void> setupServiceLocator() async {
     getClientDetailsUseCase: getIt<GetClientDetailsUseCase>(),
   ));
 
-  //  ================== COMPLAINTS MODULE (MOCK REGISTER) ==================
+  //  ================== COMPLAINTS MODULE (MOCK OLD COEXISTING) ==================
   getIt.registerFactory(() => ComplaintsCubit());
 
-  //  ================== NOTIFICATIONS MODULE (MOCK REGISTER) ==================
-  getIt.registerFactory(() => NotificationsCubit());
+  //  ================== COMPLAINTS REAL API TICKETS (NEW MODULE INJECTION) ==================
+  getIt.registerLazySingleton<TicketRemoteDataSource>(
+        () => TicketRemoteDataSourceImpl(getIt<ApiConsumer>()),
+  );
+  getIt.registerLazySingleton<TicketRepository>(
+        () => TicketRepositoryImpl(getIt<TicketRemoteDataSource>()),
+  );
+  getIt.registerLazySingleton(() => GetTicketsListUseCase(getIt<TicketRepository>()));
+  getIt.registerLazySingleton(() => GetTicketDetailsUseCase(getIt<TicketRepository>()));
+  getIt.registerLazySingleton(() => UpdateTicketStatusUseCase(getIt<TicketRepository>()));
+  getIt.registerLazySingleton(() => CreateTestimonialUseCase(getIt<TicketRepository>()));
+
+  getIt.registerFactory(() => TicketCubit(
+    getTicketsListUseCase: getIt<GetTicketsListUseCase>(),
+    getTicketDetailsUseCase: getIt<GetTicketDetailsUseCase>(),
+    updateTicketStatusUseCase: getIt<UpdateTicketStatusUseCase>(),
+    createTestimonialUseCase: getIt<CreateTestimonialUseCase>(),
+  ));
+
+  //  ================== NOTIFICATIONS REAL API (NEW MODULE INJECTION) ==================
+  getIt.registerLazySingleton<NoticeRemoteDataSource>(
+        () => NoticeRemoteDataSourceImpl(getIt<ApiConsumer>()),
+  );
+  getIt.registerLazySingleton<NoticeRepository>(
+        () => NoticeRepositoryImpl(getIt<NoticeRemoteDataSource>()),
+  );
+  getIt.registerLazySingleton(() => GetNoticesUseCase(getIt<NoticeRepository>()));
+  getIt.registerLazySingleton(() => MarkAllNoticesReadUseCase(getIt<NoticeRepository>()));
+  getIt.registerLazySingleton(() => MarkNoticeAsReadUseCase(getIt<NoticeRepository>()));
+  getIt.registerLazySingleton(() => ClearAllNoticesUseCase(getIt<NoticeRepository>()));
+
+  getIt.registerFactory(() => NoticeCubit(
+    getNoticesUseCase: getIt<GetNoticesUseCase>(),
+    markAllNoticesReadUseCase: getIt<MarkAllNoticesReadUseCase>(),
+    markNoticeAsReadUseCase: getIt<MarkNoticeAsReadUseCase>(),
+    clearAllNoticesUseCase: getIt<ClearAllNoticesUseCase>(),
+  ));
+
+  //  ================== AI ASSISTANT MODULE REAL API ==================
+  getIt.registerLazySingleton<AiAssistantRemoteDataSource>(
+        () => AiAssistantRemoteDataSourceImpl(getIt<ApiConsumer>()),
+  );
+  getIt.registerLazySingleton<AiAssistantRepository>(
+        () => AiAssistantRepositoryImpl(getIt<AiAssistantRemoteDataSource>()),
+  );
+  getIt.registerLazySingleton(() => GetAiInsightsUseCase(getIt<AiAssistantRepository>()));
+  getIt.registerLazySingleton(() => GenerateFreshInsightsUseCase(getIt<AiAssistantRepository>()));
+  getIt.registerLazySingleton(() => MarkInsightAsSeenUseCase(getIt<AiAssistantRepository>()));
+  getIt.registerLazySingleton(() => SubmitAiFeedbackUseCase(getIt<AiAssistantRepository>()));
+  getIt.registerLazySingleton(() => GetAdminFeedbackUseCase(getIt<AiAssistantRepository>())); // 🟢 حقن الـ Use Case الخامسة والأخيرة بالملي
+
+  getIt.registerFactory(() => AiAssistantCubit(
+    getAiInsightsUseCase: getIt<GetAiInsightsUseCase>(),
+    generateFreshInsightsUseCase: getIt<GenerateFreshInsightsUseCase>(),
+    markInsightAsSeenUseCase: getIt<MarkInsightAsSeenUseCase>(),
+    submitAiFeedbackUseCase: getIt<SubmitAiFeedbackUseCase>(),
+    getAdminFeedbackUseCase: getIt<GetAdminFeedbackUseCase>(), // 🟢 تمرير الـ Use Case المضافة حديثاً للـ Cubit
+  ));
 }

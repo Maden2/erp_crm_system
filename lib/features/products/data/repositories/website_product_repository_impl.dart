@@ -9,10 +9,12 @@ class WebsiteProductRepositoryImpl implements WebsiteProductRepository {
   final WebsiteProductRemoteDataSource remoteDataSource;
   WebsiteProductRepositoryImpl(this.remoteDataSource);
 
+
   @override
   Future<Either<Failure, WebsiteProductListEntity>> getWebsiteProducts({
     String? search,
     String? categoryId,
+    String? warehouseId, // 🟢 إضافة الـ warehouseId
     bool? isPublished,
     String? stockStatus,
     double? minPrice,
@@ -24,6 +26,7 @@ class WebsiteProductRepositoryImpl implements WebsiteProductRepository {
       final result = await remoteDataSource.getWebsiteProducts(
         search: search,
         categoryId: categoryId,
+        warehouseId: warehouseId, // 🟢 تمرير الـ warehouseId
         isPublished: isPublished,
         stockStatus: stockStatus,
         minPrice: minPrice,
@@ -33,7 +36,6 @@ class WebsiteProductRepositoryImpl implements WebsiteProductRepository {
       );
       return Right(result);
     } on ServerException {
-      // 🟢 تمرير الرسالة كـ Positional Parameter مباشرة بدون مسمى message:
       return const Left(ServerFailure('حدث خطأ أثناء جلب منتجات المتجر'));
     }
   }
@@ -145,6 +147,30 @@ class WebsiteProductRepositoryImpl implements WebsiteProductRepository {
       return Right(result);
     } on ServerException {
       return const Left(ServerFailure('فشل تعديل حالة نشر المنتج'));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<dynamic>>> getWarehouses() async {
+    try {
+      final result = await remoteDataSource.getWarehouses();
+      return Right(result);
+    } on ServerException {
+      return const Left(ServerFailure('حدث خطأ أثناء جلب قائمة المخازن'));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<dynamic>>> getStockMoves({String? productId, String? warehouseId, String? moveType}) async {
+    try {
+      final result = await remoteDataSource.getStockMoves(
+        productId: productId,
+        warehouseId: warehouseId,
+        moveType: moveType,
+      );
+      return Right(result);
+    } on ServerException {
+      return const Left(ServerFailure('حدث خطأ أثناء جلب سجل حركات المخزون'));
     }
   }
 }

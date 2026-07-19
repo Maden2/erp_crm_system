@@ -31,18 +31,18 @@ class _OrdersPageState extends State<OrdersPage> {
         backgroundColor: AppColors.homeBg,
         appBar: CustomAppBar(
           title: Text("الطلبات", style: TextStyles.font20WhiteMedium),
-          leading: IconButton(
+        /*  leading: IconButton(
             padding: EdgeInsets.only(right: 24.w),
             icon: Icon(Icons.tune, color: AppColors.homeBg, size: 24.sp),
             onPressed: () {},
-          ),
-          actions: [
+          ), */
+        /*  actions: [
             IconButton(
               padding: EdgeInsets.only(left: 24.w),
               icon: Icon(Icons.search, color: AppColors.homeBg, size: 24.sp),
               onPressed: () {},
             ),
-          ],
+          ], */
         ),
         body: Column(
           children: [

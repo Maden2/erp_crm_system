@@ -10,6 +10,7 @@ abstract class WebsiteProductRepository {
   Future<Either<Failure, WebsiteProductListEntity>> getWebsiteProducts({
     String? search,
     String? categoryId,
+    String? warehouseId, // 🟢 إضافة البارامتر هنا
     bool? isPublished,
     String? stockStatus,
     double? minPrice,
@@ -18,16 +19,11 @@ abstract class WebsiteProductRepository {
     required int limit,
   });
 
-  // 2. جلب تصنيفات المتجر الإلكتروني
+  // ... (باقي الدوال كما هي)
   Future<Either<Failure, List<WebsiteCategoryEntity>>> getWebsiteCategories({required bool tree});
-
-  // 3. جلب تصنيفات المستودع المتاحة للـ Mapping
   Future<Either<Failure, List<dynamic>>> getInventoryCategories({required bool tree});
-
-  // 4. جلب منتجات المستودع غير المنشورة
   Future<Either<Failure, List<WebsiteUnpublishedProductEntity>>> getUnpublishedProducts({String? categoryId});
 
-  // 5. نشر منتج من المستودع (نسخ المنتج لفئة معينة)
   Future<Either<Failure, Unit>> publishFromInventory({
     required String inventoryProductId,
     required double price,
@@ -36,10 +32,11 @@ abstract class WebsiteProductRepository {
     required String nameSnapshot,
   });
 
-  // 6. جلب تفاصيل منتج معين الكاملة
+  Future<Either<Failure, List<dynamic>>> getWarehouses();
+  Future<Either<Failure, List<dynamic>>> getStockMoves({String? productId, String? warehouseId, String? moveType});
+
   Future<Either<Failure, WebsiteProductDetailEntity>> getWebsiteProductDetails({required String id});
 
-  // 7. تعديل منتج (Update price / availability / display order)
   Future<Either<Failure, Unit>> updateWebsiteProduct({
     required String id,
     double? price,
@@ -51,9 +48,7 @@ abstract class WebsiteProductRepository {
     List<dynamic>? images,
   });
 
-  // 8. حذف منتج من المتجر نهائياً
   Future<Either<Failure, Unit>> deleteWebsiteProduct({required String id});
 
-  // 9. تبديل حالة النشر طلقة واحدة (Toggle IsPublished)
   Future<Either<Failure, bool>> togglePublishState({required String id});
 }

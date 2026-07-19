@@ -1,5 +1,3 @@
-// lib/features/products/presentation/manager/website_products_cubit.dart
-
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../domain/usecases/website_product_usecases.dart';
 import 'website_products_state.dart';
@@ -13,10 +11,11 @@ class WebsiteProductsCubit extends Cubit<WebsiteProductsState> {
     required this.togglePublishStateUseCase,
   }) : super(WebsiteProductsInitial());
 
-  // جلب المنتجات من السيرفر مع الفلاتر والـ Pagination
+  // 🟢 إضافة warehouseId للبارامترات
   Future<void> fetchWebsiteProducts({
     String? search,
     String? categoryId,
+    String? warehouseId, // 🟢 إضافة الـ ID
     bool? isPublished,
     String? stockStatus,
     int page = 1,
@@ -26,6 +25,7 @@ class WebsiteProductsCubit extends Cubit<WebsiteProductsState> {
     final result = await getWebsiteProductsUseCase(
       search: search,
       categoryId: categoryId,
+      warehouseId: warehouseId, // 🟢 تمرير الـ ID
       isPublished: isPublished,
       stockStatus: stockStatus,
       page: page,
@@ -38,7 +38,6 @@ class WebsiteProductsCubit extends Cubit<WebsiteProductsState> {
     );
   }
 
-  // تبديل حالة النشر طلقة واحدة من الكارت بره بدون تحميل الشاشة كاملة
   Future<void> toggleProductPublish(String id) async {
     final result = await togglePublishStateUseCase(id: id);
     result.fold(

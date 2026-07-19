@@ -27,7 +27,7 @@ class ComplaintsPage extends StatelessWidget {
             onPressed: () => Navigator.pop(context),
           ),
           title: Text("الشكاوي", style: TextStyles.font20WhiteMedium),
-          actions: [
+         /* actions: [
             Builder(
                 builder: (context) {
                   return IconButton(
@@ -45,7 +45,7 @@ class ComplaintsPage extends StatelessWidget {
                   );
                 }
             ),
-          ],
+          ],*/
         ),
         body: BlocBuilder<TicketCubit, TicketState>(
           builder: (context, state) {

@@ -42,7 +42,7 @@ class CustomersPage extends StatelessWidget {
                   "العملاء",
                   style: TextStyles.font20WhiteMedium,
                 ),
-                actions: [
+              /*  actions: [
                   IconButton(
                     icon: Icon(Icons.tune, color: AppColors.homeBg),
                     onPressed: () => _openFilter(context),
@@ -52,7 +52,7 @@ class CustomersPage extends StatelessWidget {
                     onPressed: () {},
                   ),
                   SizedBox(width: 8.w),
-                ],
+                ],*/
               ),
               body: BlocBuilder<ClientCubit, ClientState>(
                 builder: (context, state) {

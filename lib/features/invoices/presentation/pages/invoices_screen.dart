@@ -310,7 +310,7 @@ class _InvoicesScreenState extends State<InvoicesScreen> {
           onChanged: (query) => _applyFilters(),
         )
             : Text("الفواتير", style: TextStyles.font20WhiteMedium),
-        actions: [
+      /*  actions: [
           IconButton(
             icon: Icon(Icons.tune, color: Colors.white, size: 24.w),
             onPressed: () => _showFilterBottomSheet(context),
@@ -329,7 +329,7 @@ class _InvoicesScreenState extends State<InvoicesScreen> {
               });
             },
           ),
-        ],
+        ],*/
       ),
       body: BlocBuilder<FullInvoicesCubit, FullInvoicesState>(
         builder: (context, state) {

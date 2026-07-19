@@ -7,6 +7,7 @@ abstract class WebsiteProductRemoteDataSource {
   Future<WebsiteProductListModel> getWebsiteProducts({
     String? search,
     String? categoryId,
+    String? warehouseId, // 🟢 تمت الإضافة
     bool? isPublished,
     String? stockStatus,
     double? minPrice,
@@ -16,6 +17,11 @@ abstract class WebsiteProductRemoteDataSource {
   });
   Future<List<WebsiteCategoryModel>> getWebsiteCategories({required bool tree});
   Future<List<dynamic>> getInventoryCategories({required bool tree});
+
+  // 🟢 دوال المخزون
+  Future<List<dynamic>> getWarehouses();
+  Future<List<dynamic>> getStockMoves({String? productId, String? warehouseId, String? moveType});
+
   Future<List<WebsiteUnpublishedProductModel>> getUnpublishedProducts({String? categoryId});
   Future<void> publishFromInventory({
     required String inventoryProductId,
@@ -47,6 +53,7 @@ class WebsiteProductRemoteDataSourceImpl implements WebsiteProductRemoteDataSour
   Future<WebsiteProductListModel> getWebsiteProducts({
     String? search,
     String? categoryId,
+    String? warehouseId, // 🟢 تمت الإضافة
     bool? isPublished,
     String? stockStatus,
     double? minPrice,
@@ -54,12 +61,12 @@ class WebsiteProductRemoteDataSourceImpl implements WebsiteProductRemoteDataSour
     required int page,
     required int limit,
   }) async {
-    // 🟢 الـ apiConsumer بيهندل الـ DioException تلقائياً ويرمي الـ Exception الصح
     final responseData = await apiConsumer.get(
       ApiConstants.websiteProducts,
       queryParameters: {
         if (search != null && search.isNotEmpty) 'search': search,
         if (categoryId != null) 'categoryId': categoryId,
+        if (warehouseId != null && warehouseId.isNotEmpty) 'warehouseId': warehouseId, // 🟢 تمرير الـ ID
         if (isPublished != null) 'isPublished': isPublished,
         if (stockStatus != null) 'stockStatus': stockStatus,
         if (minPrice != null) 'minPrice': minPrice,
@@ -68,7 +75,6 @@ class WebsiteProductRemoteDataSourceImpl implements WebsiteProductRemoteDataSour
         'limit': limit,
       },
     );
-    // الـ responseData هنا هي الـ Map المرجعة مباشرة من الـ DioConsumer
     return WebsiteProductListModel.fromJson(responseData['data'] ?? responseData);
   }
 
@@ -88,7 +94,32 @@ class WebsiteProductRemoteDataSourceImpl implements WebsiteProductRemoteDataSour
       ApiConstants.websiteInventoryCategories,
       queryParameters: {'tree': tree},
     );
-    return responseData['data'] ?? responseData;
+    if (responseData is List) return responseData;
+    if (responseData is Map && responseData.containsKey('data')) return responseData['data'];
+    return [];
+  }
+
+  @override
+  Future<List<dynamic>> getWarehouses() async {
+    final responseData = await apiConsumer.get(ApiConstants.inventoryWarehouses);
+    if (responseData is List) return responseData;
+    if (responseData is Map && responseData.containsKey('data')) return responseData['data'];
+    return [];
+  }
+
+  @override
+  Future<List<dynamic>> getStockMoves({String? productId, String? warehouseId, String? moveType}) async {
+    final responseData = await apiConsumer.get(
+      ApiConstants.stockMoves,
+      queryParameters: {
+        if (productId != null) 'productId': productId,
+        if (warehouseId != null) 'warehouseId': warehouseId,
+        if (moveType != null) 'moveType': moveType,
+      },
+    );
+    if (responseData is List) return responseData;
+    if (responseData is Map && responseData.containsKey('data')) return responseData['data'];
+    return [];
   }
 
   @override
@@ -162,7 +193,6 @@ class WebsiteProductRemoteDataSourceImpl implements WebsiteProductRemoteDataSour
     }
 
     final formData = FormData.fromMap(dataMap);
-
     await apiConsumer.patch(
       ApiConstants.updateWebsiteProduct(id),
       data: formData,

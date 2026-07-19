@@ -13,73 +13,67 @@ class WarehouseHistoryPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.homeBg,
-      appBar: CustomAppBar(
-        title: Text(
-          "تاريخ إضافة المخزون",
-          style: TextStyles.font18WhiteBold.copyWith(fontFamily: 'Cairo'),
-        ),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () => Navigator.pop(context),
-        ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.refresh, color: Colors.white),
-            onPressed: () {
-              context.read<WebsiteWarehouseCubit>().fetchInventoryCategories();
-            },
+    return BlocProvider(
+      // 🟢 ندهنا على fetchStockMoves بدلاً من fetchInventoryCategories
+      create: (context) => context.read<WebsiteWarehouseCubit>()..fetchStockMoves(),
+      child: Scaffold(
+        backgroundColor: AppColors.homeBg,
+        appBar: CustomAppBar(
+          title: Text(
+            "تاريخ إضافة المخزون",
+            style: TextStyles.font18WhiteBold.copyWith(fontFamily: 'Cairo'),
           ),
-        ],
-      ),
-      body: BlocBuilder<WebsiteWarehouseCubit, WebsiteWarehouseState>(
-        builder: (context, state) {
-          if (state is WebsiteWarehouseLoading) {
-            return const Center(
-              child: CircularProgressIndicator(color: AppColors.primary),
-            );
-          }
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back, color: Colors.white),
+            onPressed: () => Navigator.pop(context),
+          ),
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.refresh, color: Colors.white),
+              onPressed: () {
+                context.read<WebsiteWarehouseCubit>().fetchStockMoves();
+              },
+            ),
+          ],
+        ),
+        body: BlocBuilder<WebsiteWarehouseCubit, WebsiteWarehouseState>(
+          builder: (context, state) {
+            if (state is WebsiteWarehouseLoading) {
+              return const Center(child: CircularProgressIndicator(color: AppColors.primary));
+            }
 
-          if (state is WebsiteInventoryCategoriesSuccess) {
-            final historyList = state.categories;
+            // 🟢 استمعنا لحالة النجاح الجديدة الخاصة بحركات المخزون
+            if (state is WebsiteStockMovesSuccess) {
+              final historyList = state.stockMoves;
 
-            if (historyList.isEmpty) {
-              return const Center(
-                child: Text(
-                  "لا يوجد سجلات حالياً",
-                  style: TextStyle(fontFamily: 'Cairo'),
-                ),
+              if (historyList.isEmpty) {
+                return const Center(child: Text("لا يوجد سجلات حالياً", style: TextStyle(fontFamily: 'Cairo')));
+              }
+
+              return ListView.builder(
+                padding: EdgeInsets.all(16.r),
+                itemCount: historyList.length,
+                physics: const BouncingScrollPhysics(),
+                itemBuilder: (context, index) {
+                  final item = historyList[index];
+                  // 🟢 هنا بنعرض الداتا الحقيقية اللي جاية من الـ API
+                  return _buildHistoryCard(
+                    name: item['ProductName'] ?? "منتج غير معروف",
+                    date: item['CreatedAt'] ?? "",
+                    productsCount: "${item['Quantity'] ?? 0} قطعة",
+                    category: item['WarehouseName'] ?? "مخزن رئيسي",
+                  );
+                },
               );
             }
 
-            return ListView.builder(
-              padding: EdgeInsets.all(16.r),
-              itemCount: historyList.length,
-              physics: const BouncingScrollPhysics(),
-              itemBuilder: (context, index) {
-                final item = historyList[index];
-                return _buildHistoryCard(
-                  name: item['name'] ?? "مخزن رئيسي",
-                  date: "2026-07",
-                  productsCount: "5 المنتجات",
-                  category: "إلكترونيات",
-                );
-              },
-            );
-          }
+            if (state is WebsiteWarehouseError) {
+              return Center(child: Text(state.message, style: const TextStyle(fontFamily: 'Cairo', color: Colors.red)));
+            }
 
-          if (state is WebsiteWarehouseError) {
-            return Center(
-              child: Text(
-                state.message,
-                style: const TextStyle(fontFamily: 'Cairo', color: Colors.red),
-              ),
-            );
-          }
-
-          return const SizedBox();
-        },
+            return const SizedBox();
+          },
+        ),
       ),
     );
   }
@@ -97,11 +91,7 @@ class WarehouseHistoryPage extends StatelessWidget {
         color: Colors.white,
         borderRadius: BorderRadius.circular(8.r),
         boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.02),
-            blurRadius: 10,
-            offset: const Offset(0, 4),
-          ),
+          BoxShadow(color: Colors.black.withOpacity(0.02), blurRadius: 10, offset: const Offset(0, 4)),
         ],
       ),
       child: Row(
@@ -110,71 +100,35 @@ class WarehouseHistoryPage extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                name,
-                style: TextStyle(
-                  fontFamily: 'Cairo',
-                  fontWeight: FontWeight.bold,
-                  fontSize: 14.sp,
-                  color: const Color(0xFF1E293B),
-                ),
-              ),
-              Text(
-                date,
-                style: TextStyle(
-                  fontFamily: 'Cairo',
-                  fontSize: 10.sp,
-                  color: Colors.grey.shade500,
-                ),
-              ),
+              Text(name, style: TextStyle(fontFamily: 'Cairo', fontWeight: FontWeight.bold, fontSize: 14.sp, color: const Color(0xFF1E293B))),
+              Text(date.substring(0, 10), style: TextStyle(fontFamily: 'Cairo', fontSize: 10.sp, color: Colors.grey.shade500)),
               SizedBox(height: 12.h),
-
               Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Icon(
-                    Icons.inventory_2_outlined,
-                    size: 14.sp,
-                    color: Colors.grey.shade400,
-                  ),
-
+                  Icon(Icons.inventory_2_outlined, size: 14.sp, color: Colors.grey.shade400),
                   SizedBox(width: 6.w),
                   Text(productsCount, style: _subTextStyle()),
                 ],
               ),
-
               Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Icon(
-                    Icons.category_outlined,
-                    size: 14.sp,
-                    color: Colors.grey.shade400,
-                  ),
-
+                  Icon(Icons.category_outlined, size: 14.sp, color: Colors.grey.shade400),
                   SizedBox(width: 6.w),
                   Text(category, style: _subTextStyle()),
                 ],
               ),
             ],
           ),
-
           const Spacer(),
-          Icon(
-            Icons.keyboard_arrow_down,
-            color: Colors.grey.shade400,
-            size: 24.sp,
-          ),
+          Icon(Icons.keyboard_arrow_down, color: Colors.grey.shade400, size: 24.sp),
         ],
       ),
     );
   }
 
   TextStyle _subTextStyle() {
-    return TextStyle(
-      fontFamily: 'Cairo',
-      fontSize: 12.sp,
-      color: Colors.grey.shade600,
-    );
+    return TextStyle(fontFamily: 'Cairo', fontSize: 12.sp, color: Colors.grey.shade600);
   }
 }

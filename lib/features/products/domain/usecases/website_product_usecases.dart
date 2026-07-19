@@ -12,6 +12,7 @@ class GetWebsiteProductsUseCase {
   Future<Either<Failure, WebsiteProductListEntity>> call({
     String? search,
     String? categoryId,
+    String? warehouseId, // 🟢 إضافة الـ warehouseId هنا
     bool? isPublished,
     String? stockStatus,
     double? minPrice,
@@ -22,6 +23,7 @@ class GetWebsiteProductsUseCase {
     return repository.getWebsiteProducts(
       search: search,
       categoryId: categoryId,
+      warehouseId: warehouseId, // 🟢 وتمريره هنا للـ repository
       isPublished: isPublished,
       stockStatus: stockStatus,
       minPrice: minPrice,

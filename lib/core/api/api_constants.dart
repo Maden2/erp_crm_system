@@ -45,6 +45,16 @@ class ApiConstants {
   static String deleteWebsiteProduct(String id) => "/api/website-products/$id";
   static String toggleWebsiteProductPublish(String id) => "/api/website-products/$id/publish";
 
+  // ================== INVENTORY ENDPOINTS ==================
+  static const String inventorySummary = "/api/inventory/summary";
+  static const String inventoryReport = "/api/inventory/report";
+  static const String inventoryWarehouses = "/api/inventory/warehouses";
+  static const String stockMoves = "/api/inventory/stock-moves";
+  static const String stockAdjustments = "/api/inventory/stock-adjustments";
+
+  static String warehouseDetails(String id) => "/api/inventory/warehouses/$id";
+  static String productStockDetails(String productId) => "/api/inventory/products/$productId/stock";
+
   // ================== CUSTOMERS ENDPOINTS ==================
   static const String customerStats = "/api/customers/stats";
   static const String customersList = "/api/customers";

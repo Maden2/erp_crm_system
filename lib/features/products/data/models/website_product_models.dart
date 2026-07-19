@@ -1,6 +1,12 @@
-// lib/features/products/data/models/website_product_models.dart
-
 import '../../domain/entities/website_product_entities.dart';
+
+// 🟢 دالة مساعدة عامة لمنع حدوث Crash عند تحويل القيم من السيرفر
+bool parseBool(dynamic value) {
+  if (value is bool) return value;
+  if (value is int) return value == 1;
+  if (value is String) return value.toLowerCase() == 'true';
+  return false;
+}
 
 class WebsiteProductListModel extends WebsiteProductListEntity {
   const WebsiteProductListModel({
@@ -47,8 +53,9 @@ class WebsiteProductItemModel extends WebsiteProductItemEntity {
       quantity: json['StockQuantity'] ?? json['stockQuantity'] ?? json['quantity'] ?? 0,
       category: json['CategoryName'] ?? json['category'] ?? '',
       image: json['PrimaryImage'] ?? json['image'] ?? '',
-      isOutOfStock: json['IsOutOfStock'] ?? json['isOutOfStock'] ?? false,
-      isPublished: json['IsPublished'] ?? json['isPublished'] ?? false,
+      // 🟢 استخدام الدالة الآمنة هنا
+      isOutOfStock: parseBool(json['IsOutOfStock'] ?? json['isOutOfStock']),
+      isPublished: parseBool(json['IsPublished'] ?? json['isPublished']),
       stockStatus: json['stockStatus'] ?? 'stable',
     );
   }
@@ -73,11 +80,9 @@ class WebsiteProductDetailModel extends WebsiteProductDetailEntity {
   });
 
   factory WebsiteProductDetailModel.fromJson(Map<String, dynamic> json) {
-    // 🟢 استخراج المخزون الكلي الجاهز من الـ stockSummary المبعوث من السيرفر
     final stockSummary = json['stockSummary'] as Map<String, dynamic>?;
     final int totalStock = stockSummary?['totalAvailable'] ?? json['StockQuantity'] ?? json['quantity'] ?? 0;
 
-    // 🟢 معالجة لستة الصور إذا رجعت كـ Objects تحتوي على ImagePath من السيرفر
     List<String> parsedImages = [];
     if (json['images'] != null && json['images'] is List) {
       parsedImages = (json['images'] as List).map((img) {
@@ -93,15 +98,16 @@ class WebsiteProductDetailModel extends WebsiteProductDetailEntity {
       name: json['Name'] ?? json['name'] ?? '',
       sku: json['Sku'] ?? json['sku'] ?? '',
       price: (json['Price'] ?? json['price'] ?? 0).toDouble(),
-      quantity: totalStock, // 🟢 ربط المخزون بالرقم الديناميكي المستخرج
+      quantity: totalStock,
       description: json['Description'] ?? json['description'] ?? '',
       images: parsedImages,
       category: json['CategoryName'] ?? json['category'] ?? '',
       colors: (json['colors'] as List?)?.map((c) => c.toString()).toList() ?? [],
       sizes: (json['sizes'] as List?)?.map((s) => s.toString()).toList() ?? [],
       minStockAlert: json['minStockAlert'] ?? 0,
-      isAvailable: json['IsAvailable'] ?? json['isAvailable'] ?? true,
-      isPublished: json['IsPublished'] ?? json['isPublished'] ?? false,
+      // 🟢 استخدام الدالة الآمنة هنا
+      isAvailable: parseBool(json['IsAvailable'] ?? json['isAvailable']),
+      isPublished: parseBool(json['IsPublished'] ?? json['isPublished']),
       displayOrder: json['DisplayOrder'] ?? json['displayOrder'] ?? 0,
     );
   }

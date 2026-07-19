@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:pdf/widgets.dart' as pw;
+import 'package:printing/printing.dart';
 import 'package:pivot/core/utils/app_colors.dart';
 import 'package:pivot/core/utils/app_styles.dart';
 import 'package:pivot/core/widgets/custom_app_bar.dart';
@@ -27,9 +29,21 @@ class OrderDetailsPage extends StatefulWidget {
 }
 
 class _OrderDetailsPageState extends State<OrderDetailsPage> {
+
+  // 🟢 ميثود توليد الفاتورة PDF (تتطلب مكتبة printing)
+  Future<void> _generatePdf(LiveOrderEntity order) async {
+    final pdf = pw.Document();
+    pdf.addPage(pw.Page(build: (pw.Context context) {
+      return pw.Center(
+        child: pw.Text("فاتورة طلب: ${order.orderNumber}",
+            style: const pw.TextStyle(fontSize: 30)),
+      );
+    }));
+    await Printing.layoutPdf(onLayout: (format) async => pdf.save());
+  }
+
   @override
   Widget build(BuildContext context) {
-    // 🟢 مفيش BlocProvider هنا نهائياً، الشاشة بتقرأ الـ Cubit الممرر لها من الخارج مباشرة بأمان
     return Scaffold(
       backgroundColor: AppColors.homeBg,
       appBar: CustomAppBar(
@@ -41,12 +55,10 @@ class _OrderDetailsPageState extends State<OrderDetailsPage> {
       ),
       body: BlocBuilder<LiveOrdersCubit, LiveOrdersState>(
         builder: (context, state) {
-          // الاستجابة لحالة التحميل الحية للمنتجات من السيرفر
           if (state is LiveOrderDetailsLoading) {
             return const Center(child: CircularProgressIndicator(color: AppColors.primary));
           }
 
-          // عند نجاح جلب البيانات الكاملة من السيرفر بالمنتجات
           LiveOrderEntity currentOrder = widget.order;
           if (state is LiveOrderDetailsSuccess) {
             currentOrder = state.order;
@@ -63,7 +75,6 @@ class _OrderDetailsPageState extends State<OrderDetailsPage> {
                 SizedBox(height: 16.h),
                 CustomerInfoCard(order: currentOrder),
                 SizedBox(height: 14.h),
-                // 🟢 المنتجات تفرش لايف الحين لأن الداتا بقت كاملة من السيرفر!
                 OrderProductsCard(order: currentOrder),
                 SizedBox(height: 14.h),
                 OrderSummaryCard(order: currentOrder),
@@ -76,7 +87,7 @@ class _OrderDetailsPageState extends State<OrderDetailsPage> {
                   CustomerNoteBox(note: currentOrder.customerNote!),
                 ],
                 SizedBox(height: 16.h),
-                _buildActionButtons(context, currentOrder.id),
+                _buildActionButtons(context, currentOrder),
               ],
             ),
           );
@@ -89,15 +100,31 @@ class _OrderDetailsPageState extends State<OrderDetailsPage> {
     return "${date.day}/${date.month}/${date.year} - ${date.hour}:${date.minute}";
   }
 
-  Widget _buildActionButtons(BuildContext context, String orderId) {
+  Widget _buildActionButtons(BuildContext context, LiveOrderEntity order) {
     return Row(
       children: [
         Expanded(
           flex: 2,
           child: ElevatedButton(
             onPressed: () {
-              // إلغاء الطلب لايف بكود الحالة 4 (ملغى)
-              context.read<LiveOrdersCubit>().updateStatus(orderId, 4);
+              // 🟢 إضافة التأكيد قبل الإلغاء
+              showDialog(
+                context: context,
+                builder: (ctx) => AlertDialog(
+                  title: const Text("إلغاء الطلب"),
+                  content: const Text("هل أنت متأكد من إلغاء هذا الطلب؟"),
+                  actions: [
+                    TextButton(onPressed: () => Navigator.pop(ctx), child: const Text("لا")),
+                    TextButton(
+                      onPressed: () {
+                        context.read<LiveOrdersCubit>().updateStatus(order.id, 4);
+                        Navigator.pop(ctx);
+                      },
+                      child: const Text("نعم", style: TextStyle(color: Colors.red)),
+                    ),
+                  ],
+                ),
+              );
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: const Color(0x1AEF4C53),
@@ -139,7 +166,7 @@ class _OrderDetailsPageState extends State<OrderDetailsPage> {
             borderRadius: BorderRadius.circular(7.r),
           ),
           child: TextButton.icon(
-            onPressed: () {},
+            onPressed: () => _generatePdf(order), // 🟢 ربط الطباعة
             style: TextButton.styleFrom(padding: EdgeInsets.symmetric(vertical: 12.h, horizontal: 8.w)),
             icon: SvgPicture.asset(
               AppAssets.printIcon,

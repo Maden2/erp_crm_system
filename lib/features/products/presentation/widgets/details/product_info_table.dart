@@ -16,8 +16,7 @@ class ProductInfoTable extends StatelessWidget {
       children: [
         SizedBox(height: 12.h),
 
-        _buildRow("الفئة", "هواتف"),
-
+        _buildRow("الفئة", product.category),
         SizedBox(height: 8.h),
 
         _buildRow("SKU", product.sku),

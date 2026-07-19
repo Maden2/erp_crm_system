@@ -1,16 +1,19 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 import '../../../../../core/utils/app_styles.dart';
 
 class ProductStockBadge extends StatelessWidget {
   final int stock;
+  final String? status; // إضافة الـ status
 
-  const ProductStockBadge({super.key, required this.stock});
+  const ProductStockBadge({super.key, required this.stock, this.status});
 
   @override
   Widget build(BuildContext context) {
-    final bool isOutOfStock = stock == 0;
-    final bool isLow = stock > 0 && stock <= 5;
+    // اللوجيك يعتمد على الـ status إن وجد، وإلا يعتمد على الكمية
+    final bool isOutOfStock = status == 'out' || stock <= 0;
+    final bool isLow = status == 'low' || (stock > 0 && stock <= 5);
     final bool isCritical = isOutOfStock || isLow;
 
     final TextStyle currentTextStyle = isCritical
@@ -30,21 +33,10 @@ class ProductStockBadge extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         textDirection: TextDirection.rtl,
         children: [
-          Container(
-            width: 5.w,
-            height: 5.h,
-            decoration: BoxDecoration(
-              color: themeColor,
-              shape: BoxShape.circle,
-            ),
-          ),
+          Container(width: 5.w, height: 5.h, decoration: BoxDecoration(color: themeColor, shape: BoxShape.circle)),
           SizedBox(width: 5.w),
           Text(
-            isOutOfStock
-                ? "حالة المخزون: نفذ"
-                : isLow
-                ? "حالة المخزون: منخفض"
-                : "حالة المخزون: متوفر",
+            isOutOfStock ? "حالة المخزون: نفذ" : isLow ? "حالة المخزون: منخفض" : "حالة المخزون: متوفر",
             style: currentTextStyle,
           ),
         ],

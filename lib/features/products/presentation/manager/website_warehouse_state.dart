@@ -1,33 +1,25 @@
-// lib/features/products/presentation/manager/website_warehouse_state.dart
-
-import 'package:equatable/equatable.dart';
-
-abstract class WebsiteWarehouseState extends Equatable {
-  const WebsiteWarehouseState();
-
-  @override
-  List<Object?> get props => [];
-}
+abstract class WebsiteWarehouseState {}
 
 class WebsiteWarehouseInitial extends WebsiteWarehouseState {}
-
 class WebsiteWarehouseLoading extends WebsiteWarehouseState {}
 
-// حالة نجاح جلب تصنيفات المخازن المتاحة للـ Mapping
 class WebsiteInventoryCategoriesSuccess extends WebsiteWarehouseState {
   final List<dynamic> categories;
+  WebsiteInventoryCategoriesSuccess(this.categories);
+}
 
-  const WebsiteInventoryCategoriesSuccess(this.categories);
+// 🟢 حالات النجاح الجديدة
+class WebsiteWarehousesSuccess extends WebsiteWarehouseState {
+  final List<dynamic> warehouses;
+  WebsiteWarehousesSuccess(this.warehouses);
+}
 
-  @override
-  List<Object?> get props => [categories];
+class WebsiteStockMovesSuccess extends WebsiteWarehouseState {
+  final List<dynamic> stockMoves;
+  WebsiteStockMovesSuccess(this.stockMoves);
 }
 
 class WebsiteWarehouseError extends WebsiteWarehouseState {
   final String message;
-
-  const WebsiteWarehouseError(this.message);
-
-  @override
-  List<Object?> get props => [message];
+  WebsiteWarehouseError(this.message);
 }

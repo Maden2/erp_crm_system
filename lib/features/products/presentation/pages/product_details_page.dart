@@ -26,7 +26,8 @@ class ProductDetailsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => getIt<WebsiteProductDetailsCubit>()..fetchProductDetails(productId),
+      create: (_) =>
+      getIt<WebsiteProductDetailsCubit>()..fetchProductDetails(productId),
       child: Scaffold(
         backgroundColor: AppColors.authBgColor,
         body: SafeArea(
@@ -37,7 +38,11 @@ class ProductDetailsPage extends StatelessWidget {
               if (state is WebsiteProductDeleteSuccess) {
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
-                    content: Text("تم إزالة المنتج من المتجر بنجاح", textAlign: TextAlign.right, style: TextStyle(fontFamily: 'Cairo')),
+                    content: Text(
+                      "تم إزالة المنتج من المتجر بنجاح",
+                      textAlign: TextAlign.right,
+                      style: TextStyle(fontFamily: 'Cairo'),
+                    ),
                     backgroundColor: Colors.green,
                   ),
                 );
@@ -64,49 +69,7 @@ class ProductDetailsPage extends StatelessWidget {
                           Positioned(
                             top: 12.h,
                             left: 12.w,
-                            child: PopupMenuButton<String>(
-                              icon: Icon(
-                                Icons.more_vert,
-                                color: const Color(0xFF1E293B),
-                                size: 28.sp,
-                              ),
-                              padding: EdgeInsets.zero,
-                              constraints: const BoxConstraints(),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12.r),
-                              ),
-                              onSelected: (value) {
-                                if (value == 'copy') {
-                                  Navigator.pushNamed(
-                                    context,
-                                    Routes.copyProductPage,
-                                    arguments: p,
-                                  );
-                                } else if (value == 'delete') {
-                                  context.read<WebsiteProductDetailsCubit>().deleteProduct(p.id);
-                                }
-                              },
-                              itemBuilder: (context) => [
-                                _buildPopupItem(
-                                  "تعديل",
-                                  Icons.edit_outlined,
-                                  "edit",
-                                  const Color(0xFF1E293B),
-                                ),
-                                _buildPopupItem(
-                                  "نسخ",
-                                  Icons.copy_all_outlined,
-                                  "copy",
-                                  const Color(0xFF1E293B),
-                                ),
-                                _buildPopupItem(
-                                  "حذف",
-                                  Icons.delete_outline_rounded,
-                                  "delete",
-                                  const Color(0xFFEF4444),
-                                ),
-                              ],
-                            ),
+                            child: _buildPopupMenu(context, p),
                           ),
                         ],
                       ),
@@ -132,14 +95,18 @@ class ProductDetailsPage extends StatelessWidget {
                                   children: [
                                     SizedBox(height: 20.h),
                                     Row(
-                                      mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: [
-                                        Text(
-                                          p.name,
-                                          style:
-                                          TextStyles.font16graphiteGreyMedium,
+                                        // 🟢 تم إضافة الـ Expanded هنا فقط لحل الـ Overflow
+                                        Expanded(
+                                          child: Text(
+                                            p.name,
+                                            style: TextStyles.font16graphiteGreyMedium,
+                                            overflow: TextOverflow.ellipsis,
+                                            maxLines: 2,
+                                          ),
                                         ),
+                                        SizedBox(width: 8.w),
                                         ProductStockBadge(stock: p.quantity),
                                       ],
                                     ),
@@ -147,19 +114,19 @@ class ProductDetailsPage extends StatelessWidget {
                                     Align(
                                       alignment: Alignment.centerRight,
                                       child: Column(
-                                        crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                        crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
                                           Text(
                                             "${p.price} ج.م",
-                                            style: TextStyles
-                                                .font22graphiteGreyMedium,
+                                            style: TextStyles.font22graphiteGreyMedium,
                                           ),
                                           SizedBox(height: 14.h),
+                                          // 🟢 التحكم في نص ولون الكمية بناءً على المخزون
                                           Text(
-                                            "${p.quantity} قطعة",
-                                            style: TextStyles
-                                                .font16graphiteGreyMedium,
+                                            p.quantity > 0 ? "${p.quantity} قطعة" : "غير متوفر حالياً",
+                                            style: TextStyles.font16graphiteGreyMedium.copyWith(
+                                              color: p.quantity > 0 ? AppColors.graphiteGrey : Colors.red,
+                                            ),
                                           ),
                                         ],
                                       ),
@@ -171,62 +138,17 @@ class ProductDetailsPage extends StatelessWidget {
                               _buildDivider(),
                               ProductWarningBanner(stock: p.quantity),
                               SizedBox(height: 16.h),
-                              Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 17.w),
-                                child: Column(
-                                  children: [
-                                    _buildSectionTitle("الألوان المتوفرة"),
-                                    ColorSelector(colors: const []),
-                                  ],
-                                ),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 17.w),
-                                child: Column(
-                                  children: [
-                                    _buildSectionTitle("المقاسات"),
-                                    SizeSelector(sizes: const []),
-                                    SizedBox(height: 16.h),
-                                  ],
-                                ),
-                              ),
+
+                              // 🟢 استخدام ويدجت مساعدة لتقليل التكرار في الأقسام
+                              _buildSectionWrapper("الألوان المتوفرة", ColorSelector(colors: const [])),
+                              _buildSectionWrapper("المقاسات", SizeSelector(sizes: const [])),
                               _buildDivider(),
-                              Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 17.w),
-                                child: Column(
-                                  children: [
-                                    _buildSectionTitle("تفاصيل المنتج"),
-                                    ProductInfoTable(product: p),
-                                    SizedBox(height: 16.h),
-                                  ],
-                                ),
-                              ),
+                              _buildSectionWrapper("تفاصيل المنتج", ProductInfoTable(product: p)),
                               _buildDivider(),
-                              Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 17.w),
-                                child: Column(
-                                  children: [
-                                    _buildSectionTitle("معدل السعر"),
-                                    PriceChart(
-                                      key: ValueKey(p.id),
-                                      data: const [],
-                                    ),
-                                    SizedBox(height: 16.h),
-                                  ],
-                                ),
-                              ),
+                              _buildSectionWrapper("معدل السعر", PriceChart(key: ValueKey(p.id), data: const [])),
                               _buildDivider(),
-                              Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 17.w),
-                                child: Column(
-                                  children: [
-                                    _buildSectionTitle("وصف المنتج"),
-                                    ProductDescriptionSection(
-                                      description: p.description,
-                                    ),
-                                  ],
-                                ),
-                              ),
+                              _buildSectionWrapper("وصف المنتج", ProductDescriptionSection(description: p.description)),
+
                               SizedBox(height: 40.h),
                             ],
                           ),
@@ -243,6 +165,35 @@ class ProductDetailsPage extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+
+  // ================= HELPER WIDGETS =================
+
+  Widget _buildPopupMenu(BuildContext context, dynamic p) {
+    return PopupMenuButton<String>(
+      icon: Icon(
+        Icons.more_vert,
+        color: const Color(0xFF1E293B),
+        size: 28.sp,
+      ),
+      padding: EdgeInsets.zero,
+      constraints: const BoxConstraints(),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12.r),
+      ),
+      onSelected: (value) {
+        if (value == 'copy') {
+          Navigator.pushNamed(context, Routes.copyProductPage, arguments: p);
+        } else if (value == 'delete') {
+          context.read<WebsiteProductDetailsCubit>().deleteProduct(p.id);
+        }
+      },
+      itemBuilder: (context) => [
+        _buildPopupItem("تعديل", Icons.edit_outlined, "edit", const Color(0xFF1E293B)),
+        _buildPopupItem("نسخ", Icons.copy_all_outlined, "copy", const Color(0xFF1E293B)),
+        _buildPopupItem("حذف", Icons.delete_outline_rounded, "delete", const Color(0xFFEF4444)),
+      ],
     );
   }
 
@@ -263,6 +214,19 @@ class ProductDetailsPage extends StatelessWidget {
             title,
             style: TextStyles.font12blackColorRegular.copyWith(color: color),
           ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildSectionWrapper(String title, Widget child) {
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 17.w),
+      child: Column(
+        children: [
+          _buildSectionTitle(title),
+          child,
+          SizedBox(height: 16.h),
         ],
       ),
     );

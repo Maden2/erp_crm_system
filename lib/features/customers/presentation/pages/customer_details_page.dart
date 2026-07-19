@@ -83,7 +83,7 @@ class CustomerDetailsPage extends StatelessWidget {
               return Text("تفاصيل العميل", style: TextStyles.font18WhiteBold.copyWith(fontFamily: 'Cairo'));
             },
           ),
-          actions: [
+        /*  actions: [
             IconButton(
               onPressed: () {},
               icon: SvgPicture.asset(
@@ -109,7 +109,7 @@ class CustomerDetailsPage extends StatelessWidget {
               ),
             ),
             SizedBox(width: 4.w),
-          ],
+          ],*/
         ),
         body: BlocBuilder<ClientCubit, ClientState>( // 🟢 استخدام الـ ClientCubit والـ ClientState
           builder: (context, state) {
